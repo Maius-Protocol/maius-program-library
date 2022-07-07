@@ -1,0 +1,20 @@
+[package]
+name = "maius-program-library"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "maius_program_library"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "0.24.2", features = ["init-if-needed"] }
+anchor-spl = { version = "0.24.2", features = ["default", "spl-token"] }
