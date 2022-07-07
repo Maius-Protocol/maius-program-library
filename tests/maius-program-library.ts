@@ -51,7 +51,7 @@ describe("maius-program-library", () => {
       program.programId
     );
 
-    const response = await program.methods.initializeCustomer(
+    const transaction = await program.methods.initializeCustomer(
       description,
       customerWallet.publicKey
     ).accounts({
@@ -60,9 +60,7 @@ describe("maius-program-library", () => {
       systemProgram: SystemProgram.programId
     }).signers([
       merchantWallet.payer
-    ]).transaction()
-
-    console.log('response', response)
+    ]).rpc()
   
     const dataCustomerAccount = await program.account.customer.fetch(customerAccount);
     

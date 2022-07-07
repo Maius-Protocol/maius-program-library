@@ -2,21 +2,27 @@ use anchor_lang::prelude::*;
 pub mod schemas;
 pub mod instructions;
 mod constants;
+use crate::constants::*;
 
 use instructions::*;
+use schemas::*;
 
 declare_id!("5aoQ5SF77E73o8KqfXc2LHMP3yfbwkqPgnd6aAAw1bfJ");
+
+#[macro_export]
+macro_rules! debug {
+    ($($rest:tt)*) => {
+    #[cfg(feature="verbose")]
+        anchor_lang::prelude:: msg!($($rest)*)
+    };
+}
 
 #[program]
 pub mod maius_program_library {
     use super::*;
 
     pub fn initialize_customer(ctx: Context<InitializeCustomer>, description: String, customer_wallet: Pubkey) -> Result<()> {
-        // handler(ctx, description, customer_wallet);
-
-        ctx.accounts.customer_account.authority = customer_wallet;
-        ctx.accounts.customer_account.description = description;
-        ctx.accounts.customer_account.bump = *ctx.bumps.get("customer_account").unwrap();
+        initialize_customer::handler(ctx, description, customer_wallet);
 
         Ok(())
     }

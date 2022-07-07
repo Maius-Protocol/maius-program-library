@@ -5,7 +5,7 @@ use crate::schemas::Customer;
 #[instruction(description: String, customer_wallet: Pubkey)]
 pub struct InitializeCustomer<'info> {
     #[account(
-        init,
+        init_if_needed,
         seeds = [
             b"customer_account".as_ref(),
             customer_wallet.key().as_ref(),
@@ -25,6 +25,7 @@ pub fn handler(
     description: String, 
     customer_wallet: Pubkey
 ) -> Result<()> {
+    msg!("Space: {}", Customer::space(&description));
     ctx.accounts.customer_account.authority = customer_wallet;
     ctx.accounts.customer_account.description = description;
     ctx.accounts.customer_account.bump = *ctx.bumps.get("customer_account").unwrap();
