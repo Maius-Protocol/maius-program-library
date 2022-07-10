@@ -25,9 +25,13 @@ describe("maius-program-library", () => {
   let customerWallet: Wallet;
 
   let customerAccount: anchor.web3.PublicKey;
-
   let customerBump: number; 
   
+  const getBalance = async (address: string) => {
+    const response = await program.provider.connection.getBalance(new anchor.web3.PublicKey(address))
+    return ((response || 0) / LAMPORTS_PER_SOL).toFixed(18)
+  }
+
   before("Init test accounts", async () => {
     merchantWallet = new Wallet(Keypair.generate());
     customerWallet = new Wallet(Keypair.generate());
@@ -35,9 +39,10 @@ describe("maius-program-library", () => {
       await provider.connection.requestAirdrop(merchantWallet.publicKey, 3*LAMPORTS_PER_SOL),
         "confirmed"
     )
-    console.log('merchantWallet', await provider.connection.getBalance(merchantWallet.publicKey))
-    
+    console.log('merchantWallet', await provider.connection.getBalance(merchantWallet.publicKey));
+    console.log('Before merchantWallet SOL amount:', await getBalance(merchantWallet.publicKey.toBase58()));
   })
+
 
   it("Create a customer of merchant", async () => {
 
@@ -45,15 +50,29 @@ describe("maius-program-library", () => {
 
     [customerAccount, customerBump] = await PublicKey.findProgramAddress(
       [
-        Buffer.from("customer_account"),
+        Buffer.from("customer"),
         customerWallet.publicKey.toBuffer(),
       ],
       program.programId
     );
+      await program.methods.initializeCustomer(
+        description,
+        customerWallet.publicKey
+      ).accounts({
+        customerAccount: customerAccount,
+        merchantAuthority: merchantWallet.publicKey,
+        systemProgram: SystemProgram.programId
+      }).signers([
+        merchantWallet.payer
+      ]).rpc()
+    
+      const dataCustomerAccount = await program.account.customer.fetch(customerAccount);
+      console.log('Create', dataCustomerAccount.description)
+  })
 
-    const transaction = await program.methods.initializeCustomer(
-      description,
-      customerWallet.publicKey
+  it("Update customer description", async () => {
+    await program.methods.updateCustomer(
+      "Updated description"
     ).accounts({
       customerAccount: customerAccount,
       merchantAuthority: merchantWallet.publicKey,
@@ -61,10 +80,26 @@ describe("maius-program-library", () => {
     }).signers([
       merchantWallet.payer
     ]).rpc()
-  
-    const dataCustomerAccount = await program.account.customer.fetch(customerAccount);
-    
-    console.log(dataCustomerAccount)
 
+    const dataCustomerAccount = await program.account.customer.fetch(customerAccount);
+    console.log('After Update: ', dataCustomerAccount.description)
+  })
+
+  it("Delete customer", async () => {
+    console.log('Before merchantWallet SOL amount: ', await getBalance(merchantWallet.publicKey.toBase58()))
+    await program.methods.deleteCustomer(
+    ).accounts({
+      customerAccount: customerAccount,
+      merchantAuthority: merchantWallet.publicKey,
+      systemProgram: SystemProgram.programId
+    }).signers([
+      merchantWallet.payer
+    ]).rpc()
+    try {
+      const dataCustomerAccount = await program.account.customer.fetch(customerAccount);
+      throw new Error('Should not be deleteable')
+    } catch (e) {
+      console.log('After merchantWallet SOL amount:', await getBalance(merchantWallet.publicKey.toBase58()));
+    }
   })
 });

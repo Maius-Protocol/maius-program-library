@@ -22,9 +22,15 @@ pub mod maius_program_library {
     use super::*;
 
     pub fn initialize_customer(ctx: Context<InitializeCustomer>, description: String, customer_wallet: Pubkey) -> Result<()> {
-        initialize_customer::handler(ctx, description, customer_wallet);
+        initialize_customer::handler(ctx, description, customer_wallet)
+    }
 
-        Ok(())
+    pub fn update_customer(ctx: Context<UpdateCustomer>, description: String) -> Result<()> {
+        update_customer::handler(ctx, description)
+    }
+
+    pub fn delete_customer(ctx: Context<DeleteCustomer>) -> Result<()> {
+        delete_customer::handler(ctx)
     }
 
     // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {

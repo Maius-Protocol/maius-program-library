@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::schemas::Customer;
+use crate::errors::*;
 
 #[derive(Accounts)]
 #[instruction(description: String, customer_wallet: Pubkey)]
@@ -7,12 +8,13 @@ pub struct InitializeCustomer<'info> {
     #[account(
         init_if_needed,
         seeds = [
-            b"customer_account".as_ref(),
+            // version,
+            Customer::CUSTOMER_PREFIX.as_bytes(),
             customer_wallet.key().as_ref(),
         ],
         bump,
         payer = merchant_authority,
-        space = Customer::space(&description)
+        space = Customer::space()
     )]
     pub customer_account: Account<'info, Customer>,
     #[account(mut)]
@@ -25,9 +27,12 @@ pub fn handler(
     description: String, 
     customer_wallet: Pubkey
 ) -> Result<()> {
-    msg!("Space: {}", Customer::space(&description));
+    msg!("Customer: {}, Create with description: {}", customer_wallet, description);
+    require!(
+        description.len() <= Customer::DESCRIPTION_MAX_LEN,
+        ErrorMessage::InvalidDescLen    
+    );
     ctx.accounts.customer_account.authority = customer_wallet;
     ctx.accounts.customer_account.description = description;
-    ctx.accounts.customer_account.bump = *ctx.bumps.get("customer_account").unwrap();
     Ok(())
-}
+} 
