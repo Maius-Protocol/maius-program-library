@@ -30,6 +30,6 @@ jobs:
         shell: bash
       - run: ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
         shell: bash
-      - run: solana-keygen new --silent
+      - run: solana-keygen new --silent --force --no-bip39-passphrase
       - run: npm i -g @project-serum/anchor-cli@$ANCHOR_VERSION ts-mocha typescript
       - run: anchor test
