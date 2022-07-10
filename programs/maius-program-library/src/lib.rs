@@ -7,7 +7,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("5aoQ5SF77E73o8KqfXc2LHMP3yfbwkqPgnd6aAAw1bfJ");
+declare_id!("85WehtyqKfKjGTq9ad9V6J5iMX7KLsNSN5rdxaeqDQoy");
 
 #[macro_export]
 macro_rules! debug {
@@ -40,6 +40,21 @@ pub mod maius_program_library {
 
     pub fn delete_customer(ctx: Context<DeleteCustomer>) -> Result<()> {
         delete_customer::handler(ctx)
+    }
+
+    pub fn initialize_product(
+        ctx: Context<InitializeProduct>,
+        name: String,
+        authority: Pubkey,
+        description: String,
+        sku: String,
+        default_price: Pubkey,
+        unit_label: String,
+        images: Vec<String>
+    ) -> Result<()> {
+        initialize_product::handler(
+            ctx, name, authority, description, sku, default_price, unit_label, images
+        )
     }
 
     // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {

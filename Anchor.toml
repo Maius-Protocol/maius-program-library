@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.localnet]
-maius_program_library = "5aoQ5SF77E73o8KqfXc2LHMP3yfbwkqPgnd6aAAw1bfJ"
+maius_program_library = "85WehtyqKfKjGTq9ad9V6J5iMX7KLsNSN5rdxaeqDQoy"
 
 [registry]
 url = "https://anchor.projectserum.com"
