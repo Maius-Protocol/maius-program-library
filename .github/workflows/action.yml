@@ -1,8 +1,7 @@
 # name: Test Maius
 # on: [push]
 
-
-name: GitHub Actions Demo
+name: Test Maius
 on: [push]
 env:
   SOLANA_VERSION: 1.10.8
