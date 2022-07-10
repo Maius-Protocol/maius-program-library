@@ -28,6 +28,7 @@ jobs:
         shell: bash
       - run: echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
         shell: bash
+      - run: ssh-keygen -t rsa -b 4096 -C "contact@maiuspay.com"
       - run: solana-keygen new --silent
       - run: npm i -g @project-serum/anchor-cli@$ANCHOR_VERSION ts-mocha typescript
       - run: anchor test
