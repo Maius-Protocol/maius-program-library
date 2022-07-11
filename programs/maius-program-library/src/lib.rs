@@ -70,6 +70,12 @@ pub mod maius_program_library {
         )
     }
 
+    pub fn delete_product(
+        ctx: Context<DeleteProduct>
+    ) -> Result<()> {
+        delete_product::handler(ctx)
+    }
+
     // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {
     //     Ok(())
     // }

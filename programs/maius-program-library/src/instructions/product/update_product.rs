@@ -3,7 +3,7 @@ use crate::schemas::*;
 use crate::errors::*;
 
 #[derive(Accounts)]
-#[instruction(name: String)]
+#[instruction()]
 pub struct UpdateProduct<'info> {
     #[account(
         mut
@@ -26,7 +26,7 @@ pub fn handler(
     ctx.accounts.product_account.description = description;
     ctx.accounts.product_account.sku = sku;
     ctx.accounts.product_account.default_price = default_price;
-    ctx.accounts.product_account.unit_label = unit_label;
+    ctx.accounts.   product_account.unit_label = unit_label;
     ctx.accounts.product_account.images = images;
     ctx.accounts.product_account.active = false;
     let clock = &ctx.accounts.clock;

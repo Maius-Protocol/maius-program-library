@@ -129,4 +129,22 @@ export let globalState = {
     //   console.log('After merchantWallet SOL amount:', e);
     // }
   })
+
+  it("Delete product", async () => {
+    console.log('Before merchantWallet SOL amount: ', await getBalance(merchantWallet.publicKey.toBase58()))
+    await program.methods.deleteProduct(
+    ).accounts({
+      productAccount: productAccount,
+      merchant: merchantWallet.publicKey,
+      systemProgram: SystemProgram.programId
+    }).signers([
+      merchantWallet.payer
+    ]).rpc()
+    try {
+      const deleteProductAccount = await program.account.customer.fetch(productAccount);
+      throw new Error('Should not be deletable')
+    } catch (e) {
+      console.log('After merchantWallet SOL amount:', await getBalance(merchantWallet.publicKey.toBase58()));
+    }
+  })
 });
