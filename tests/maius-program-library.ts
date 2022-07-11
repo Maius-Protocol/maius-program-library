@@ -100,4 +100,33 @@ export let globalState = {
       console.log('After merchantWallet SOL amount:', await getBalance(merchantWallet.publicKey.toBase58()));
     }
   })
+
+  it("update product", async () => {
+    let description = "bus\\nCharlotte Patton Incidunt hic aspern 4421, Aschach an der Steyr\\nArsenio Richard Ex et est ut et corr 21410, Dol";
+    let unit_label = "";
+    let defaultPrice: anchor.web3.PublicKey;
+    let sku = "4225-776-3234";
+    let images: string[] = ["https://static.zajo.net/content/mediagallery/zajo_dcat/image/product/types/X/9088.png"];
+    await program.methods.updateProduct(
+        description,
+        sku,
+        defaultPrice,
+        unit_label,
+        images,
+    ).accounts({
+      productAccount: productAccount,
+      merchant: merchantWallet.publicKey,
+      systemProgram: SystemProgram.programId,
+      clock: SYSVAR_CLOCK_PUBKEY,
+    }).signers([
+      merchantWallet.payer
+    ]).rpc()
+
+    const updateProductAccount = await program.account.product.fetch(productAccount);
+    console.log(updateProductAccount)
+    //   throw new Error('Should not be error')
+    // } catch (e) {
+    //   console.log('After merchantWallet SOL amount:', e);
+    // }
+  })
 });

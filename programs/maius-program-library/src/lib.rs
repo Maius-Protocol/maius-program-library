@@ -57,6 +57,19 @@ pub mod maius_program_library {
         )
     }
 
+    pub fn update_product(
+        ctx: Context<UpdateProduct>,
+        description: String,
+        sku: String,
+        default_price: Pubkey,
+        unit_label: String,
+        images: Vec<String>
+    ) -> Result<()> {
+        update_product::handler(
+            ctx, description, sku, default_price, unit_label, images
+        )
+    }
+
     // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {
     //     Ok(())
     // }
