@@ -22,18 +22,14 @@ jobs:
       - name: Install Rust
         run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         shell: bash
-      - name: Switch to rust nightly
-        run: rustup default nightly
-        shell: bash
       - run: echo "/home/runner/.cargo/bin" >> $GITHUB_PATH
         shell: bash
       - run: sh -c "$(curl -sSfL https://release.solana.com/v1.10.30/install)"
         shell: bash
-      - run: echo "/home/runner/.local/share/solana/install/1.10.30/bin" >> $GITHUB_PATH
+      - run: echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
         shell: bash
       - run: ssh-keygen -q -t rsa -N '' <<< $'\ny' >/dev/null 2>&1
         shell: bash
       - run: solana-keygen new --silent --force --no-bip39-passphrase
       - run: npm i -g @project-serum/anchor-cli@$ANCHOR_VERSION ts-mocha typescript
-      - run: anchor build
       - run: anchor test
