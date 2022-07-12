@@ -19,6 +19,9 @@ jobs:
           cache: "npm"
       - name: Install package
         run: npm install
+      - name: Clear Cache
+        run: rm -rf .local/share/solana && rm -rf .config/solana && rm -rf .cache/solana
+        shell: bash
       - name: Install Rust
         run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         shell: bash
