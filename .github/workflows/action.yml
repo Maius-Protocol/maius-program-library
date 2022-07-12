@@ -7,6 +7,7 @@ env:
   SOLANA_VERSION: 1.10.30
   ANCHOR_VERSION: 0.24.2
 jobs:
+  key: mycache-v1
   build:
     runs-on: ubuntu-latest
     steps:
@@ -19,14 +20,8 @@ jobs:
           cache: "npm"
       - name: Install package
         run: npm install
-      - name: Clear Cache
-        run: rm -rf .local/share/solana && rm -rf .config/solana && rm -rf .cache/solana
-        shell: bash
       - name: Install Rust
         run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        shell: bash
-      - name: Switch to rust nightly
-        run: rustup default nightly
         shell: bash
       - run: echo "/home/runner/.cargo/bin" >> $GITHUB_PATH
         shell: bash
