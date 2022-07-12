@@ -101,6 +101,8 @@ jobs:
       - name: build programs
         run: |
           export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
+          export PATH="/usr/local/share/npm/bin:$PATH"
+          yarn install
           anchor build
       - name: run tests
         run: |
