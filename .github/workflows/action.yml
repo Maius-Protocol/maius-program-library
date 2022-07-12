@@ -7,7 +7,6 @@ env:
   SOLANA_VERSION: 1.10.30
   ANCHOR_VERSION: 0.24.2
 jobs:
-  key: mycache-v1
   build:
     runs-on: ubuntu-latest
     steps:
@@ -34,4 +33,6 @@ jobs:
       - run: solana-keygen new --silent --force --no-bip39-passphrase
       - run: npm i -g @project-serum/anchor-cli@$ANCHOR_VERSION ts-mocha typescript
       - run: anchor test
+        with:
+          cache: "new-cache-key"
         shell: bash
