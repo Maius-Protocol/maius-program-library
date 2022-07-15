@@ -3,13 +3,24 @@ use crate::schemas::*;
 use crate::errors::*;
 
 #[derive(Accounts)]
-#[instruction(name: String)]
+#[instruction(sku: String)]
 pub struct InitializeProduct<'info> {
     #[account(
     init_if_needed,
     seeds = [
     PRODUCT_PREFIX.as_bytes(),
-    name.as_bytes(),
+    merchant.key().as_ref(),
+    ],
+    bump,
+    payer = merchant,
+    space = ProductAuthor::space()
+    )]
+    pub product_account_author: Account<'info, ProductAuthor>,
+    #[account(
+    init_if_needed,
+    seeds = [
+    PRODUCT_PREFIX.as_bytes(),
+    sku.as_bytes(),
     merchant.key().as_ref(),
     ],
     bump,
@@ -25,14 +36,21 @@ pub struct InitializeProduct<'info> {
 
 pub fn handler(
     ctx: Context<InitializeProduct>,
+    sku: String,
     name: String,
     authority: Pubkey,
     description: String,
-    sku: String,
     default_price: Pubkey,
     unit_label: String,
     images: Vec<String>
 ) -> Result<()> {
+    let product_account_author = &mut ctx.accounts.product_account_author;
+
+    if !product_account_author.has_already_been_initialized {
+        product_account_author.has_already_been_initialized = true;
+        product_account_author.authority = authority;
+        product_account_author.product_accounts = vec![];
+    }
     ctx.accounts.product_account.authority = authority;
     ctx.accounts.product_account.description = description;
     ctx.accounts.product_account.name = name;
@@ -43,5 +61,6 @@ pub fn handler(
     ctx.accounts.product_account.active = false;
     let clock = &ctx.accounts.clock;
     ctx.accounts.product_account.updated_at = clock.unix_timestamp;
+    product_account_author.product_accounts.push(ctx.accounts.product_account.key());
     Ok(())
 }

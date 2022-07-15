@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use crate::constants::*;
 
+pub const MAXIMUM_PRODUCT_PER_AUTHOR :usize = 30;
 pub const MAXIMUM_IMAGE_PER_PRODUCT :usize = 8;
 pub const MAXIMUM_LENGTH_OF_IMAGE_URL :usize = 256;
 pub const MAXIMUM_LENGTH_OF_DESCRIPTION_PRODUCT :usize = 512;
@@ -36,5 +37,21 @@ impl Product {
         4 + MAXIMUM_LENGTH_OF_UNIT_LABEL_PRODUCT + // unit_label
         I64_SIZE + // update_at
         4 + MAXIMUM_IMAGE_PER_PRODUCT*4 + MAXIMUM_IMAGE_PER_PRODUCT*MAXIMUM_LENGTH_OF_IMAGE_URL // images
+    }
+}
+
+
+#[account]
+pub struct ProductAuthor {
+    pub authority: Pubkey,
+    pub has_already_been_initialized: bool,
+    pub product_accounts: Vec<Pubkey>,
+}
+impl ProductAuthor {
+    pub fn space() -> usize {
+        8 + // discriminator
+        PUBKEY_SIZE + // authority
+        1 + // has_already_been_initialized
+        4 + (PUBKEY_SIZE * MAXIMUM_PRODUCT_PER_AUTHOR)  // product_accounts
     }
 }
