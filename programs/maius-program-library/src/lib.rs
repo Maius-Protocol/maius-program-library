@@ -21,8 +21,8 @@ macro_rules! debug {
 pub mod maius_program_library {
     use super::*;
 
-    pub fn initialize_merchant(ctx: Context<InitializeCustomer>, description: String, customer_wallet: Pubkey) -> Result<()> {
-        initialize_customer::handler(ctx, description, customer_wallet)
+    pub fn initialize_merchant(ctx: Context<InitializeMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
+        initialize_merchant::handler(ctx, name, description, logo_url)
     }
 
     pub fn initialize_customer(ctx: Context<InitializeCustomer>, description: String, customer_wallet: Pubkey) -> Result<()> {

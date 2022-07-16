@@ -5,6 +5,7 @@ use crate::constants::*;
 #[derive(Default)]
 pub struct Customer {
     pub authority: Pubkey,
+    pub prev_customer_key: Pubkey,
     pub description: String,
 }
 
@@ -17,6 +18,7 @@ impl Customer {
         8 +  // discriminator
         1 + // bump
         PUBKEY_SIZE + // authority
+        PUBKEY_SIZE + // prev_customer_key
         4 + // Vec len
         Customer::DESCRIPTION_MAX_LEN // description
     }

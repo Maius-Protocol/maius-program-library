@@ -4,12 +4,11 @@ use crate::constants::*;
 #[account]
 #[derive(Default)]
 pub struct Merchant {
-    pub authority: Pubkey,
-    pub capacity: u16,
+    pub merchant_wallet_address: Pubkey,
     pub name: String,
     pub description: String,
     pub logo_url: String,
-    pub customers: Vec<Pubkey>,
+    pub current_customer_key: Pubkey,
 }
 
 impl Merchant {
@@ -18,12 +17,13 @@ impl Merchant {
     pub const DESCRIPTION_MAX_LEN: usize = 256;
     pub const LOGO_URL_MAX_LEN: usize = 256;
 
-    pub fn space(capacity: u16) -> usize {
-        8 + 2 +
+    pub fn space() -> usize {
+        8 +  // discriminator
+            1 + // bump
             4 + Merchant::NAME_MAX_LEN +
             4 + Merchant::DESCRIPTION_MAX_LEN +
             4 + Merchant::LOGO_URL_MAX_LEN +
-            4 + (capacity as usize) * std::mem::size_of::<Pubkey>()
+            4 + std::mem::size_of::<Pubkey>()
     }
 
 }
