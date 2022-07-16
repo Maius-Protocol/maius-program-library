@@ -1,110 +1,33 @@
-name: Test
-
+name: Rust
 on:
   push:
-    branches:
-      - "*"
+    branches: [main]
   pull_request:
-    branches:
-      - "*"
+    branches: [main]
 env:
-  solana_version: stable
-
+  CARGO_TERM_COLOR: always
 jobs:
-  install:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        name: cache solana cli
-        id: cache-solana
-        with:
-          path: |
-            ~/.cache/solana/
-            ~/.local/share/solana/
-          key: solana-${{ runner.os }}-v0000-${{ env.solana_version }}
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-
-      - name: Cache rust
-        uses: Swatinem/rust-cache@v1
-
-      - name: install essentials
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pkg-config build-essential libudev-dev
-      - name: install solana
-        if: steps.cache-solana.outputs.cache-hit != 'true'
-        run: |
-          sh -c "$(curl -sSfL https://release.solana.com/${{ env.solana_version }}/install)"
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          solana --version
-      - name: install node_modules
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          yarn install --ignore-scripts --frozen-lockfile
-  lint:
-    needs: install
-    runs-on: ubuntu-latest
+    container: projectserum/build:v0.24.2
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache rust
-        uses: Swatinem/rust-cache@v1
-
-      - name: Run fmt
-        run: cargo fmt -- --check
-
-      - name: Run clippy
-        run: cargo clippy -- --deny=warnings
-
-  test:
-    needs: install
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: ['yarn test']
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: install node_modules
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          yarn install --ignore-scripts --frozen-lockfile
-      - uses: actions/cache@v2
-        name: cache solana cli
-        id: cache-solana
-        with:
-          path: |
-            ~/.cache/solana/
-            ~/.local/share/solana/
-          key: solana-${{ runner.os }}-v0000-${{ env.solana_version }}
-
-      - name: setup solana
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          solana --version
-          solana-keygen new
-      - name: build programs
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          export PATH="/usr/local/share/npm/bin:$PATH"
-          yarn install
-          anchor build
-      - name: run tests
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
-          ${{ matrix.node }}
+      - uses: actions/checkout@v3
+      - name: List rustup toolchains
+        run: rustup toolchain list
+      - name: Set default toolchain
+        run: rustup default stable
+      - name: List rustup toolchains
+        run: rustup toolchain list
+      - name: Generate new keygen
+        run: solana-keygen new
+      - name: Set solana target cluster to local
+        run: solana config set --url http:localhost:8899
+      - name: Check solana config
+        run: solana config get
+      - name: Install yarn dependencies
+        run: yarn install
+      - name: Build
+        run: anchor build
+      - name: Run tests
+        run: anchor test
