@@ -18,13 +18,13 @@ pub struct UpdateProduct<'info> {
 pub fn handler(
     ctx: Context<UpdateProduct>,
     description: String,
-    sku: String,
+    name: String,
     default_price: Pubkey,
     unit_label: String,
     images: Vec<String>
 ) -> Result<()> {
     ctx.accounts.product_account.description = description;
-    ctx.accounts.product_account.sku = sku;
+    ctx.accounts.product_account.name = name;
     ctx.accounts.product_account.default_price = default_price;
     ctx.accounts.   product_account.unit_label = unit_label;
     ctx.accounts.product_account.images = images;

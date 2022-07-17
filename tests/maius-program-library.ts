@@ -104,12 +104,12 @@ export let globalState = {
   it("update product", async () => {
     let description = "bus\\nCharlotte Patton Incidunt hic aspern 4421, Aschach an der Steyr\\nArsenio Richard Ex et est ut et corr 21410, Dol";
     let unit_label = "";
+    let name = "Silver product"
     let defaultPrice: anchor.web3.PublicKey;
-    let sku = "4225-776-3234";
     let images: string[] = ["https://static.zajo.net/content/mediagallery/zajo_dcat/image/product/types/X/9088.png"];
     await program.methods.updateProduct(
         description,
-        sku,
+        name,
         defaultPrice,
         unit_label,
         images,

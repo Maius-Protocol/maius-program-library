@@ -44,29 +44,29 @@ pub mod maius_program_library {
 
     pub fn initialize_product(
         ctx: Context<InitializeProduct>,
+        sku: String,
         name: String,
         authority: Pubkey,
         description: String,
-        sku: String,
         default_price: Pubkey,
         unit_label: String,
         images: Vec<String>
     ) -> Result<()> {
         initialize_product::handler(
-            ctx, name, authority, description, sku, default_price, unit_label, images
+            ctx, sku, name, authority, description,  default_price, unit_label, images
         )
     }
 
     pub fn update_product(
         ctx: Context<UpdateProduct>,
         description: String,
-        sku: String,
+        name: String,
         default_price: Pubkey,
         unit_label: String,
         images: Vec<String>
     ) -> Result<()> {
         update_product::handler(
-            ctx, description, sku, default_price, unit_label, images
+            ctx, description, name, default_price, unit_label, images
         )
     }
 
