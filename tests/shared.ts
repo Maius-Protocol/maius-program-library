@@ -17,28 +17,28 @@ export const getBalance = async (address: string) => {
   return ((response || 0) / LAMPORTS_PER_SOL).toFixed(18);
 };
 
-export const initializeMerchant = async (merchantWallet: Wallet) => {
-  const address = await findMerchantAddress(merchantWallet);
-  const genesisCustomer = await findCustomerAddress(merchantWallet);
-  await program.methods
-    .initializeMerchant(
-      "MaiusPay",
-      "Awesome store",
-      "https://i.pravatar.cc/300"
-    )
-    .accounts({
-      merchant: address,
-      genesisCustomer: genesisCustomer,
-      merchantWallet: merchantWallet.publicKey,
-      systemProgram: SystemProgram.programId,
-    })
-    .signers([merchantWallet.payer])
-    .rpc();
-
-  const data = await program.account.merchant.fetch(address);
-  console.log("[Merchant] Create result: ", data);
-  return address;
-};
+// export const initializeMerchant = async (merchantWallet: Wallet) => {
+//   const address = await findMerchantAddress(merchantWallet);
+//   const genesisCustomer = await findCustomerAddress(merchantWallet);
+//   await program.methods
+//     .initializeMerchant(
+//       "MaiusPay",
+//       "Awesome store",
+//       "https://i.pravatar.cc/300"
+//     )
+//     .accounts({
+//       merchant: address,
+//       genesisCustomer: genesisCustomer,
+//       merchantWallet: merchantWallet.publicKey,
+//       systemProgram: SystemProgram.programId,
+//     })
+//     .signers([merchantWallet.payer])
+//     .rpc();
+//
+//   const data = await program.account.merchant.fetch(address);
+//   console.log("[Merchant] Create result: ", data);
+//   return address;
+// };
 
 export const airdropAccounts = async () => {
   anchor.setProvider(provider);

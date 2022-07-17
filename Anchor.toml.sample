@@ -6,7 +6,7 @@ maius_program_library = "85WehtyqKfKjGTq9ad9V6J5iMX7KLsNSN5rdxaeqDQoy"
 [registry]
 url = "https://anchor.projectserum.com"
 
-[provider]
+[provider]x
 cluster = "localnet"
 wallet = "/github/home/.config/solana/id.json"
 
