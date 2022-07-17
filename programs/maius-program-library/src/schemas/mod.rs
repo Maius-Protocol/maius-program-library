@@ -1,3 +1,4 @@
+pub mod merchant;
 pub mod customer;
 // pub mod subscription;
 // pub mod subscription_item;
@@ -8,6 +9,7 @@ pub mod customer;
 
 // pub use subscription::*;
 // pub use subscription_item::*;
+pub use merchant::*;
 pub use customer::*;
 // pub use invoice::*;
 // pub use invoice_item::*;
