@@ -37,9 +37,17 @@ pub mod maius_program_library {
     //     Ok(())
     // }
 
-    // pub fn initialize_price(ctx: Context<InitializePrice>) -> Result<()> {
-    //     Ok(())
-    // }
+    pub fn initialize_price(ctx: Context<InitializePrice>, product: Pubkey, billing_scheme: String, currency: Currency, unit_amount: u64, interval: String, interval_count: u8, active: bool, price_type: String) -> Result<()> {
+        initialize_price::handler(ctx, product, billing_scheme, currency, unit_amount, interval, interval_count, active, price_type);
+    }
+
+    pub fn update_price(ctx: Context<UpdatePrice>, description: String) -> Result<()> {
+        update_customer::handler(ctx, description)
+    }
+
+    pub fn delete_price(ctx: Context<DeletePrice>) -> Result<()> {
+        delete_customer::handler(ctx)
+    }
 
     // pub fn initialize_invoice(ctx: Context<InitializeInvoice>) -> Result<()> {
     //     Ok(())

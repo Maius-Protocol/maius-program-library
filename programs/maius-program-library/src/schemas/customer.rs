@@ -20,5 +20,4 @@ impl Customer {
         4 + // Vec len
         Customer::DESCRIPTION_MAX_LEN // description
     }
-
 }

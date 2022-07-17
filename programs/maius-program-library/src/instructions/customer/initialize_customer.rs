@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::schemas::Customer;
-use crate::errors::*;
+// use crate::errors::*;
 
 #[derive(Accounts)]
 #[instruction(description: String, customer_wallet: Pubkey)]
@@ -28,10 +28,10 @@ pub fn handler(
     customer_wallet: Pubkey
 ) -> Result<()> {
     msg!("Customer: {}, Create with description: {}", customer_wallet, description);
-    require!(
-        description.len() <= Customer::DESCRIPTION_MAX_LEN,
-        ErrorMessage::InvalidDescLen    
-    );
+    // require!(
+    //     description.len() <= Customer::DESCRIPTION_MAX_LEN,
+    //     ErrorMessage::InvalidDescLen    
+    // );
     ctx.accounts.customer_account.authority = customer_wallet;
     ctx.accounts.customer_account.description = description;
     Ok(())
