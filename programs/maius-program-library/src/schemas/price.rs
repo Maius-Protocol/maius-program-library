@@ -14,7 +14,6 @@ pub struct Price {
     pub price_type: String,
     pub created: u64,
     pub updated: u64,
-    pub product_price_index: String,
 }
 
 impl Price {
@@ -23,11 +22,10 @@ impl Price {
     pub const CURRENCY_MAX_LEN: usize = 16;
     pub const INTERVAL_MAX_LEN: usize = 64;
     pub const INTERVAL_COUNT_MAX_LEN: usize = 31;
-    pub const UNIT_AMOUNT_MAX_LEN: usize = 18446744073709551615;
+    pub const UNIT_AMOUNT_MAX_LEN: usize = 8;
     pub const PRICE_TYPE_MAX_LEN: usize = 256;
-    pub const CREATED_MAX_LEN: usize = 18446744073709551615;
-    pub const UPDATED_MAX_LEN: usize = 18446744073709551615;
-    pub const PRICE_CREATED_INDEX_MAX_LEN: usize = 18446744073709551615;
+    pub const CREATED_MAX_LEN: usize = 8;
+    pub const UPDATED_MAX_LEN: usize = 8;
 
     // FYI: https://github.com/coral-xyz/anchor/blob/master/lang/syn/src/codegen/program/handlers.rs#L98
     pub fn space() -> usize {
@@ -41,7 +39,6 @@ impl Price {
         1 + // active
         4 + Price::PRICE_TYPE_MAX_LEN + // price_type
         Price::CREATED_MAX_LEN + // created
-        Price::UPDATED_MAX_LEN + // updated
-        Price::PRICE_CREATED_INDEX_MAX_LEN // price_created_index
+        Price::UPDATED_MAX_LEN  // updated
     }
 }

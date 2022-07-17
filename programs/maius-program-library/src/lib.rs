@@ -7,7 +7,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("5aoQ5SF77E73o8KqfXc2LHMP3yfbwkqPgnd6aAAw1bfJ");
+declare_id!("85WehtyqKfKjGTq9ad9V6J5iMX7KLsNSN5rdxaeqDQoy");
 
 #[macro_export]
 macro_rules! debug {
@@ -21,6 +21,15 @@ macro_rules! debug {
 pub mod maius_program_library {
     use super::*;
 
+    pub fn initialize_merchant(ctx: Context<InitializeMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
+        initialize_merchant::handler(ctx, name, description, logo_url)
+    }
+
+    pub fn update_merchant(ctx: Context<UpdateMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
+        update_merchant::handler(ctx, name, description, logo_url)
+    }
+
+
     pub fn initialize_customer(ctx: Context<InitializeCustomer>, description: String, customer_wallet: Pubkey) -> Result<()> {
         initialize_customer::handler(ctx, description, customer_wallet)
     }
@@ -31,6 +40,40 @@ pub mod maius_program_library {
 
     pub fn delete_customer(ctx: Context<DeleteCustomer>) -> Result<()> {
         delete_customer::handler(ctx)
+    }
+
+    pub fn initialize_product(
+        ctx: Context<InitializeProduct>,
+        sku: String,
+        name: String,
+        authority: Pubkey,
+        description: String,
+        default_price: Pubkey,
+        unit_label: String,
+        images: Vec<String>
+    ) -> Result<()> {
+        initialize_product::handler(
+            ctx, sku, name, authority, description,  default_price, unit_label, images
+        )
+    }
+
+    pub fn update_product(
+        ctx: Context<UpdateProduct>,
+        description: String,
+        name: String,
+        default_price: Pubkey,
+        unit_label: String,
+        images: Vec<String>
+    ) -> Result<()> {
+        update_product::handler(
+            ctx, description, name, default_price, unit_label, images
+        )
+    }
+
+    pub fn delete_product(
+        ctx: Context<DeleteProduct>
+    ) -> Result<()> {
+        delete_product::handler(ctx)
     }
 
     // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {

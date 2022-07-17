@@ -12,7 +12,7 @@ pub struct InitializePrice<'info> {
             Price::PRICE_PREFIX.as_bytes(),
             merchant_authority.key().as_ref(),
             product.key().as_ref(),
-            product.price_account
+            product_account.price_count.to_string().as_ref()
         ],
         bump,
         payer = merchant_authority,
@@ -51,6 +51,8 @@ pub fn handler(
     ctx.accounts.price_account.price_type = price_type;
     ctx.accounts.price_account.created = created;
     ctx.accounts.price_account.updated = updated;
+
+    ctx.accounts.product_account.price_count += 1;
 
     Ok(())
 } 
