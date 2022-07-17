@@ -8,26 +8,18 @@ pub struct InitializeProduct<'info> {
     #[account(
     init_if_needed,
     seeds = [
+    b"v1",
     PRODUCT_PREFIX.as_bytes(),
-    merchant.key().as_ref(),
-    ],
-    bump,
-    payer = merchant,
-    space = ProductAuthor::space()
-    )]
-    pub product_account_author: Account<'info, ProductAuthor>,
-    #[account(
-    init_if_needed,
-    seeds = [
-    PRODUCT_PREFIX.as_bytes(),
-    sku.as_bytes(),
-    merchant.key().as_ref(),
+    merchant_account.key().as_ref(),
+    merchant_account.product_count.to_string().as_ref(),
     ],
     bump,
     payer = merchant,
     space = Product::space()
     )]
     pub product_account: Account<'info, Product>,
+    #[account(mut)]
+    pub merchant_account: Account<'info, Merchant>,
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -44,7 +36,6 @@ pub fn handler(
     unit_label: String,
     images: Vec<String>
 ) ->  Result<()> {
-    let product_account_author = &mut ctx.accounts.product_account_author;
     ctx.accounts.product_account.authority = authority;
     ctx.accounts.product_account.description = description;
     ctx.accounts.product_account.name = name;
@@ -57,6 +48,6 @@ pub fn handler(
     let clock = &ctx.accounts.clock;
     ctx.accounts.product_account.created = clock.unix_timestamp;
     ctx.accounts.product_account.updated = clock.unix_timestamp;
-    product_account_author.product_accounts.push(sku);
+    ctx.accounts.merchant_account.product_count += 1;
     Ok(())
 }

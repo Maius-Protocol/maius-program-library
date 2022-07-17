@@ -43,17 +43,3 @@ impl Product {
     }
 }
 
-
-#[account]
-pub struct ProductAuthor {
-    pub authority: Pubkey,
-    pub product_accounts: Vec<String>,
-}
-impl ProductAuthor {
-    pub fn space() -> usize {
-        8 + // discriminator
-        PUBKEY_SIZE + // authority
-        1 + // has_already_been_initialized
-        4 + (MAXIMUM_LENGTH_OF_SKU_PRODUCT * MAXIMUM_PRODUCT_PER_AUTHOR)  // product_accounts
-    }
-}

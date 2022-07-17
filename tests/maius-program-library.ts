@@ -9,8 +9,6 @@ import {
 // import { merchantTests } from "./merchant";
 import {productTests} from "./product"
 
-let productAccount: anchor.web3.PublicKey;
-let productBump: number;
 
 export let globalState = {
   merchantWallet: new Wallet(Keypair.generate()),
