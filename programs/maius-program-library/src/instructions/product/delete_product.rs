@@ -7,6 +7,10 @@ use crate::errors::*;
 pub struct DeleteProduct<'info> {
     #[account(
     mut,
+    )]
+    pub product_account_author: Account<'info, ProductAuthor>,
+    #[account(
+    mut,
     close=merchant
     )]
     pub product_account: Account<'info, Product>,
@@ -18,6 +22,7 @@ pub struct DeleteProduct<'info> {
 pub fn handler(
     ctx: Context<DeleteProduct>
 ) -> Result<()> {
+
     msg!("Product: {}, Delete", ctx.accounts.product_account.name);
     Ok(())
 }

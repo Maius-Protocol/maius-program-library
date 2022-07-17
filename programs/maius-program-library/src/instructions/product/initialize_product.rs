@@ -43,24 +43,20 @@ pub fn handler(
     default_price: Pubkey,
     unit_label: String,
     images: Vec<String>
-) -> Result<()> {
+) ->  Result<()> {
     let product_account_author = &mut ctx.accounts.product_account_author;
-
-    if !product_account_author.has_already_been_initialized {
-        product_account_author.has_already_been_initialized = true;
-        product_account_author.authority = authority;
-        product_account_author.product_accounts = vec![];
-    }
     ctx.accounts.product_account.authority = authority;
     ctx.accounts.product_account.description = description;
     ctx.accounts.product_account.name = name;
-    ctx.accounts.product_account.sku = sku;
+    ctx.accounts.product_account.sku = sku.clone();
     ctx.accounts.product_account.default_price = default_price;
     ctx.accounts.product_account.unit_label = unit_label;
+    ctx.accounts.product_account.price_count = 0;
     ctx.accounts.product_account.images = images;
     ctx.accounts.product_account.active = false;
     let clock = &ctx.accounts.clock;
-    ctx.accounts.product_account.updated_at = clock.unix_timestamp;
-    product_account_author.product_accounts.push(ctx.accounts.product_account.key());
+    ctx.accounts.product_account.created = clock.unix_timestamp;
+    ctx.accounts.product_account.updated = clock.unix_timestamp;
+    product_account_author.product_accounts.push(sku);
     Ok(())
 }
