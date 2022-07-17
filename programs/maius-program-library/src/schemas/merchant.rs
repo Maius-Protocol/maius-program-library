@@ -8,6 +8,7 @@ pub struct Merchant {
     pub name: String,
     pub description: String,
     pub logo_url: String,
+    pub product_count: u64,
     pub current_customer_key: Pubkey,
 }
 
@@ -19,11 +20,12 @@ impl Merchant {
 
     pub fn space() -> usize {
         8 +  // discriminator
-            1 + // bump
-            4 + Merchant::NAME_MAX_LEN +
-            4 + Merchant::DESCRIPTION_MAX_LEN +
-            4 + Merchant::LOGO_URL_MAX_LEN +
-            4 + std::mem::size_of::<Pubkey>()
+        1 + // bump
+        4 + Merchant::NAME_MAX_LEN + // name
+        4 + Merchant::DESCRIPTION_MAX_LEN + // description
+        4 + Merchant::LOGO_URL_MAX_LEN + // logo
+        8 + // product_count
+        4 + std::mem::size_of::<Pubkey>()
     }
 
 }

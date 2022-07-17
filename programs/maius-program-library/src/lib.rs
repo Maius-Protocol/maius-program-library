@@ -70,38 +70,4 @@ pub mod maius_program_library {
         )
     }
 
-    pub fn delete_product(
-        ctx: Context<DeleteProduct>
-    ) -> Result<()> {
-        delete_product::handler(ctx)
-    }
-
-    // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_price(ctx: Context<InitializePrice>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_invoice(ctx: Context<InitializeInvoice>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_invoice_item(ctx: Context<InitializeInvoiceItem>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_subscription(ctx: Context<InitializeSubscription>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_subscription_item(ctx: Context<InitializeSubscriptionItem>) -> Result<()> {
-    //     Ok(())
-    // }
-
-
-    // pub fn update_customer(ctx: Context<UpdateCustomer>) -> Result<()> {
-    //     Ok(())
-    // }
 }
