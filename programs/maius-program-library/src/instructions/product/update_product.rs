@@ -12,7 +12,6 @@ pub struct UpdateProduct<'info> {
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,
-    pub clock: Sysvar<'info, Clock>,
 }
 
 pub fn handler(
@@ -29,7 +28,6 @@ pub fn handler(
     ctx.accounts.product_account.unit_label = unit_label;
     ctx.accounts.product_account.images = images;
     ctx.accounts.product_account.active = false;
-    let clock = &ctx.accounts.clock;
-    ctx.accounts.product_account.updated = clock.unix_timestamp;
+    ctx.accounts.product_account.updated = Clock::get().unwrap().unix_timestamp;
     Ok(())
 }
