@@ -6,7 +6,6 @@ pub mod product;
 // pub mod invoice;
 // pub mod invoice_item;
 pub mod price;
-pub mod product;
 
 // pub use subscription::*;
 // pub use subscription_item::*;

@@ -12,8 +12,8 @@ pub struct Price {
     pub interval_count: u8,
     pub active: bool,
     pub price_type: String,
-    pub created: u64,
-    pub updated: u64,
+    pub created: i64,
+    pub updated: i64,
 }
 
 impl Price {

@@ -20,6 +20,7 @@ pub struct InitializePrice<'info> {
     )]
     pub price_account: Account<'info, Price>,
     pub system_program: Program<'info, System>,
+    #[account(mut)]
     pub product_account: Account<'info, Product>,
     #[account(mut)]
     pub merchant_authority: Signer<'info>,
@@ -35,22 +36,20 @@ pub fn handler(
     interval_count: u8, 
     active: bool,
     price_type: String,
-    created: u64,
-    updated: u64,
-    product_price_index: String
 ) -> Result<()> {
-    msg!("Initialize a new Price with product: {}, billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}, created: {}, updated: {}", 
-        product, billing_scheme, unit_amount, interval, interval_count, active, price_type, created, updated);
+    msg!("Initialize a new Price of Product: {} with billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}", 
+        product, billing_scheme, unit_amount, interval, interval_count, active, price_type);
 
     ctx.accounts.price_account.product = product;
     ctx.accounts.price_account.billing_scheme = billing_scheme;
     ctx.accounts.price_account.currency = currency;
+    ctx.accounts.price_account.unit_amount = unit_amount;
     ctx.accounts.price_account.interval = interval;
     ctx.accounts.price_account.interval_count = interval_count;
     ctx.accounts.price_account.active = active;
     ctx.accounts.price_account.price_type = price_type;
-    ctx.accounts.price_account.created = created;
-    ctx.accounts.price_account.updated = updated;
+    ctx.accounts.price_account.created = Clock::get().unwrap().unix_timestamp;
+    ctx.accounts.price_account.updated = Clock::get().unwrap().unix_timestamp;
 
     ctx.accounts.product_account.price_count += 1;
 

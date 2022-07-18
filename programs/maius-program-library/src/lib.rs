@@ -70,46 +70,49 @@ pub mod maius_program_library {
         )
     }
 
-    pub fn delete_product(
-        ctx: Context<DeleteProduct>
+    pub fn initialize_price(
+        ctx: Context<InitializePrice>,
+        product: Pubkey, 
+        billing_scheme: String, 
+        currency: String, 
+        unit_amount: u64, 
+        interval: String, 
+        interval_count: u8, 
+        active: bool, 
+        price_type: String
     ) -> Result<()> {
-        delete_product::handler(ctx)
+        initialize_price::handler(
+            ctx, 
+            product, 
+            billing_scheme, 
+            currency, 
+            unit_amount, 
+            interval, 
+            interval_count, 
+            active, 
+            price_type
+        )
     }
 
-    // pub fn initialize_product(ctx: Context<InitializeProduct>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    pub fn initialize_price(ctx: Context<InitializePrice>, product: Pubkey, billing_scheme: String, currency: Currency, unit_amount: u64, interval: String, interval_count: u8, active: bool, price_type: String) -> Result<()> {
-        initialize_price::handler(ctx, product, billing_scheme, currency, unit_amount, interval, interval_count, active, price_type);
+    pub fn update_price(
+        ctx: Context<UpdatePrice>,
+        billing_scheme: String,
+        currency: String,
+        unit_amount: u64,
+        interval: String, 
+        interval_count: u8, 
+        active: bool,
+        price_type: String,
+    ) -> Result<()> {
+        update_price::handler(
+            ctx,
+            billing_scheme,
+            currency,
+            unit_amount,
+            interval, 
+            interval_count,
+            active,
+            price_type
+        )
     }
-
-    pub fn update_price(ctx: Context<UpdatePrice>, description: String) -> Result<()> {
-        update_customer::handler(ctx, description)
-    }
-
-    pub fn delete_price(ctx: Context<DeletePrice>) -> Result<()> {
-        delete_customer::handler(ctx)
-    }
-
-    // pub fn initialize_invoice(ctx: Context<InitializeInvoice>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_invoice_item(ctx: Context<InitializeInvoiceItem>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_subscription(ctx: Context<InitializeSubscription>) -> Result<()> {
-    //     Ok(())
-    // }
-
-    // pub fn initialize_subscription_item(ctx: Context<InitializeSubscriptionItem>) -> Result<()> {
-    //     Ok(())
-    // }
-
-
-    // pub fn update_customer(ctx: Context<UpdateCustomer>) -> Result<()> {
-    //     Ok(())
-    // }
 }
