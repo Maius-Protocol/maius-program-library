@@ -89,7 +89,6 @@ export const productTests = describe("[Product] Test Cases", () => {
           productAccount: productAccount,
           merchant: globalState.merchantWallet.publicKey,
           systemProgram: SystemProgram.programId,
-          clock: SYSVAR_CLOCK_PUBKEY,
         })
         .signers([globalState.merchantWallet.payer])
         .rpc();
@@ -135,7 +134,6 @@ export const productTests = describe("[Product] Test Cases", () => {
               productAccount: productAccount1,
               merchant: globalState.merchantWallet.publicKey,
               systemProgram: SystemProgram.programId,
-              clock: SYSVAR_CLOCK_PUBKEY,
           })
           .signers([globalState.merchantWallet.payer])
           .rpc();
