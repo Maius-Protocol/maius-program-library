@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-pub const SUBSCRIPTION_PREFIX: &'static str = "subscription";
+pub const SUBSCRIPTION_ITEM_PREFIX: &'static str = "subscription_item";
 
 #[account]
 #[derive(Default)]
