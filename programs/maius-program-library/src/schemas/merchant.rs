@@ -9,6 +9,7 @@ pub struct Merchant {
     pub description: String,
     pub logo_url: String,
     pub product_count: u64,
+    pub subscription_count: u64,
     pub current_customer_key: Pubkey,
 }
 
@@ -25,6 +26,7 @@ impl Merchant {
         4 + Merchant::DESCRIPTION_MAX_LEN + // description
         4 + Merchant::LOGO_URL_MAX_LEN + // logo
         8 + // product_count
+        8 + // subscription_count
         4 + std::mem::size_of::<Pubkey>()
     }
 

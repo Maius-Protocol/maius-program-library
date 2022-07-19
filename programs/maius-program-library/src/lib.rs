@@ -70,4 +70,13 @@ pub mod maius_program_library {
         )
     }
 
+    pub fn initialize_subscription(
+        ctx: Context<InitializeSubscription>,
+        merchant_wallet: Pubkey,
+        customer_wallet: Pubkey,
+        last_invoice: Pubkey
+    ) -> Result<()> {
+        initialize_subscription::handler(ctx, merchant_wallet, customer_wallet, last_invoice)
+    }
+
 }
