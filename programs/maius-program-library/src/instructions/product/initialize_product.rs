@@ -23,7 +23,6 @@ pub struct InitializeProduct<'info> {
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,
-    pub clock: Sysvar<'info, Clock>,
 }
 
 pub fn handler(
@@ -45,9 +44,8 @@ pub fn handler(
     ctx.accounts.product_account.price_count = 0;
     ctx.accounts.product_account.images = images;
     ctx.accounts.product_account.active = false;
-    let clock = &ctx.accounts.clock;
-    ctx.accounts.product_account.created = clock.unix_timestamp;
-    ctx.accounts.product_account.updated = clock.unix_timestamp;
+    ctx.accounts.product_account.created = Clock::get().unwrap().unix_timestamp;
+    ctx.accounts.product_account.updated = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.merchant_account.product_count += 1;
     Ok(())
 }

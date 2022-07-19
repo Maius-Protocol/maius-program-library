@@ -1,6 +1,7 @@
 pub mod merchant;
 pub mod customer;
 pub mod product;
+pub mod subscription;
 // pub mod initialize_product;
 pub mod price;
 // pub mod initialize_invoice;
@@ -12,6 +13,7 @@ pub mod price;
 pub use merchant::*;
 pub use customer::*;
 pub use product::*;
+pub use subscription::*;
 // pub use initialize_product::*;
 pub use price::*;
 // pub use initialize_invoice::*;

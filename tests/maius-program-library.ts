@@ -7,18 +7,15 @@ import {
   provider,
 } from "./shared";
 // import { merchantTests } from "./merchant";
-import {productTests} from "./product"
 
 
 export let globalState = {
   merchantWallet: new Wallet(Keypair.generate()),
   customerWallet: new Wallet(Keypair.generate()),
-  productAccount: productAccount,
-  productBump: productBump,
 };
 
 describe("maius-program-library", () => {
-  productTests.run();
+  // productTests.run();
   // merchantTests.run();
   // customerTests.run();
 });
