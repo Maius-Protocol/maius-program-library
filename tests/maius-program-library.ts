@@ -7,7 +7,6 @@ import {
   provider,
 } from "./shared";
 // import { merchantTests } from "./merchant";
-import {productTests} from "./product"
 
 
 export let globalState = {
@@ -16,7 +15,7 @@ export let globalState = {
 };
 
 describe("maius-program-library", () => {
-  productTests.run();
+  // productTests.run();
   // merchantTests.run();
   // customerTests.run();
 });
