@@ -26,20 +26,7 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "name": "logoUrl",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
       "name": "updateMerchant",
@@ -48,11 +35,6 @@ export type MaiusProgramLibrary = {
           "name": "merchantAccount",
           "isMut": true,
           "isSigner": false
-        },
-        {
-          "name": "merchantAuthority",
-          "isMut": true,
-          "isSigner": true
         },
         {
           "name": "systemProgram",
@@ -179,11 +161,6 @@ export type MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "clock",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -234,11 +211,6 @@ export type MaiusProgramLibrary = {
         },
         {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "clock",
           "isMut": false,
           "isSigner": false
         }
@@ -414,20 +386,7 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "name": "logoUrl",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
       "name": "updateMerchant",
@@ -436,11 +395,6 @@ export const IDL: MaiusProgramLibrary = {
           "name": "merchantAccount",
           "isMut": true,
           "isSigner": false
-        },
-        {
-          "name": "merchantAuthority",
-          "isMut": true,
-          "isSigner": true
         },
         {
           "name": "systemProgram",
@@ -567,11 +521,6 @@ export const IDL: MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "clock",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -622,11 +571,6 @@ export const IDL: MaiusProgramLibrary = {
         },
         {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "clock",
           "isMut": false,
           "isSigner": false
         }

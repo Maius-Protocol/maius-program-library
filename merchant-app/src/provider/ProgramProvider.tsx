@@ -1,9 +1,10 @@
 import { Program, AnchorProvider } from "@project-serum/anchor";
 import React from "react";
 import { useContext } from "react";
-import { idlJSON, programID } from "../../config/globalVariables";
+import { opts, programID } from "../../config/globalVariables";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { MaiusProgramLibrary } from "../../config/maius_program_library";
+import idl from "../../config/idl.json";
 
 interface ProgramContextState {
   program: Program<MaiusProgramLibrary>;
@@ -15,22 +16,16 @@ const ProgramContext = React.createContext<ProgramContextState | undefined>(
 interface ProgramProviderProps {
   children: React.ReactNode;
 }
-
-const opts = {
-  preflightCommitment: "processed",
-};
 export const ProgramProvider: React.FunctionComponent<ProgramProviderProps> = ({
   children,
 }: ProgramProviderProps) => {
   const { connection } = useConnection();
   const { wallet } = useWallet();
 
-  const provider = new AnchorProvider(
-    connection,
-    wallet,
-    opts.preflightCommitment
-  );
-  const program = new Program(idlJSON, programID, provider);
+  const provider = new AnchorProvider(connection, wallet, {
+    commitment: "finalized",
+  });
+  const program = new Program(idl, programID, provider);
   return (
     <ProgramContext.Provider value={{ program }}>
       {children}

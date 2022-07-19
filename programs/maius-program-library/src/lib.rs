@@ -7,7 +7,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("85WehtyqKfKjGTq9ad9V6J5iMX7KLsNSN5rdxaeqDQoy");
+declare_id!("9ZUbSFMnfwCeAY3Nt3VSUUSFCfTEWHhrZLWd7bnyYXR9");
 
 #[macro_export]
 macro_rules! debug {
@@ -21,8 +21,8 @@ macro_rules! debug {
 pub mod maius_program_library {
     use super::*;
 
-    pub fn initialize_merchant(ctx: Context<InitializeMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
-        initialize_merchant::handler(ctx, name, description, logo_url)
+    pub fn initialize_merchant(ctx: Context<InitializeMerchant>) -> Result<()> {
+        initialize_merchant::handler(ctx)
     }
 
     pub fn update_merchant(ctx: Context<UpdateMerchant>, name: String, description: String, logo_url: String) -> Result<()> {

@@ -10,24 +10,13 @@ export function useCreateMerchantAccount() {
   const { wallet, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  const merchant_wallet_addr = wallet?.adapter?.publicKey?.toBase58() || "";
   return useMutation(async () => {
     const address = await findMerchantAddress(wallet?.adapter?.publicKey);
     const genesisCustomer = await findCustomerAddress(
       wallet?.adapter?.publicKey
     );
-    console.log({
-      merchant: address,
-      genesisCustomer: genesisCustomer,
-      merchantWallet: wallet?.adapter?.publicKey,
-      systemProgram: SystemProgram.programId,
-    });
     const transaction = await program.methods
-      .initializeMerchant(
-        "MaiusPay",
-        "Awesome store",
-        "https://i.pravatar.cc/300"
-      )
+      .initializeMerchant()
       .accounts({
         merchant: address,
         genesisCustomer: genesisCustomer,
@@ -35,6 +24,7 @@ export function useCreateMerchantAccount() {
         systemProgram: SystemProgram.programId,
       })
       .transaction();
-    return await sendTransaction(transaction, connection);
+    await sendTransaction(transaction, connection);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
   });
 }
