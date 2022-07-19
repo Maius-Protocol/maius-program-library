@@ -22,7 +22,7 @@ import {
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
+import { clusterApiUrl, Commitment } from "@solana/web3.js";
 import {
   createDefaultAuthorizationResultCache,
   SolanaMobileWalletAdapter,
@@ -31,7 +31,7 @@ import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ProgramProvider } from "../src/provider/ProgramProvider";
-import { localhostEndpoint } from "../config/globalVariables";
+import { localhostEndpoint, opts } from "../config/globalVariables";
 import { NotificationsProvider } from "@mantine/notifications";
 
 const queryClient = new QueryClient();
@@ -52,7 +52,7 @@ function MyApp(props: AppProps) {
   const wallets = useMemo(
     () => [
       new SolanaMobileWalletAdapter({
-        appIdentity: { name: "Solana Wallet Adapter App" },
+        appIdentity: { name: "Maius Pay" },
         authorizationResultCache: createDefaultAuthorizationResultCache(),
       }),
       new CoinbaseWalletAdapter(),
@@ -76,7 +76,10 @@ function MyApp(props: AppProps) {
 
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <ConnectionProvider endpoint={endpoint}>
+        <ConnectionProvider
+          endpoint={endpoint}
+          config={{ commitment: "finalized" }}
+        >
           <WalletProvider wallets={wallets} autoConnect>
             <ProgramProvider>
               <WalletModalProvider>

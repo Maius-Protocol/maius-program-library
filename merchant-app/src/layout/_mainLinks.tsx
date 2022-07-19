@@ -57,7 +57,18 @@ const configLinks = [
   },
 ];
 const productLinks = [
-  { icon: <GitPullRequest size={16} />, color: "blue", label: "Configuration" },
+  {
+    icon: <GitPullRequest size={16} />,
+    link: "/products",
+    color: "blue",
+    label: "Products",
+  },
+  {
+    icon: <GitPullRequest size={16} />,
+    link: "/pricing",
+    color: "blue",
+    label: "Pricing",
+  },
 ];
 
 export function MainLinks() {
@@ -72,7 +83,7 @@ export function MainLinks() {
       <Text p="xs" transform="uppercase" color="gray" size="xs">
         Product
       </Text>
-      {configLinks.map((link) => (
+      {productLinks.map((link) => (
         <MainLink {...link} key={link.label} />
       ))}
     </div>
