@@ -70,6 +70,51 @@ pub mod maius_program_library {
         )
     }
 
+    pub fn initialize_price(
+        ctx: Context<InitializePrice>,
+        product: Pubkey, 
+        billing_scheme: String, 
+        currency: String, 
+        unit_amount: u64, 
+        interval: String, 
+        interval_count: u8, 
+        active: bool, 
+        price_type: String
+    ) -> Result<()> {
+        initialize_price::handler(
+            ctx, 
+            product, 
+            billing_scheme, 
+            currency, 
+            unit_amount, 
+            interval, 
+            interval_count, 
+            active, 
+            price_type
+        )
+    }
+
+    pub fn update_price(
+        ctx: Context<UpdatePrice>,
+        billing_scheme: String,
+        currency: String,
+        unit_amount: u64,
+        interval: String, 
+        interval_count: u8, 
+        active: bool,
+        price_type: String,
+    ) -> Result<()> {
+        update_price::handler(
+            ctx,
+            billing_scheme,
+            currency,
+            unit_amount,
+            interval, 
+            interval_count,
+            active,
+            price_type
+        )
+    }
     pub fn initialize_subscription(
         ctx: Context<InitializeSubscription>,
         merchant_wallet: Pubkey,

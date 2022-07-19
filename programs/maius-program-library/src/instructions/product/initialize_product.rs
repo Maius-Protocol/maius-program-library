@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::schemas::*;
-use crate::errors::*;
+// use crate::errors::*;
 
 #[derive(Accounts)]
 #[instruction(sku: String)]
