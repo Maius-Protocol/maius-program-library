@@ -239,6 +239,154 @@ export type MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "initializePrice",
+      "accounts": [
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "productAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "product",
+          "type": "publicKey"
+        },
+        {
+          "name": "billingScheme",
+          "type": "string"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "unitAmount",
+          "type": "u64"
+        },
+        {
+          "name": "interval",
+          "type": "string"
+        },
+        {
+          "name": "intervalCount",
+          "type": "u8"
+        },
+        {
+          "name": "active",
+          "type": "bool"
+        },
+        {
+          "name": "priceType",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updatePrice",
+      "accounts": [
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "billingScheme",
+          "type": "string"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "unitAmount",
+          "type": "u64"
+        },
+        {
+          "name": "interval",
+          "type": "string"
+        },
+        {
+          "name": "intervalCount",
+          "type": "u8"
+        },
+        {
+          "name": "active",
+          "type": "bool"
+        },
+        {
+          "name": "priceType",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initializeSubscription",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "merchantWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "customerWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "lastInvoice",
+          "type": "publicKey"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -288,8 +436,60 @@ export type MaiusProgramLibrary = {
             "type": "u64"
           },
           {
+            "name": "subscriptionCount",
+            "type": "u64"
+          },
+          {
             "name": "currentCustomerKey",
             "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "price",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "product",
+            "type": "publicKey"
+          },
+          {
+            "name": "billingScheme",
+            "type": "string"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "unitAmount",
+            "type": "u64"
+          },
+          {
+            "name": "interval",
+            "type": "string"
+          },
+          {
+            "name": "intervalCount",
+            "type": "u8"
+          },
+          {
+            "name": "active",
+            "type": "bool"
+          },
+          {
+            "name": "priceType",
+            "type": "string"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "updated",
+            "type": "i64"
           }
         ]
       }
@@ -344,6 +544,50 @@ export type MaiusProgramLibrary = {
             "type": {
               "vec": "string"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "subscriptionItem",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price",
+            "type": "publicKey"
+          },
+          {
+            "name": "billingThresholdsGte",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "subscription",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "merchantWallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "customerWallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "lastInvoice",
+            "type": "publicKey"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "subscriptionItemCount",
+            "type": "u64"
           }
         ]
       }
@@ -599,6 +843,154 @@ export const IDL: MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "initializePrice",
+      "accounts": [
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "productAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "product",
+          "type": "publicKey"
+        },
+        {
+          "name": "billingScheme",
+          "type": "string"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "unitAmount",
+          "type": "u64"
+        },
+        {
+          "name": "interval",
+          "type": "string"
+        },
+        {
+          "name": "intervalCount",
+          "type": "u8"
+        },
+        {
+          "name": "active",
+          "type": "bool"
+        },
+        {
+          "name": "priceType",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updatePrice",
+      "accounts": [
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "billingScheme",
+          "type": "string"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "unitAmount",
+          "type": "u64"
+        },
+        {
+          "name": "interval",
+          "type": "string"
+        },
+        {
+          "name": "intervalCount",
+          "type": "u8"
+        },
+        {
+          "name": "active",
+          "type": "bool"
+        },
+        {
+          "name": "priceType",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initializeSubscription",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "merchantWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "customerWallet",
+          "type": "publicKey"
+        },
+        {
+          "name": "lastInvoice",
+          "type": "publicKey"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -648,8 +1040,60 @@ export const IDL: MaiusProgramLibrary = {
             "type": "u64"
           },
           {
+            "name": "subscriptionCount",
+            "type": "u64"
+          },
+          {
             "name": "currentCustomerKey",
             "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "price",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "product",
+            "type": "publicKey"
+          },
+          {
+            "name": "billingScheme",
+            "type": "string"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "unitAmount",
+            "type": "u64"
+          },
+          {
+            "name": "interval",
+            "type": "string"
+          },
+          {
+            "name": "intervalCount",
+            "type": "u8"
+          },
+          {
+            "name": "active",
+            "type": "bool"
+          },
+          {
+            "name": "priceType",
+            "type": "string"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "updated",
+            "type": "i64"
           }
         ]
       }
@@ -704,6 +1148,50 @@ export const IDL: MaiusProgramLibrary = {
             "type": {
               "vec": "string"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "subscriptionItem",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price",
+            "type": "publicKey"
+          },
+          {
+            "name": "billingThresholdsGte",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "subscription",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "merchantWallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "customerWallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "lastInvoice",
+            "type": "publicKey"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "subscriptionItemCount",
+            "type": "u64"
           }
         ]
       }
