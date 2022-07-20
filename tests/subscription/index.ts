@@ -39,7 +39,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .initializeMerchant(
                 "MaiusPay",
                 "Awesome store",
-                "https://i.pravatar.cc/300"
+                "https://i.pravatar.cc/300",
             )
             .accounts({
                 merchant: merchantAccount,
