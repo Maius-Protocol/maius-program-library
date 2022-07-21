@@ -2,23 +2,14 @@ pub mod merchant;
 pub mod customer;
 pub mod product;
 pub mod subscription;
-// pub mod initialize_product;
 pub mod price;
-// pub mod subscription_item;
-// pub mod initialize_invoice;
-// pub mod initialize_invoice_item;
-// pub mod initialize_subscription;
-// pub mod initialize_subscription_item;
-// pub mod update_customer;
+pub mod subscription_item;
+
 
 pub use merchant::*;
 pub use customer::*;
 pub use product::*;
 pub use subscription::*;
-// pub use subscription_item::*;
+pub use subscription_item::*;
 pub use price::*;
-// pub use initialize_invoice::*;
-// pub use initialize_invoice_item::*;
-// pub use initialize_subscription::*;
-// pub use initialize_subscription_item::*;
-// pub use update_customer::*;
+

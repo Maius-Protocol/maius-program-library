@@ -23,7 +23,6 @@ impl Subscription {
             PUBKEY_SIZE + // last_invoice
             8 + // created
             4 + MAXIMUM_LENGTH_OF_STATUS + // status
-            1 + // subscription_item_count
-            8 // subscription_item_count
+            1 // subscription_item_count
     }
 }

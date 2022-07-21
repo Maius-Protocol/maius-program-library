@@ -124,4 +124,13 @@ pub mod maius_program_library {
         initialize_subscription::handler(ctx, merchant_wallet, customer_wallet, last_invoice)
     }
 
+    pub fn initialize_subscription_item(
+        ctx: Context<InitializeSubscriptionItem>,
+        price: Pubkey,
+        bill_thresholds: u64,
+        quantity: u8,
+    ) -> Result<()> {
+        initialize_subscription_item::handler(ctx, price, bill_thresholds, quantity)
+    }
+
 }
