@@ -17,6 +17,8 @@ pub struct InitializeSubscription<'info> {
     )]
     pub subscription_account: Account<'info, Subscription>,
     #[account(mut)]
+    pub customer_account: Account<'info, Customer>,
+    #[account(mut)]
     pub merchant_account: Account<'info, Merchant>,
     #[account(mut)]
     pub merchant: Signer<'info>,
