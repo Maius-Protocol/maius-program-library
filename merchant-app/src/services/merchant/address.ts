@@ -3,12 +3,12 @@ import { programID } from "../../../config/globalVariables";
 
 export const useMerchantAccountKey = "merchant";
 
-export const findMerchantAddress = async (merchant_wallet: PublicKey) => {
+export const findMerchantAddress = async (merchant_wallet: string) => {
   const [address] = await PublicKey.findProgramAddress(
     [
       Buffer.from("v1"),
       Buffer.from(useMerchantAccountKey),
-      merchant_wallet.toBuffer(),
+      new PublicKey(merchant_wallet).toBuffer(),
     ],
     programID
   );

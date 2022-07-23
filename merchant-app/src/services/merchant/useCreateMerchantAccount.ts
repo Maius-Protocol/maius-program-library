@@ -3,28 +3,26 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
 import { findMerchantAddress } from "./address";
 import { globalState } from "../../../../tests/maius-program-library";
-import { SystemProgram } from "@solana/web3.js";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { findCustomerAddress } from "../customer/address";
 
-export function useCreateMerchantAccount() {
-  const { wallet, sendTransaction } = useWallet();
+export function useCreateMerchantAccount(merchantWalletAddress: string) {
+  const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
   return useMutation(async () => {
-    const address = await findMerchantAddress(wallet?.adapter?.publicKey);
-    const genesisCustomer = await findCustomerAddress(
-      wallet?.adapter?.publicKey
-    );
+    const address = await findMerchantAddress(merchantWalletAddress);
+    const genesisCustomer = await findCustomerAddress(merchantWalletAddress);
     const transaction = await program.methods
       .initializeMerchant()
       .accounts({
         merchant: address,
         genesisCustomer: genesisCustomer,
-        merchantWallet: wallet?.adapter?.publicKey,
+        merchantWallet: new PublicKey(merchantWalletAddress),
         systemProgram: SystemProgram.programId,
       })
       .transaction();
     await sendTransaction(transaction, connection);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   });
 }

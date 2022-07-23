@@ -11,15 +11,17 @@ import { useForm } from "@mantine/form";
 import { useMerchantAccount } from "../../services/merchant/useMerchantAccount";
 import { useUpdateMerchantAccount } from "../../services/merchant/useUpdateMerchantAccount";
 import { showNotification } from "@mantine/notifications";
+import { useProgram } from "../../provider/ProgramProvider";
 
 const UpdateMerchantInfo = () => {
+  const { merchantWalletAddress } = useProgram();
   const {
     data: merchantAccount,
     refetch,
     isRefetching: isRefetching,
-  } = useMerchantAccount();
+  } = useMerchantAccount(merchantWalletAddress);
   const { mutateAsync: update, isLoading: isUpdating } =
-    useUpdateMerchantAccount();
+    useUpdateMerchantAccount(merchantWalletAddress);
   const form = useForm({
     initialValues: {
       name: merchantAccount?.name,
@@ -62,18 +64,21 @@ const UpdateMerchantInfo = () => {
               label="Name"
               placeholder="Maius Pay"
               {...form.getInputProps("name")}
+              className="mb-2"
             />
             <TextInput
               required
               label="Description"
               placeholder="Maius Pay is a subscription service"
               {...form.getInputProps("description")}
+              className="mb-2"
             />
             <TextInput
               required
               label="Logo URL"
               placeholder="Maius Pay"
               {...form.getInputProps("logo_url")}
+              className="mb-2"
             />
 
             <Group position="right" mt="md">

@@ -8,5 +8,5 @@ export const idlJSON = idl;
 export const localhostEndpoint = "http://localhost:8899";
 
 export const opts = {
-  preflightCommitment: "finalized",
+  preflightCommitment: "processed",
 };

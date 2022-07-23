@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  GitPullRequest,
-  AlertCircle,
-  Messages,
-  Database,
-  Settings,
-} from "tabler-icons-react";
+import { Box, CurrencyDollar, Settings } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
+import { useProgram } from "../provider/ProgramProvider";
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -48,30 +43,31 @@ function MainLink({ icon, color, label, link }: MainLinkProps) {
   );
 }
 
-const configLinks = [
-  {
-    icon: <Settings size={16} />,
-    color: "blue",
-    label: "Configuartion",
-    link: "/config",
-  },
-];
-const productLinks = [
-  {
-    icon: <GitPullRequest size={16} />,
-    link: "/products",
-    color: "blue",
-    label: "Products",
-  },
-  {
-    icon: <GitPullRequest size={16} />,
-    link: "/pricing",
-    color: "blue",
-    label: "Pricing",
-  },
-];
+export const MainLinks = () => {
+  const { routes } = useProgram();
+  const configLinks = [
+    {
+      icon: <Settings size={16} />,
+      color: "blue",
+      label: "Configuartion",
+      link: routes.merchant.config,
+    },
+  ];
 
-export function MainLinks() {
+  const productLinks = [
+    {
+      icon: <Box size={16} />,
+      link: routes.merchant.products.list,
+      color: "blue",
+      label: "Products",
+    },
+    {
+      icon: <CurrencyDollar size={16} />,
+      link: routes.merchant.pricing.list,
+      color: "blue",
+      label: "Pricing",
+    },
+  ];
   return (
     <div>
       <Text p="xs" transform="uppercase" color="gray" size="xs">
@@ -88,4 +84,4 @@ export function MainLinks() {
       ))}
     </div>
   );
-}
+};

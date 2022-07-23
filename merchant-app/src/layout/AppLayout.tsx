@@ -18,10 +18,11 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import React from "react";
 import { useRouter } from "next/router";
-import routing from "../../config/router";
+import { useProgram } from "../provider/ProgramProvider";
 
 const AppLayout = ({ children }) => {
   const router = useRouter();
+  const { routes } = useProgram();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   return (
     <AppShell
@@ -44,7 +45,7 @@ const AppLayout = ({ children }) => {
         <Header height={60}>
           <Group
             onClick={() => {
-              router.push(routing.home);
+              router.push(routes.merchant.home);
             }}
             sx={{ height: "100%" }}
             px={20}

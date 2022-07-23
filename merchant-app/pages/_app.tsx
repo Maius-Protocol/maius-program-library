@@ -34,7 +34,13 @@ import { ProgramProvider } from "../src/provider/ProgramProvider";
 import { localhostEndpoint, opts } from "../config/globalVariables";
 import { NotificationsProvider } from "@mantine/notifications";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 0,
+    },
+  },
+});
 
 function MyApp(props: AppProps) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
@@ -78,7 +84,7 @@ function MyApp(props: AppProps) {
         <ReactQueryDevtools initialIsOpen={false} />
         <ConnectionProvider
           endpoint={endpoint}
-          config={{ commitment: "finalized" }}
+          config={{ commitment: "processed" }}
         >
           <WalletProvider wallets={wallets} autoConnect>
             <ProgramProvider>
