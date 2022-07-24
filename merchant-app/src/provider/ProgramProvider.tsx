@@ -25,6 +25,9 @@ const routing = (merchantWallet: string) => ({
     customers: {
       list: `/merchant/${merchantWallet}/customers`,
       create: `/merchant/${merchantWallet}/customers/create`,
+      detail: (customerAccountAddress: string) => ({
+        edit: `/merchant/${merchantWallet}/customers/${customerAccountAddress}/edit`,
+      }),
     },
     products: {
       list: `/merchant/${merchantWallet}/products`,

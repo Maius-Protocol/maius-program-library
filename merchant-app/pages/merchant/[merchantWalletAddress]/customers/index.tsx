@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { Box, Edit, Plus, User } from "tabler-icons-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCustomersList } from "../../../../src/services/customer/useCustomersList";
 import { useMerchantAccount } from "../../../../src/services/merchant/useMerchantAccount";
 import { displayTime } from "../../../../src/utils/displayUtils";
@@ -18,7 +18,7 @@ import { displayTime } from "../../../../src/utils/displayUtils";
 const CustomersPage = () => {
   const { routes, merchantWalletAddress } = useProgram();
   const { data: merchantAccount } = useMerchantAccount(merchantWalletAddress);
-  const { data, hasNextPage, hasPreviousPage } = useCustomersList(
+  const { data, hasNextPage, fetchNextPage } = useCustomersList(
     merchantAccount?.currentCustomerKey?.toBase58() || ""
   );
   const elements = data?.pages?.flat() || [];
@@ -39,15 +39,31 @@ const CustomersPage = () => {
         <td>{element?.description}</td>
         <td>{displayTime(element?.created?.toNumber())}</td>
         <td>
-          <UnstyledButton>
-            <ThemeIcon color="blue" variant="light">
-              <Edit size={14} />
-            </ThemeIcon>
-          </UnstyledButton>
+          <Link
+            href={
+              routes.merchant.customers.detail(element?.authority?.toBase58())
+                .edit
+            }
+          >
+            <UnstyledButton>
+              <ThemeIcon color="blue" variant="light">
+                <Edit size={14} />
+              </ThemeIcon>
+            </UnstyledButton>
+          </Link>
         </td>
       </tr>
     );
   });
+
+  const lastKey = elements[elements?.length - 1]?.prevCustomerKey;
+
+  useEffect(() => {
+    if (lastKey) {
+      fetchNextPage();
+    }
+  }, [lastKey]);
+
   return (
     <Card className="vh-100">
       <Group className="justify-content-between align-items-center mb-4">
