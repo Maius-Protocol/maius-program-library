@@ -19,9 +19,11 @@ import {
 import React from "react";
 import { useRouter } from "next/router";
 import { useProgram } from "../provider/ProgramProvider";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const AppLayout = ({ children }) => {
   const router = useRouter();
+  const wallet = useWallet();
   const { routes } = useProgram();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   return (
@@ -33,8 +35,8 @@ const AppLayout = ({ children }) => {
             <MainLinks />
           </Navbar.Section>
           <Navbar.Section>
-            <div className="d-flex flex-column mb-2 w-100">
-              <WalletMultiButton />
+            <div className="d-flex flex-column mb-2 w-100 overflow-scroll">
+              {!wallet?.connected && <WalletMultiButton />}
               <div style={{ height: "12px" }} />
               <WalletDisconnectButton />
             </div>
@@ -44,15 +46,18 @@ const AppLayout = ({ children }) => {
       header={
         <Header height={60}>
           <Group
-            onClick={() => {
-              router.push(routes.merchant.home);
-            }}
             sx={{ height: "100%" }}
             px={20}
             position="apart"
             style={{ cursor: "pointer" }}
           >
-            <Text>Maius Pay</Text>
+            <Text
+              onClick={() => {
+                router.push(routes.merchant.home);
+              }}
+            >
+              Maius Pay
+            </Text>
             <ActionIcon
               variant="default"
               onClick={() => toggleColorScheme()}

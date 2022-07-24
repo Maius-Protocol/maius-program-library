@@ -11,12 +11,17 @@ import React from "react";
 import { useMerchantAccount } from "../../services/merchant/useMerchantAccount";
 import { useCreateMerchantAccount } from "../../services/merchant/useCreateMerchantAccount";
 import { showNotification } from "@mantine/notifications";
+import { useProgram } from "../../provider/ProgramProvider";
 
 const SetupMerchant = () => {
   const theme = useMantineTheme();
-  const { refetch, isLoading: isFetching } = useMerchantAccount();
+  const { merchantWalletAddress } = useProgram();
+
+  const { refetch, isLoading: isFetching } = useMerchantAccount(
+    merchantWalletAddress
+  );
   const { mutateAsync: createAccount, isLoading: isCreating } =
-    useCreateMerchantAccount();
+    useCreateMerchantAccount(merchantWalletAddress);
 
   const isLoading = isFetching || isCreating;
 

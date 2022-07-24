@@ -3,7 +3,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
 import { findMerchantAddress } from "./address";
 import { globalState } from "../../../../tests/maius-program-library";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY } from "@solana/web3.js";
 import { findCustomerAddress } from "../customer/address";
 
 export function useCreateMerchantAccount(merchantWalletAddress: string) {
@@ -23,6 +23,6 @@ export function useCreateMerchantAccount(merchantWalletAddress: string) {
       })
       .transaction();
     await sendTransaction(transaction, connection);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   });
 }

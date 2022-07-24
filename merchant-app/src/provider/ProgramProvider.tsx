@@ -22,11 +22,16 @@ const routing = (merchantWallet: string) => ({
   merchant: {
     home: `/merchant/${merchantWallet}`,
     config: `/merchant/${merchantWallet}/config`,
-    pricing: {
-      list: `/merchant/${merchantWallet}/pricing`,
+    customers: {
+      list: `/merchant/${merchantWallet}/customers`,
+      create: `/merchant/${merchantWallet}/customers/create`,
     },
     products: {
       list: `/merchant/${merchantWallet}/products`,
+      create: `/merchant/${merchantWallet}/products/create`,
+    },
+    pricing: {
+      list: `/merchant/${merchantWallet}/pricing`,
     },
   },
 });

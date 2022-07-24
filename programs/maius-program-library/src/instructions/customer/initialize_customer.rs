@@ -41,6 +41,7 @@ pub fn handler(
     customer_account.description = description;
 
     customer_account.prev_customer_key = merchant_account.current_customer_key;
+    customer_account.created = Clock::get().unwrap().unix_timestamp;
     merchant_account.current_customer_key = customer_account.key();
     Ok(())
 }

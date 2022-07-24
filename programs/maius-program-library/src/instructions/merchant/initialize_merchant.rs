@@ -37,6 +37,7 @@ pub fn handler(
     merchant.current_customer_key = genesis_customer.key();
     genesis_customer.authority = *ctx.accounts.merchant_wallet.to_account_info().key;
     genesis_customer.description = "Genesis customer is merchant itself".parse().unwrap();
+    genesis_customer.created = Clock::get().unwrap().unix_timestamp;
     Ok(())
 }
 
