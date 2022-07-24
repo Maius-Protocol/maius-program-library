@@ -7,8 +7,8 @@ pub const MAXIMUM_LENGTH_OF_STATUS :usize = 36;
 #[account]
 #[derive(Default)]
 pub struct Subscription {
-    pub merchant_wallet: Pubkey,
-    pub customer_wallet: Pubkey,
+    pub merchant_account: Pubkey,
+    pub customer_account: Pubkey,
     pub last_invoice: Pubkey,
     pub created: i64,
     pub status: String,
@@ -18,8 +18,8 @@ pub struct Subscription {
 impl Subscription {
     pub fn space() -> usize {
             8  + // discriminator
-            PUBKEY_SIZE + // merchant_wallet
-            PUBKEY_SIZE + // customer_wallet
+            PUBKEY_SIZE + // merchant_account
+            PUBKEY_SIZE + // customer_account
             PUBKEY_SIZE + // last_invoice
             8 + // created
             4 + MAXIMUM_LENGTH_OF_STATUS + // status

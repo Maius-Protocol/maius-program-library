@@ -17,8 +17,6 @@ pub struct InitializeSubscription<'info> {
     )]
     pub subscription_account: Account<'info, Subscription>,
     #[account(mut)]
-    pub customer_account: Account<'info, Customer>,
-    #[account(mut)]
     pub merchant_account: Account<'info, Merchant>,
     #[account(mut)]
     pub merchant: Signer<'info>,
@@ -27,12 +25,12 @@ pub struct InitializeSubscription<'info> {
 
 pub fn handler(
     ctx: Context<InitializeSubscription>,
-    merchant_wallet: Pubkey,
-    customer_wallet: Pubkey,
+    merchant_account: Pubkey,
+    customer_account: Pubkey,
     last_invoice: Pubkey,
 ) ->  Result<()> {
-    ctx.accounts.subscription_account.merchant_wallet = merchant_wallet;
-    ctx.accounts.subscription_account.customer_wallet = customer_wallet;
+    ctx.accounts.subscription_account.merchant_account = merchant_account;
+    ctx.accounts.subscription_account.customer_account = customer_account;
     ctx.accounts.subscription_account.last_invoice = last_invoice;
     ctx.accounts.subscription_account.created = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.subscription_account.status = "active".to_string();

@@ -76,7 +76,6 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .accounts({
                 merchantAccount: merchantAccount,
                 subscriptionAccount: subscriptionAccount,
-                customerAccount: customerAccount,
                 merchant: globalState.merchantWallet.publicKey,
                 systemProgram: SystemProgram.programId,
             })
@@ -108,7 +107,6 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .accounts({
                 merchantAccount: merchantAccount,
                 subscriptionAccount: subscriptionAccount1,
-                customerAccount: customerAccount,
                 merchant: globalState.merchantWallet.publicKey,
                 systemProgram: SystemProgram.programId,
             })
