@@ -6,6 +6,7 @@ pub mod subscription_item;
 pub mod price;
 pub mod invoice;
 pub mod invoice_item;
+pub mod accepted_tokens;
 
 pub use merchant::*;
 pub use customer::*;
@@ -15,3 +16,4 @@ pub use subscription_item::*;
 pub use price::*;
 pub use invoice::*;
 pub use invoice_item::*;
+pub use accepted_tokens::*;
