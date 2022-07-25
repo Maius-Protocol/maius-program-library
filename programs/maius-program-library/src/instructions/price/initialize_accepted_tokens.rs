@@ -3,13 +3,13 @@ use crate::schemas::*;
 use anchor_spl::token::{Mint};
 
 #[derive(Accounts)]
-#[instruction(tokens: Vec<Mint>)]
+#[instruction(tokens: Vec<Pubkey>)]
 pub struct InitializeAcceptedTokens<'info> {
     #[account(
         init_if_needed,
         seeds = [
             b"v1",
-            AcceptedTokens::ACCEPTED_TOKENS_PREFIX.as_bytes(),
+            ACCEPTED_TOKENS_PREFIX.as_bytes(),
             merchant_authority.key().as_ref(),
         ],
         bump,
@@ -24,7 +24,7 @@ pub struct InitializeAcceptedTokens<'info> {
 
 pub fn handler(
     ctx: Context<InitializeAcceptedTokens>,
-    tokens: Vec<Mint>,
+    tokens: Vec<Pubkey>,
 ) -> Result<()> {
     
     ctx.accounts.accepted_tokens_account.tokens = tokens;

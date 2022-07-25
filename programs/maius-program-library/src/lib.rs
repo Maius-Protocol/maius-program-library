@@ -81,7 +81,7 @@ pub mod maius_program_library {
         interval_count: u8, 
         active: bool, 
         price_type: String,
-        accepted_tokens: Vec<Mint>
+        accepted_tokens: Vec<Pubkey>
     ) -> Result<()> {
         initialize_price::handler(
             ctx, 
@@ -129,9 +129,9 @@ pub mod maius_program_library {
 
     pub fn initialize_accepted_tokens(
         ctx: Context<InitializeAcceptedTokens>,
-        tokens: Vec<Mint>
+        tokens: Vec<Pubkey>
     ) -> Result<()> {
-        initialize_price::handler(
+        initialize_accepted_tokens::handler(
             ctx, 
             tokens
         )

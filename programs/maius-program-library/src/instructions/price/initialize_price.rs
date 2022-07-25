@@ -4,13 +4,13 @@ use anchor_spl::token::{Mint};
 // use crate::errors::*;
 
 #[derive(Accounts)]
-#[instruction(product: Pubkey, billing_scheme: String, currency: String, unit_amount: u64, interval: String, interval_count: u8, active: bool, price_type: String, accepted_tokens: Vec<Mint>)]
+#[instruction(product: Pubkey, billing_scheme: String, currency: String, unit_amount: u64, interval: String, interval_count: u8, active: bool, price_type: String, accepted_tokens: Vec<Pubkey>)]
 pub struct InitializePrice<'info> {
     #[account(
         init_if_needed,
         seeds = [
             b"v1",
-            Price::PRICE_PREFIX.as_bytes(),
+            PRICE_PREFIX.as_bytes(),
             merchant_authority.key().as_ref(),
             product.key().as_ref(),
             product_account.price_count.to_string().as_ref()
@@ -37,9 +37,9 @@ pub fn handler(
     interval_count: u8, 
     active: bool,
     price_type: String,
-    accepted_tokens: Vec<Mint>
+    accepted_tokens: Vec<Pubkey>
 ) -> Result<()> {
-    msg!("Initialize a new Price of Product: {} with billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}, accepted_tokens: {}", 
+    msg!("Initialize a new Price of Product: {} with billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}, accepted_tokens: {:?}", 
         product, billing_scheme, unit_amount, interval, interval_count, active, price_type, accepted_tokens);
 
     ctx.accounts.price_account.product = product;
