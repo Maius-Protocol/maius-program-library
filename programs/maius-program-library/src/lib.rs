@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use anchor_spl::token::{Mint};
 pub mod schemas;
 pub mod instructions;
 mod constants;
@@ -79,7 +80,8 @@ pub mod maius_program_library {
         interval: String, 
         interval_count: u8, 
         active: bool, 
-        price_type: String
+        price_type: String,
+        accepted_tokens: Vec<Pubkey>
     ) -> Result<()> {
         initialize_price::handler(
             ctx, 
@@ -90,7 +92,8 @@ pub mod maius_program_library {
             interval, 
             interval_count, 
             active, 
-            price_type
+            price_type,
+            accepted_tokens
         )
     }
 
@@ -133,4 +136,13 @@ pub mod maius_program_library {
         initialize_subscription_item::handler(ctx, price, bill_thresholds, quantity)
     }
 
+    pub fn initialize_accepted_tokens(
+        ctx: Context<InitializeAcceptedTokens>,
+        tokens: Vec<Pubkey>
+    ) -> Result<()> {
+        initialize_accepted_tokens::handler(
+            ctx, 
+            tokens
+        )
+    }
 }

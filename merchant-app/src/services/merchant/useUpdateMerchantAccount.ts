@@ -12,13 +12,13 @@ interface useUpdateMerchantAccountInput {
   logo_url: string;
 }
 
-export function useUpdateMerchantAccount() {
+export function useUpdateMerchantAccount(merchantWalletAddress: string) {
   const { wallet, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
   return useMutation<unknown, unknown, useUpdateMerchantAccountInput>(
     async ({ name, description, logo_url }) => {
-      const address = await findMerchantAddress(wallet?.adapter?.publicKey);
+      const address = await findMerchantAddress(merchantWalletAddress);
       const transaction = await program.methods
         .updateMerchant(name, description, logo_url)
         .accounts({
@@ -27,7 +27,7 @@ export function useUpdateMerchantAccount() {
         })
         .transaction();
       await sendTransaction(transaction, connection);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return;
     }
   );

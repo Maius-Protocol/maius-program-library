@@ -406,6 +406,10 @@ export type MaiusProgramLibrary = {
           {
             "name": "description",
             "type": "string"
+          },
+          {
+            "name": "created",
+            "type": "i64"
           }
         ]
       }
@@ -1010,6 +1014,10 @@ export const IDL: MaiusProgramLibrary = {
           {
             "name": "description",
             "type": "string"
+          },
+          {
+            "name": "created",
+            "type": "i64"
           }
         ]
       }
