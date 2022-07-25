@@ -5,6 +5,7 @@ pub mod subscription;
 pub mod price;
 pub mod subscription_item;
 pub mod invoice_item;
+pub mod invoice;
 
 
 pub use merchant::*;
@@ -13,4 +14,5 @@ pub use product::*;
 pub use subscription::*;
 pub use subscription_item::*;
 pub use price::*;
+pub use invoice::*;
 
