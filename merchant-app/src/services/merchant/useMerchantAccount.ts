@@ -1,20 +1,17 @@
 import { useQuery } from "react-query";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
-import { findMerchantAddress } from "./address";
+import { findMerchantAddress, useMerchantAccountKey } from "./address";
 
-export function useMerchantAccount() {
-  const { wallet } = useWallet();
+export function useMerchantAccount(merchantWalletAddress: string) {
   const { program } = useProgram();
-  const merchant_wallet_addr = wallet?.adapter?.publicKey?.toBase58() || "";
   return useQuery(
-    [useMerchantAccount, merchant_wallet_addr],
+    [useMerchantAccountKey, merchantWalletAddress],
     async () => {
-      const address = await findMerchantAddress(wallet?.adapter?.publicKey);
+      const address = await findMerchantAddress(merchantWalletAddress);
       return await program.account.merchant.fetch(address);
     },
     {
-      enabled: merchant_wallet_addr !== "",
+      enabled: merchantWalletAddress !== null,
       retry: false,
     }
   );

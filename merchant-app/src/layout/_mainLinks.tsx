@@ -1,24 +1,28 @@
 import React from "react";
-import {
-  GitPullRequest,
-  AlertCircle,
-  Messages,
-  Database,
-  Settings,
-} from "tabler-icons-react";
+import { Box, CurrencyDollar, Settings, User } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
+import { useProgram } from "../provider/ProgramProvider";
+import classNames from "classnames";
+import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
 
 interface MainLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
   link: string;
+  disabled?: boolean;
 }
 
-function MainLink({ icon, color, label, link }: MainLinkProps) {
+function MainLink({
+  icon,
+  color,
+  label,
+  link,
+  disabled = false,
+}: MainLinkProps) {
   return (
-    <Link href={link}>
+    <Link href={disabled ? "#" : link}>
       <UnstyledButton
         sx={(theme) => ({
           display: "block",
@@ -48,30 +52,40 @@ function MainLink({ icon, color, label, link }: MainLinkProps) {
   );
 }
 
-const configLinks = [
-  {
-    icon: <Settings size={16} />,
-    color: "blue",
-    label: "Configuartion",
-    link: "/config",
-  },
-];
-const productLinks = [
-  {
-    icon: <GitPullRequest size={16} />,
-    link: "/products",
-    color: "blue",
-    label: "Products",
-  },
-  {
-    icon: <GitPullRequest size={16} />,
-    link: "/pricing",
-    color: "blue",
-    label: "Pricing",
-  },
-];
+export const MainLinks = () => {
+  const { routes, merchantWalletAddress } = useProgram();
+  const { data: merchantAccount } = useMerchantAccount(merchantWalletAddress);
+  const configLinks = [
+    {
+      icon: <Settings size={16} />,
+      color: "blue",
+      label: "Configuartion",
+      link: routes.merchant.config,
+    },
+  ];
 
-export function MainLinks() {
+  const productLinks = [
+    {
+      icon: <User size={16} />,
+      link: routes.merchant.customers.list,
+      color: "blue",
+      label: "Customers",
+    },
+    {
+      icon: <Box size={16} />,
+      link: routes.merchant.products.list,
+      color: "blue",
+      label: "Products",
+    },
+    {
+      icon: <CurrencyDollar size={16} />,
+      link: routes.merchant.pricing.list,
+      color: "blue",
+      label: "Pricing",
+    },
+  ];
+
+  const disabled = !merchantAccount;
   return (
     <div>
       <Text p="xs" transform="uppercase" color="gray" size="xs">
@@ -80,12 +94,18 @@ export function MainLinks() {
       {configLinks.map((link) => (
         <MainLink {...link} key={link.label} />
       ))}
-      <Text p="xs" transform="uppercase" color="gray" size="xs">
-        Product
-      </Text>
-      {productLinks.map((link) => (
-        <MainLink {...link} key={link.label} />
-      ))}
+      <div
+        className={classNames({
+          "opacity-50 user-select-none": disabled,
+        })}
+      >
+        <Text p="xs" transform="uppercase" color="gray" size="xs">
+          Merchant
+        </Text>
+        {productLinks.map((link) => (
+          <MainLink {...link} key={link.label} disabled={disabled} />
+        ))}
+      </div>
     </div>
   );
-}
+};
