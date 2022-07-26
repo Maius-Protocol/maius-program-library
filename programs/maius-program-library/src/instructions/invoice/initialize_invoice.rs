@@ -13,7 +13,7 @@ pub struct InitializeInvoice<'info> {
     ],
     bump,
     payer = merchant,
-    space = Subscription::space()
+    space = Invoice::space()
     )]
     pub subscription_account: Account<'info, Subscription>,
     #[account(mut)]
@@ -24,7 +24,7 @@ pub struct InitializeInvoice<'info> {
 }
 
 pub fn handler(
-    ctx: Context<InitializeSubscription>,
+    ctx: Context<InitializeInvoice>,
     merchant_account: Pubkey,
     customer_account: Pubkey,
     last_invoice: Pubkey,
