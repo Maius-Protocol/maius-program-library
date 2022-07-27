@@ -29,18 +29,12 @@ pub struct InitializeMerchant<'info> {
 }
 
 pub fn handler(
-    ctx: Context<InitializeMerchant>,
-    name: String,
-    description: String,
-    logo_url: String,
+    ctx: Context<InitializeMerchant>
 ) -> Result<()> {
     let merchant = &mut ctx.accounts.merchant;
     let genesis_customer = &mut ctx.accounts.genesis_customer;
     merchant.merchant_wallet_address = *ctx.accounts.merchant_wallet.to_account_info().key;
     merchant.current_customer_key = genesis_customer.key();
-    merchant.description = description;
-    merchant.name = name;
-    merchant.logo_url = logo_url;
     genesis_customer.authority = *ctx.accounts.merchant_wallet.to_account_info().key;
     genesis_customer.description = "Genesis customer is merchant itself".parse().unwrap();
     genesis_customer.created = Clock::get().unwrap().unix_timestamp;

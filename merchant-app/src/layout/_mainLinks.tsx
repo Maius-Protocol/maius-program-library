@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useProgram } from "../provider/ProgramProvider";
 import classNames from "classnames";
 import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 interface MainLinkProps {
   icon: React.ReactNode;
@@ -53,6 +54,8 @@ function MainLink({
 }
 
 export const MainLinks = () => {
+  const { connected } = useWallet();
+
   const { routes, merchantWalletAddress } = useProgram();
   const { data: merchantAccount } = useMerchantAccount(merchantWalletAddress);
   const configLinks = [
@@ -86,6 +89,11 @@ export const MainLinks = () => {
   ];
 
   const disabled = !merchantAccount;
+
+  if (!connected) {
+    return <></>;
+  }
+
   return (
     <div>
       <Text p="xs" transform="uppercase" color="gray" size="xs">

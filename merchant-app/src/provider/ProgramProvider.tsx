@@ -32,6 +32,8 @@ const routing = (merchantWallet: string) => ({
     products: {
       list: `/merchant/${merchantWallet}/products`,
       create: `/merchant/${merchantWallet}/products/create`,
+      edit: (product_count_index) =>
+        `/merchant/${merchantWallet}/products/${product_count_index}`,
     },
     pricing: {
       list: `/merchant/${merchantWallet}/pricing`,

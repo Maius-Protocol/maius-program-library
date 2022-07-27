@@ -13,7 +13,7 @@ export const findProductAddress = async (
       Buffer.from("v1"),
       Buffer.from(useProductKey),
       new PublicKey(merchant_wallet).toBuffer(),
-      new BN(product_count_index)?.toArrayLike(Buffer),
+      Buffer.from(product_count_index?.toString()),
     ],
     programID
   );
