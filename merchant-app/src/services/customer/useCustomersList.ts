@@ -1,7 +1,7 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useProgram } from "../../provider/ProgramProvider";
 import { useMerchantAccountKey } from "../merchant/address";
-import { findCustomerAddress, useCustomerAccountKey } from "./address";
+import { useCustomerAccountKey } from "./address";
 import { SystemProgram } from "@solana/web3.js";
 
 export function useCustomersList(current_customer_key: string) {

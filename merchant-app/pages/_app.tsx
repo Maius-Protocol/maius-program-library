@@ -28,11 +28,12 @@ import {
   SolanaMobileWalletAdapter,
 } from "@solana-mobile/wallet-adapter-mobile";
 import "../styles/globals.css";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { ProgramProvider } from "../src/provider/ProgramProvider";
 import { localhostEndpoint, opts } from "../config/globalVariables";
 import { NotificationsProvider } from "@mantine/notifications";
+import { QueryClient } from "@tanstack/query-core";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,10 +59,10 @@ function MyApp(props: AppProps) {
   }, [network]);
   const wallets = useMemo(
     () => [
-      new SolanaMobileWalletAdapter({
-        appIdentity: { name: "Maius Pay" },
-        authorizationResultCache: createDefaultAuthorizationResultCache(),
-      }),
+      // new SolanaMobileWalletAdapter({
+      //   appIdentity: { name: "Maius Pay" },
+      //   authorizationResultCache: createDefaultAuthorizationResultCache(),
+      // }),
       new CoinbaseWalletAdapter(),
       new PhantomWalletAdapter(),
       new GlowWalletAdapter(),

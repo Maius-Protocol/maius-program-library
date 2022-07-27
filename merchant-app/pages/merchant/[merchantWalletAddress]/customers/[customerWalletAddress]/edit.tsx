@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useProgram } from "../../../../../src/provider/ProgramProvider";
-import { useCreateCustomerAccount } from "../../../../../src/services/customer/useCreateCustomerAccount";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import {
