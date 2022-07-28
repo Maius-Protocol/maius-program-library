@@ -23,8 +23,8 @@ pub mod maius_program_library {
     use crate::instructions::invoice_item::{initialize_invoice_item, InitializeInvoiceItem};
     use super::*;
 
-    pub fn initialize_merchant(ctx: Context<InitializeMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
-        initialize_merchant::handler(ctx, name, description, logo_url)
+    pub fn initialize_merchant(ctx: Context<InitializeMerchant>) -> Result<()> {
+        initialize_merchant::handler(ctx)
     }
 
     pub fn update_merchant(ctx: Context<UpdateMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
@@ -48,14 +48,12 @@ pub mod maius_program_library {
         ctx: Context<InitializeProduct>,
         sku: String,
         name: String,
-        authority: Pubkey,
         description: String,
-        default_price: Pubkey,
         unit_label: String,
         images: Vec<String>
     ) -> Result<()> {
         initialize_product::handler(
-            ctx, sku, name, authority, description,  default_price, unit_label, images
+            ctx, sku, name, description, unit_label, images
         )
     }
 

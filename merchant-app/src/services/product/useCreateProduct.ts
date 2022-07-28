@@ -1,34 +1,50 @@
 import { useMutation } from "@tanstack/react-query";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { findCustomerAddress } from "../customer/address";
+import { SystemProgram } from "@solana/web3.js";
 import { findMerchantAddress } from "../merchant/address";
+import { findProductAddress } from "./address";
 
-export interface useCreateCustomerAccountInput {
-  customer_wallet: string;
+export interface useCreateProductInput {
+  sku: string;
+  name: string;
   description: string;
+  images: any[];
 }
 
-export function useCreateCustomerAccount(merchantWalletAddress: string) {
+export function useCreateProduct(
+  merchantWalletAddress: string,
+  product_count_index: number
+) {
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  return useMutation<unknown, unknown, useCreateCustomerAccountInput>(
-    async ({ customer_wallet, description }) => {
+  return useMutation<unknown, unknown, useCreateProductInput>(
+    async ({ sku, name, description, images }) => {
       const merchantAccountAddress = await findMerchantAddress(
         merchantWalletAddress
       );
-      const customerAccountAddress = await findCustomerAddress(customer_wallet);
+      const productAccountAddress = await findProductAddress(
+        merchantWalletAddress,
+        product_count_index
+      );
+
       const transaction = await program.methods
-        .initializeCustomer(description, new PublicKey(customer_wallet))
+        .initializeProduct(
+          sku,
+          name,
+          description,
+          "",
+          images.map((e) => e?.url)
+        )
         .accounts({
-          merchantAuthority: merchantWalletAddress,
+          productAccount: productAccountAddress,
           merchantAccount: merchantAccountAddress,
-          customerAccount: customerAccountAddress,
+          merchant: merchantWalletAddress,
           systemProgram: SystemProgram.programId,
         })
         .transaction();
+
       await sendTransaction(transaction, connection);
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }

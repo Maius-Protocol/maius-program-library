@@ -173,16 +173,8 @@ export type MaiusProgramLibrary = {
           "type": "string"
         },
         {
-          "name": "authority",
-          "type": "publicKey"
-        },
-        {
           "name": "description",
           "type": "string"
-        },
-        {
-          "name": "defaultPrice",
-          "type": "publicKey"
         },
         {
           "name": "unitLabel",
@@ -296,6 +288,12 @@ export type MaiusProgramLibrary = {
         {
           "name": "priceType",
           "type": "string"
+        },
+        {
+          "name": "acceptedTokens",
+          "type": {
+            "vec": "publicKey"
+          }
         }
       ]
     },
@@ -387,9 +385,90 @@ export type MaiusProgramLibrary = {
           "type": "publicKey"
         }
       ]
+    },
+    {
+      "name": "initializeSubscriptionItem",
+      "accounts": [
+        {
+          "name": "subscriptionItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "publicKey"
+        },
+        {
+          "name": "billThresholds",
+          "type": "u64"
+        },
+        {
+          "name": "quantity",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initializeAcceptedTokens",
+      "accounts": [
+        {
+          "name": "acceptedTokensAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "tokens",
+          "type": {
+            "vec": "publicKey"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
+    {
+      "name": "acceptedTokens",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokens",
+            "type": {
+              "vec": "publicKey"
+            }
+          }
+        ]
+      }
+    },
     {
       "name": "customer",
       "type": {
@@ -410,6 +489,34 @@ export type MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "invoiceItem",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "cus",
+            "type": "publicKey"
+          },
+          {
+            "name": "lastInvoice",
+            "type": "publicKey"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "subscriptionItemCount",
+            "type": "u8"
           }
         ]
       }
@@ -488,6 +595,12 @@ export type MaiusProgramLibrary = {
             "type": "string"
           },
           {
+            "name": "acceptedTokens",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
             "name": "created",
             "type": "i64"
           },
@@ -562,8 +675,16 @@ export type MaiusProgramLibrary = {
             "type": "publicKey"
           },
           {
-            "name": "billingThresholdsGte",
+            "name": "billingThresholds",
             "type": "u64"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "quantity",
+            "type": "u8"
           }
         ]
       }
@@ -574,11 +695,11 @@ export type MaiusProgramLibrary = {
         "kind": "struct",
         "fields": [
           {
-            "name": "merchantWallet",
+            "name": "merchantAccount",
             "type": "publicKey"
           },
           {
-            "name": "customerWallet",
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
@@ -590,8 +711,12 @@ export type MaiusProgramLibrary = {
             "type": "i64"
           },
           {
+            "name": "status",
+            "type": "string"
+          },
+          {
             "name": "subscriptionItemCount",
-            "type": "u64"
+            "type": "u8"
           }
         ]
       }
@@ -781,16 +906,8 @@ export const IDL: MaiusProgramLibrary = {
           "type": "string"
         },
         {
-          "name": "authority",
-          "type": "publicKey"
-        },
-        {
           "name": "description",
           "type": "string"
-        },
-        {
-          "name": "defaultPrice",
-          "type": "publicKey"
         },
         {
           "name": "unitLabel",
@@ -904,6 +1021,12 @@ export const IDL: MaiusProgramLibrary = {
         {
           "name": "priceType",
           "type": "string"
+        },
+        {
+          "name": "acceptedTokens",
+          "type": {
+            "vec": "publicKey"
+          }
         }
       ]
     },
@@ -995,9 +1118,90 @@ export const IDL: MaiusProgramLibrary = {
           "type": "publicKey"
         }
       ]
+    },
+    {
+      "name": "initializeSubscriptionItem",
+      "accounts": [
+        {
+          "name": "subscriptionItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "publicKey"
+        },
+        {
+          "name": "billThresholds",
+          "type": "u64"
+        },
+        {
+          "name": "quantity",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initializeAcceptedTokens",
+      "accounts": [
+        {
+          "name": "acceptedTokensAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAuthority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "tokens",
+          "type": {
+            "vec": "publicKey"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
+    {
+      "name": "acceptedTokens",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokens",
+            "type": {
+              "vec": "publicKey"
+            }
+          }
+        ]
+      }
+    },
     {
       "name": "customer",
       "type": {
@@ -1018,6 +1222,34 @@ export const IDL: MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "invoiceItem",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "cus",
+            "type": "publicKey"
+          },
+          {
+            "name": "lastInvoice",
+            "type": "publicKey"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "subscriptionItemCount",
+            "type": "u8"
           }
         ]
       }
@@ -1096,6 +1328,12 @@ export const IDL: MaiusProgramLibrary = {
             "type": "string"
           },
           {
+            "name": "acceptedTokens",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
             "name": "created",
             "type": "i64"
           },
@@ -1170,8 +1408,16 @@ export const IDL: MaiusProgramLibrary = {
             "type": "publicKey"
           },
           {
-            "name": "billingThresholdsGte",
+            "name": "billingThresholds",
             "type": "u64"
+          },
+          {
+            "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "quantity",
+            "type": "u8"
           }
         ]
       }
@@ -1182,11 +1428,11 @@ export const IDL: MaiusProgramLibrary = {
         "kind": "struct",
         "fields": [
           {
-            "name": "merchantWallet",
+            "name": "merchantAccount",
             "type": "publicKey"
           },
           {
-            "name": "customerWallet",
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
@@ -1198,8 +1444,12 @@ export const IDL: MaiusProgramLibrary = {
             "type": "i64"
           },
           {
+            "name": "status",
+            "type": "string"
+          },
+          {
             "name": "subscriptionItemCount",
-            "type": "u64"
+            "type": "u8"
           }
         ]
       }

@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Button,
   Card,
   Divider,
@@ -11,86 +12,79 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import Link from "next/link";
-import { X } from "tabler-icons-react";
+import { Trash, X } from "tabler-icons-react";
 import React from "react";
 import { useProgram } from "../../../../src/provider/ProgramProvider";
 import { useRouter } from "next/router";
 import ImageDropzone from "../../../../src/pages/products/ImageDropzone";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
+import { randomId } from "@mantine/hooks";
+import { useCreateProduct } from "../../../../src/services/product/useCreateProduct";
+import { useMerchantAccount } from "../../../../src/services/merchant/useMerchantAccount";
+import ProductForm from "../../../../src/pages/products/ProductForm";
 
 const CreateProductPage = () => {
-  const { routes } = useProgram();
+  const { routes, merchantWalletAddress } = useProgram();
   const router = useRouter();
+  const {
+    data: merchantAccount,
+    refetch,
+    isRefetching: isFetchingMerchant,
+  } = useMerchantAccount(merchantWalletAddress);
+  const { mutateAsync: create, isLoading: isCreating } = useCreateProduct(
+    merchantWalletAddress,
+    merchantAccount?.productCount?.toNumber() || 0
+  );
   const form = useForm({
-    initialValues: {},
+    initialValues: {
+      images: [],
+    },
     validate: {},
   });
 
-  const createProduct = async () => {};
+  const isLoading = isFetchingMerchant || isCreating;
+
+  const createProduct = async (data) => {
+    try {
+      await create({ ...data });
+      await refetch();
+      await router.push(routes.merchant.products.list);
+    } catch (e) {
+      showNotification({
+        title: "Something went wrong!",
+        message: `${e.toString()}`,
+        color: "red",
+      });
+    }
+  };
   return (
     <Card className="vh-100">
-      <Group className="justify-content-between align-items-center">
-        <div className="d-flex flex-row align-items-center">
-          <UnstyledButton>
-            <X
-              size={20}
-              onClick={() => {
-                router.push(routes.merchant.products.list);
-              }}
-            />
-          </UnstyledButton>
-          <Title order={3} className="m-lg-2">
-            Add a product
-          </Title>
-        </div>
-        <Button>Save product</Button>
-      </Group>
-      <Divider className="mt-3" />
-
-      <form
-        onSubmit={form.onSubmit(async (values) => {
-          try {
-            await update({
-              ...values,
-            });
-            await refetch();
-          } catch (e) {
-            showNotification({
-              title: "Something went wrong!",
-              message: `${e.toString()}`,
-              color: "red",
-            });
-          }
-        })}
-      >
-        <Title order={4} className="mt-4">
-          Product information
-        </Title>
-        <Title order={5} className="mt-4">
-          Product details
-        </Title>
-        <div className="d-flex flex-row g-2 mt-2">
-          <div className="col-12 col-md-6 ">
-            <TextInput
-              required
-              label="Name"
-              placeholder="Maius Pay"
-              {...form.getInputProps("name")}
-              className="mb-2"
-            />
-            <TextInput
-              required
-              label="Description"
-              placeholder="Maius Pay is a subscription service"
-              {...form.getInputProps("description")}
-              className="mb-2"
-            />
+      <form onSubmit={form.onSubmit(createProduct)}>
+        <Group className="justify-content-between align-items-center">
+          <div className="d-flex flex-row align-items-center">
+            <UnstyledButton>
+              <X
+                size={20}
+                onClick={() => {
+                  router.push(routes.merchant.products.list);
+                }}
+              />
+            </UnstyledButton>
+            <Title order={3} className="m-lg-2">
+              Add a product
+            </Title>
           </div>
-          <div className="col-12 col-md-6 px-4">
-            <ImageDropzone />
-          </div>
-        </div>
+          <Button type="submit" loading={isLoading}>
+            Save product
+          </Button>
+        </Group>
+        <Divider className="mt-3" />
+        <ProductForm {...form} />
+        <Title order={3} className="mt-3">
+          Price information
+        </Title>
+        <div className="d-flex flex-column"></div>
       </form>
     </Card>
   );

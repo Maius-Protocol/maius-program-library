@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useProgram } from "../../provider/ProgramProvider";
 import { useMerchantAccountKey } from "../merchant/address";
 import { findCustomerAddress, useCustomerAccountKey } from "./address";
