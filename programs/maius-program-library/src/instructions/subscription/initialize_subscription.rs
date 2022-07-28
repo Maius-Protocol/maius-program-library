@@ -28,11 +28,14 @@ pub fn handler(
     merchant_account: Pubkey,
     customer_account: Pubkey,
     last_invoice: Pubkey,
+    current_period_end: i64
 ) ->  Result<()> {
     ctx.accounts.subscription_account.merchant_account = merchant_account;
     ctx.accounts.subscription_account.customer_account = customer_account;
     ctx.accounts.subscription_account.last_invoice = last_invoice;
     ctx.accounts.subscription_account.created = Clock::get().unwrap().unix_timestamp;
+    ctx.accounts.subscription_account.current_period_start = Clock::get().unwrap().unix_timestamp;
+    ctx.accounts.subscription_account.current_period_end = current_period_end;
     ctx.accounts.subscription_account.status = "active".to_string();
     ctx.accounts.merchant_account.subscription_count += 1;
     Ok(())

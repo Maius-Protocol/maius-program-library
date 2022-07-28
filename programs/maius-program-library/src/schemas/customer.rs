@@ -8,6 +8,7 @@ pub struct Customer {
     pub prev_customer_key: Pubkey,
     pub description: String,
     pub created: i64,
+    pub invoice_count: i64
 }
 
 impl Customer {
@@ -22,7 +23,8 @@ impl Customer {
         PUBKEY_SIZE + // prev_customer_key
         4 + // Vec len
         Customer::DESCRIPTION_MAX_LEN + // description
-        I64_SIZE
+        I64_SIZE + // created
+        8 // invoice_count
     }
 
 }
