@@ -8,16 +8,18 @@ pub struct InitializeInvoice<'info> {
     seeds = [
     b"v1",
     INVOICE_PREFIX.as_bytes(),
-    merchant_account.key().as_ref(),
-    merchant_account.subscription_count.to_string().as_ref(),
+    customer_account.key().as_ref(),
+    customer_account.invoice_count.to_string().as_ref()
     ],
     bump,
     payer = merchant,
     space = Invoice::space()
     )]
-    pub subscription_account: Account<'info, Subscription>,
+    pub invoice_account: Account<'info, Invoice>,
     #[account(mut)]
     pub merchant_account: Account<'info, Merchant>,
+    #[account(mut)]
+    pub customer_account: Account<'info, Customer>,
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -25,15 +27,13 @@ pub struct InitializeInvoice<'info> {
 
 pub fn handler(
     ctx: Context<InitializeInvoice>,
-    merchant_account: Pubkey,
     customer_account: Pubkey,
-    last_invoice: Pubkey,
+    subscription_account: Pubkey,
 ) ->  Result<()> {
-    ctx.accounts.subscription_account.merchant_account = merchant_account;
-    ctx.accounts.subscription_account.customer_account = customer_account;
-    ctx.accounts.subscription_account.last_invoice = last_invoice;
-    ctx.accounts.subscription_account.created = Clock::get().unwrap().unix_timestamp;
-    ctx.accounts.subscription_account.status = "active".to_string();
-    ctx.accounts.merchant_account.subscription_count += 1;
+    ctx.accounts.invoice_account.customer_account = customer_account;
+    ctx.accounts.invoice_account.subscription_account = subscription_account;
+    ctx.accounts.invoice_account.created = Clock::get().unwrap().unix_timestamp;
+    ctx.accounts.invoice_account.status = "draft".to_string();
+    ctx.accounts.customer_account.invoice_count += 1;
     Ok(())
 }

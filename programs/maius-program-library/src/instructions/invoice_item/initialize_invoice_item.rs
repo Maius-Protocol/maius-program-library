@@ -9,7 +9,6 @@ pub struct InitializeInvoiceItem<'info> {
     seeds = [
     b"v1",
     INVOICE_ITEM_PREFIX.as_bytes(),
-    merchant_account.key().as_ref(),
     customer_account.key().as_ref(),
     invoice_account.invoice_item_count.to_string().as_ref(),
     ],

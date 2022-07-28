@@ -20,6 +20,7 @@ macro_rules! debug {
 
 #[program]
 pub mod maius_program_library {
+    use crate::instructions::invoice_item::{initialize_invoice_item, InitializeInvoiceItem};
     use super::*;
 
     pub fn initialize_merchant(ctx: Context<InitializeMerchant>, name: String, description: String, logo_url: String) -> Result<()> {
@@ -134,6 +135,23 @@ pub mod maius_program_library {
         quantity: u8,
     ) -> Result<()> {
         initialize_subscription_item::handler(ctx, price, bill_thresholds, quantity)
+    }
+
+    pub fn initialize_invoice(
+        ctx: Context<InitializeInvoice>,
+        customer_account: Pubkey,
+        subscription_account: Pubkey,
+    ) -> Result<()> {
+        initialize_invoice::handler(ctx, customer_account, subscription_account)
+    }
+
+    pub fn initialize_invoice_item(
+        ctx: Context<InitializeInvoiceItem>,
+        customer_account: Pubkey,
+        price: Pubkey,
+        quantity: u64
+    ) -> Result<()> {
+        initialize_invoice_item::handler(ctx, customer_account, price, quantity)
     }
 
     pub fn initialize_accepted_tokens(

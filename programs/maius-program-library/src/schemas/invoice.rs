@@ -14,6 +14,7 @@ pub struct Invoice {
     pub period_start: i64,
     pub paid: bool,
     pub status: String,
+    pub total: i64,
     pub subscription_account: Pubkey
 }
 
@@ -27,6 +28,7 @@ impl Invoice {
         8 + // period_start
         1 + // paid
         4 + MAXIMUM_LENGTH_OF_STATUS + // status
+        8 + // total
         PUBKEY_SIZE // subscription_account
     }
 }
