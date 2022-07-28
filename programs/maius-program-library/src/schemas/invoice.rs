@@ -14,7 +14,7 @@ pub struct Invoice {
     pub period_start: i64,
     pub paid: bool,
     pub status: String,
-    pub total: i64,
+    pub total: u64,
     pub subscription_account: Pubkey
 }
 
