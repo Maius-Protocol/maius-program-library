@@ -22,14 +22,9 @@ import {
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl, Commitment } from "@solana/web3.js";
-import {
-  createDefaultAuthorizationResultCache,
-  SolanaMobileWalletAdapter,
-} from "@solana-mobile/wallet-adapter-mobile";
-import "../styles/globals.css";
+import { clusterApiUrl } from "@solana/web3.js";
 import { ProgramProvider } from "../src/provider/ProgramProvider";
-import { localhostEndpoint, opts } from "../config/globalVariables";
+import { localhostEndpoint } from "../config/globalVariables";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient } from "@tanstack/query-core";
 import { QueryClientProvider } from "@tanstack/react-query";

@@ -22,7 +22,7 @@ pub struct InitializeInvoiceItem<'info> {
     #[account(mut)]
     pub invoice_account: Account<'info, Invoice>,
     #[account(mut)]
-    pub customer_account: Account<'info, customer>,
+    pub customer_account: Account<'info, Customer>,
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,

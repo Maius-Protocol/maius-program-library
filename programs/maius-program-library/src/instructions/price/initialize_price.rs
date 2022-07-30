@@ -29,31 +29,12 @@ pub struct InitializePrice<'info> {
 
 pub fn handler(
     ctx: Context<InitializePrice>,
-    product: Pubkey, 
-    billing_scheme: String,
-    currency: String,
-    unit_amount: u64,
-    interval: String, 
-    interval_count: u8, 
-    active: bool,
-    price_type: String,
-    accepted_tokens: Vec<Pubkey>
+    product: Pubkey,
 ) -> Result<()> {
-    msg!("Initialize a new Price of Product: {} with billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}, accepted_tokens: {:?}", 
-        product, billing_scheme, unit_amount, interval, interval_count, active, price_type, accepted_tokens);
+    msg!("Initialize a new Price of Product: {}",
+        product);
 
     ctx.accounts.price_account.product = product;
-    ctx.accounts.price_account.billing_scheme = billing_scheme;
-    ctx.accounts.price_account.currency = currency;
-    ctx.accounts.price_account.unit_amount = unit_amount;
-    ctx.accounts.price_account.interval = interval;
-    ctx.accounts.price_account.interval_count = interval_count;
-    ctx.accounts.price_account.active = active;
-    ctx.accounts.price_account.price_type = price_type;
-    ctx.accounts.price_account.accepted_tokens = accepted_tokens;
-    ctx.accounts.price_account.created = Clock::get().unwrap().unix_timestamp;
-    ctx.accounts.price_account.updated = Clock::get().unwrap().unix_timestamp;
-
     ctx.accounts.product_account.price_count += 1;
 
     Ok(())

@@ -15,6 +15,7 @@ import ProductForm from "../../../../src/pages/products/ProductForm";
 import React, { useEffect } from "react";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
+import PriceForm from "../../../../src/pages/products/PriceForm";
 
 const EditPage = () => {
   const router = useRouter();
@@ -74,6 +75,7 @@ const EditPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
+        <PriceForm product_id={parseInt(product_count_index)} />
       </form>
     </Card>
   );
