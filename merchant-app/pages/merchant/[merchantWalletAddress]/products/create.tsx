@@ -81,10 +81,6 @@ const CreateProductPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
-        <Title order={3} className="mt-3">
-          Price information
-        </Title>
-        <div className="d-flex flex-column"></div>
       </form>
     </Card>
   );

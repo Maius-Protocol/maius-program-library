@@ -43,7 +43,12 @@ const ProductsPage = () => {
         </ThemeIcon>
       </td>
       <td>{index}</td>
-      <td>{element.name}</td>
+      <td>
+        <div>{element.name}</div>
+        <div className="text-muted">
+          {element?.priceCount?.toNumber()} prices
+        </div>
+      </td>
       <td>{displayTime(element?.created?.toNumber())}</td>
       <td>{displayTime(element?.updated?.toNumber())}</td>{" "}
       <td>

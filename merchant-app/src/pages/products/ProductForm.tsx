@@ -1,4 +1,11 @@
-import { ActionIcon, Button, Group, TextInput, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Select,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { Trash } from "tabler-icons-react";
 import { randomId } from "@mantine/hooks";
 import React from "react";
@@ -61,7 +68,7 @@ const ProductForm = (form: UseFormReturnType<any>) => {
             </Group>
           );
         })}
-        <Group position="center" mt="md">
+        <Group position="left" mt="md">
           <Button
             type="button"
             onClick={() =>
@@ -72,6 +79,49 @@ const ProductForm = (form: UseFormReturnType<any>) => {
             }
           >
             Add Image
+          </Button>
+        </Group>
+      </div>
+      <Title order={3} className="mt-3">
+        Price information
+      </Title>
+      <div className="d-flex flex-column">
+        {form.values.prices.map((item, index) => {
+          return (
+            <Group key={item.key} align="center" mb="xs">
+              <Select
+                label="Your favorite framework/library"
+                placeholder="Pick one"
+                data={[
+                  { value: "react", label: "React" },
+                  { value: "ng", label: "Angular" },
+                  { value: "svelte", label: "Svelte" },
+                  { value: "vue", label: "Vue" },
+                ]}
+                {...form.getInputProps(`prices.${index}.currency`)}
+              />
+
+              <ActionIcon
+                color="red"
+                className="mt-3"
+                onClick={() => form.removeListItem("prices", index)}
+              >
+                <Trash size={16} />
+              </ActionIcon>
+            </Group>
+          );
+        })}
+        <Group position="left" mt="md">
+          <Button
+            type="button"
+            onClick={() =>
+              form.insertListItem("prices", {
+                url: "",
+                key: randomId(),
+              })
+            }
+          >
+            Add another price
           </Button>
         </Group>
       </div>

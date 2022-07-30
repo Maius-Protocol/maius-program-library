@@ -27,6 +27,7 @@ const EditPage = () => {
   const form = useForm({
     initialValues: {
       images: [],
+      prices: [],
     },
     validate: {},
   });
@@ -45,6 +46,7 @@ const EditPage = () => {
           url: e,
           key: randomId(),
         })),
+        prices: [],
       });
     }
   }, [data]);
@@ -72,10 +74,6 @@ const EditPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
-        <Title order={3} className="mt-3">
-          Price information
-        </Title>
-        <div className="d-flex flex-column"></div>
       </form>
     </Card>
   );
