@@ -17,6 +17,7 @@ pub const MAXIMUM_ACCEPTED_TOKENS_PER_PRICE: usize = 56;
 #[account]
 #[derive(Default)]
 pub struct Price {
+    pub authority: Pubkey,
     pub product: Pubkey,
     pub billing_scheme: String,
     pub currency: String,

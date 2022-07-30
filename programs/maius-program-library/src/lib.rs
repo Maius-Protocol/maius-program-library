@@ -74,8 +74,8 @@ pub mod maius_program_library {
         product: Pubkey,
     ) -> Result<()> {
         initialize_price::handler(
-            ctx, 
-            product, 
+            ctx,
+            product,
         )
     }
 

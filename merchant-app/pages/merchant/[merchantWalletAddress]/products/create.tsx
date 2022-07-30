@@ -52,7 +52,7 @@ const CreateProductPage = () => {
     }
   };
   return (
-    <Card className="vh-100">
+    <Card>
       <form onSubmit={form.onSubmit(createProduct)}>
         <Group className="justify-content-between align-items-center">
           <div className="d-flex flex-row align-items-center">

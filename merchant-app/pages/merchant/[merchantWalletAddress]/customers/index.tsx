@@ -65,7 +65,7 @@ const CustomersPage = () => {
   }, [lastKey]);
 
   return (
-    <Card className="vh-100">
+    <Card>
       <Group className="justify-content-between align-items-center mb-4">
         <Title order={2}>Customers</Title>
         <Link href={routes.merchant.customers.create}>

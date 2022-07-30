@@ -70,7 +70,7 @@ const ProductsPage = () => {
   }, [data?.pages?.length, merchantAccount]);
 
   return (
-    <Card className="vh-100">
+    <Card>
       <Group className="justify-content-between align-items-center">
         <Title order={2}>Products</Title>
         <Link href={routes.merchant.products.create}>

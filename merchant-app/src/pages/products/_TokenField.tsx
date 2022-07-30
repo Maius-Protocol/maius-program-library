@@ -35,13 +35,12 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   )
 );
 
-const TokenField = ({ getInputProps, index }: UseFormReturnType<any>) => {
+const TokenField = ({ getInputProps, setValues }: UseFormReturnType<any>) => {
   const [tokenList, setTokenList] = useState<any[]>([]);
 
   useEffect(() => {
     new TokenListProvider().resolve().then((tokens) => {
       const _tokenList = tokens.filterByTag("stablecoin").getList();
-      console.log(_tokenList);
       setTokenList(_tokenList);
     });
   }, []);
@@ -62,7 +61,12 @@ const TokenField = ({ getInputProps, index }: UseFormReturnType<any>) => {
       maxDropdownHeight={400}
       searchable
       sx={{ flex: 1 }}
-      {...getInputProps(`prices.${index}.accepted_tokens`)}
+      onChange={(value) => {
+        setValues({
+          accepted_tokens: value,
+        });
+      }}
+      className="mb-2"
     />
   );
 };

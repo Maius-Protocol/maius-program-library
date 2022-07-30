@@ -7,7 +7,8 @@ import { findProductAddress } from "../product/address";
 
 export function useCreatePricingAccount(
   merchantWalletAddress: string,
-  product_count_index: number
+  product_count_index: number,
+  price_count_index: number
 ) {
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
@@ -17,17 +18,17 @@ export function useCreatePricingAccount(
       merchantWalletAddress,
       product_count_index
     );
-    const pricingAccountAddress = await findPricingAddress(
+    const pricing_account_address = await findPricingAddress(
       merchantWalletAddress,
       product_account_address?.toBase58(),
-      product_count_index
+      price_count_index
     );
     const transaction = await program.methods
       .initializePrice(new PublicKey(product_account_address))
       .accounts({
-        priceAccount: pricingAccountAddress,
-        productAccount: new PublicKey(product_account_address),
-        merchantAuthority: new PublicKey(merchantWalletAddress),
+        priceAccount: pricing_account_address,
+        productAccount: product_account_address,
+        merchant: merchantWalletAddress,
         systemProgram: SystemProgram.programId,
       })
       .transaction();

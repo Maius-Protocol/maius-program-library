@@ -241,19 +241,19 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "productAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -718,6 +718,10 @@ export type MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
           {
             "name": "product",
             "type": "publicKey"
@@ -1142,19 +1146,19 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "productAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -1619,6 +1623,10 @@ export const IDL: MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
           {
             "name": "product",
             "type": "publicKey"

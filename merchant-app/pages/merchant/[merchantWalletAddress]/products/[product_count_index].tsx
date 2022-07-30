@@ -53,7 +53,7 @@ const EditPage = () => {
   }, [data]);
 
   return (
-    <Card className="vh-100">
+    <Card>
       <form onSubmit={form.onSubmit(editProduct)}>
         <Group className="justify-content-between align-items-center">
           <div className="d-flex flex-row align-items-center">
@@ -75,8 +75,8 @@ const EditPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
-        <PriceForm product_id={parseInt(product_count_index)} />
       </form>
+      <PriceForm product_id={product_count_index} />
     </Card>
   );
 };
