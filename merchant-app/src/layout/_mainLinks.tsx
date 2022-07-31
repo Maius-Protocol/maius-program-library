@@ -80,12 +80,12 @@ export const MainLinks = () => {
       color: "blue",
       label: "Products",
     },
-    {
-      icon: <CurrencyDollar size={16} />,
-      link: routes.merchant.pricing.list,
-      color: "blue",
-      label: "Pricing",
-    },
+    // {
+    //   icon: <CurrencyDollar size={16} />,
+    //   link: routes.merchant.pricing.list,
+    //   color: "blue",
+    //   label: "Pricing",
+    // },
   ];
 
   const disabled = !merchantAccount;

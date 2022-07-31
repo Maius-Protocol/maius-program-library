@@ -61,7 +61,7 @@ const ProductForm = (form: UseFormReturnType<any>) => {
             </Group>
           );
         })}
-        <Group position="center" mt="md">
+        <Group position="left" mt="md">
           <Button
             type="button"
             onClick={() =>

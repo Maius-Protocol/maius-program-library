@@ -15,6 +15,7 @@ import ProductForm from "../../../../src/pages/products/ProductForm";
 import React, { useEffect } from "react";
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
+import PriceForm from "../../../../src/pages/products/PriceForm";
 
 const EditPage = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const EditPage = () => {
   const form = useForm({
     initialValues: {
       images: [],
+      prices: [],
     },
     validate: {},
   });
@@ -45,12 +47,13 @@ const EditPage = () => {
           url: e,
           key: randomId(),
         })),
+        prices: [],
       });
     }
   }, [data]);
 
   return (
-    <Card className="vh-100">
+    <Card>
       <form onSubmit={form.onSubmit(editProduct)}>
         <Group className="justify-content-between align-items-center">
           <div className="d-flex flex-row align-items-center">
@@ -72,11 +75,8 @@ const EditPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
-        <Title order={3} className="mt-3">
-          Price information
-        </Title>
-        <div className="d-flex flex-column"></div>
       </form>
+      <PriceForm product_id={product_count_index} />
     </Card>
   );
 };
