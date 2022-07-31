@@ -121,9 +121,10 @@ pub mod maius_program_library {
         ctx: Context<InitializeSubscription>,
         merchant_wallet: Pubkey,
         customer_wallet: Pubkey,
-        last_invoice: Pubkey
+        last_invoice: Pubkey,
+        current_period_end: i64,
     ) -> Result<()> {
-        initialize_subscription::handler(ctx, merchant_wallet, customer_wallet, last_invoice)
+        initialize_subscription::handler(ctx, merchant_wallet, customer_wallet, last_invoice, current_period_end)
     }
 
     pub fn initialize_subscription_item(
@@ -170,6 +171,14 @@ pub mod maius_program_library {
         initialize_accepted_tokens::handler(
             ctx, 
             tokens
+        )
+    }
+
+    pub fn subscribe(
+        ctx: Context<Subscribe>,
+    ) -> Result<()> {
+        subscribe::handler(
+            ctx
         )
     }
 }
