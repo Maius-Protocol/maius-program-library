@@ -143,6 +143,12 @@ pub mod maius_program_library {
         initialize_invoice::handler(ctx, customer_account, subscription_account)
     }
 
+    pub fn initialize_customer_invoice(
+        ctx: Context<InitializeCustomerInvoice>,
+    ) -> Result<()> {
+        initialize_customer_invoice::handler(ctx)
+    }
+
     pub fn update_invoice(
         ctx: Context<UpdateInvoice>,
         total: u64,
