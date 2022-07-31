@@ -19,7 +19,8 @@ pub fn handler(
     interval: String, 
     interval_count: u8, 
     active: bool,
-    price_type: String
+    price_type: String,
+    accepted_tokens: Vec<Pubkey>,
 ) -> Result<()> {
     msg!("Update Price: {} with billing_scheme: {}, unit_amount: {}, interval: {}, interval_count: {}, active: {}, price_type: {}",
     ctx.accounts.price_account.key(), billing_scheme, unit_amount, interval, interval_count, active, price_type);

@@ -9,7 +9,7 @@ pub struct InitializeInvoice<'info> {
     b"v1",
     INVOICE_PREFIX.as_bytes(),
     customer_account.key().as_ref(),
-    customer_account.invoice_count.to_string().as_ref()
+    customer_invoice_account.invoice_count.to_string().as_ref()
     ],
     bump,
     payer = merchant,
@@ -20,6 +20,8 @@ pub struct InitializeInvoice<'info> {
     pub merchant_account: Account<'info, Merchant>,
     #[account(mut)]
     pub customer_account: Account<'info, Customer>,
+    #[account(mut)]
+    pub customer_invoice_account: Account<'info, CustomerInvoice>,
     #[account(mut)]
     pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -34,6 +36,6 @@ pub fn handler(
     ctx.accounts.invoice_account.subscription_account = subscription_account;
     ctx.accounts.invoice_account.created = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.invoice_account.status = "draft".to_string();
-    ctx.accounts.customer_account.invoice_count += 1;
+    ctx.accounts.customer_invoice_account.invoice_count += 1;
     Ok(())
 }

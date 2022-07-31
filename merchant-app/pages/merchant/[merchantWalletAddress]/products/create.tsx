@@ -1,28 +1,21 @@
 import {
-  ActionIcon,
   Button,
   Card,
   Divider,
   Group,
-  Stack,
-  Table,
-  Text,
-  TextInput,
   Title,
   UnstyledButton,
 } from "@mantine/core";
-import Link from "next/link";
-import { Trash, X } from "tabler-icons-react";
+import { X } from "tabler-icons-react";
 import React from "react";
 import { useProgram } from "../../../../src/provider/ProgramProvider";
 import { useRouter } from "next/router";
-import ImageDropzone from "../../../../src/pages/products/ImageDropzone";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { randomId } from "@mantine/hooks";
 import { useCreateProduct } from "../../../../src/services/product/useCreateProduct";
 import { useMerchantAccount } from "../../../../src/services/merchant/useMerchantAccount";
 import ProductForm from "../../../../src/pages/products/ProductForm";
+import PriceForm from "../../../../src/pages/products/PriceForm";
 
 const CreateProductPage = () => {
   const { routes, merchantWalletAddress } = useProgram();
@@ -59,7 +52,7 @@ const CreateProductPage = () => {
     }
   };
   return (
-    <Card className="vh-100">
+    <Card>
       <form onSubmit={form.onSubmit(createProduct)}>
         <Group className="justify-content-between align-items-center">
           <div className="d-flex flex-row align-items-center">
@@ -81,10 +74,6 @@ const CreateProductPage = () => {
         </Group>
         <Divider className="mt-3" />
         <ProductForm {...form} />
-        <Title order={3} className="mt-3">
-          Price information
-        </Title>
-        <div className="d-flex flex-column"></div>
       </form>
     </Card>
   );

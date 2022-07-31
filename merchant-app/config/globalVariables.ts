@@ -7,6 +7,8 @@ export const idlJSON = idl;
 
 export const localhostEndpoint = "http://0.0.0.0:8899";
 
+export const supportedTokens = ["USDC", "bUSD", "USDT", "SOL", "KNC"];
+
 export const opts = {
   preflightCommitment: "processed",
 };

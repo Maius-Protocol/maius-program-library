@@ -16,12 +16,11 @@ export function useProductAccount(
       product_count_index,
     ],
     async () => {
-      console.log(merchantWalletAddress, product_count_index);
-      const customerAccountAddress = await findProductAddress(
+      const product_account_address = await findProductAddress(
         merchantWalletAddress,
         product_count_index
       );
-      return await program.account.product.fetch(customerAccountAddress);
+      return await program.account.product.fetch(product_account_address);
     },
     {
       enabled:

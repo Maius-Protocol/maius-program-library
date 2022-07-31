@@ -15,4 +15,5 @@ pub use subscription::*;
 pub use subscription_item::*;
 pub use price::*;
 pub use invoice::*;
+pub use invoice_item::*;
 

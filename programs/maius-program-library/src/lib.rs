@@ -20,7 +20,6 @@ macro_rules! debug {
 
 #[program]
 pub mod maius_program_library {
-    use crate::instructions::invoice_item::{initialize_invoice_item, InitializeInvoiceItem};
     use super::*;
 
     pub fn initialize_merchant(ctx: Context<InitializeMerchant>) -> Result<()> {
@@ -72,27 +71,11 @@ pub mod maius_program_library {
 
     pub fn initialize_price(
         ctx: Context<InitializePrice>,
-        product: Pubkey, 
-        billing_scheme: String, 
-        currency: String, 
-        unit_amount: u64, 
-        interval: String, 
-        interval_count: u8, 
-        active: bool, 
-        price_type: String,
-        accepted_tokens: Vec<Pubkey>
+        product: Pubkey,
     ) -> Result<()> {
         initialize_price::handler(
-            ctx, 
-            product, 
-            billing_scheme, 
-            currency, 
-            unit_amount, 
-            interval, 
-            interval_count, 
-            active, 
-            price_type,
-            accepted_tokens
+            ctx,
+            product,
         )
     }
 
@@ -105,6 +88,7 @@ pub mod maius_program_library {
         interval_count: u8, 
         active: bool,
         price_type: String,
+        accepted_tokens: Vec<Pubkey>,
     ) -> Result<()> {
         update_price::handler(
             ctx,
@@ -114,7 +98,8 @@ pub mod maius_program_library {
             interval, 
             interval_count,
             active,
-            price_type
+            price_type,
+            accepted_tokens,
         )
     }
     pub fn initialize_subscription(
@@ -122,7 +107,7 @@ pub mod maius_program_library {
         merchant_wallet: Pubkey,
         customer_wallet: Pubkey,
         last_invoice: Pubkey,
-        current_period_end: i64,
+        current_period_end: i64
     ) -> Result<()> {
         initialize_subscription::handler(ctx, merchant_wallet, customer_wallet, last_invoice, current_period_end)
     }
@@ -132,6 +117,7 @@ pub mod maius_program_library {
         price: Pubkey,
         bill_thresholds: u64,
         quantity: u8,
+
     ) -> Result<()> {
         initialize_subscription_item::handler(ctx, price, bill_thresholds, quantity)
     }

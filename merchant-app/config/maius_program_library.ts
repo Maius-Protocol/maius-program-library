@@ -241,59 +241,25 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "productAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
         {
           "name": "product",
           "type": "publicKey"
-        },
-        {
-          "name": "billingScheme",
-          "type": "string"
-        },
-        {
-          "name": "currency",
-          "type": "string"
-        },
-        {
-          "name": "unitAmount",
-          "type": "u64"
-        },
-        {
-          "name": "interval",
-          "type": "string"
-        },
-        {
-          "name": "intervalCount",
-          "type": "u8"
-        },
-        {
-          "name": "active",
-          "type": "bool"
-        },
-        {
-          "name": "priceType",
-          "type": "string"
-        },
-        {
-          "name": "acceptedTokens",
-          "type": {
-            "vec": "publicKey"
-          }
         }
       ]
     },
@@ -344,6 +310,12 @@ export type MaiusProgramLibrary = {
         {
           "name": "priceType",
           "type": "string"
+        },
+        {
+          "name": "acceptedTokens",
+          "type": {
+            "vec": "publicKey"
+          }
         }
       ]
     },
@@ -383,6 +355,10 @@ export type MaiusProgramLibrary = {
         {
           "name": "lastInvoice",
           "type": "publicKey"
+        },
+        {
+          "name": "currentPeriodEnd",
+          "type": "i64"
         }
       ]
     },
@@ -422,6 +398,142 @@ export type MaiusProgramLibrary = {
         {
           "name": "quantity",
           "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initializeInvoice",
+      "accounts": [
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccount",
+          "type": "publicKey"
+        },
+        {
+          "name": "subscriptionAccount",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "updateInvoice",
+      "accounts": [
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "total",
+          "type": "u64"
+        },
+        {
+          "name": "periodEnd",
+          "type": "i64"
+        },
+        {
+          "name": "periodStart",
+          "type": "i64"
+        },
+        {
+          "name": "paid",
+          "type": "bool"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initializeInvoiceItem",
+      "accounts": [
+        {
+          "name": "invoiceItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccount",
+          "type": "publicKey"
+        },
+        {
+          "name": "price",
+          "type": "publicKey"
+        },
+        {
+          "name": "quantity",
+          "type": "u64"
         }
       ]
     },
@@ -489,6 +601,10 @@ export type MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "invoiceCount",
+            "type": "i64"
           }
         ]
       }
@@ -499,11 +615,31 @@ export type MaiusProgramLibrary = {
         "kind": "struct",
         "fields": [
           {
-            "name": "cus",
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
-            "name": "lastInvoice",
+            "name": "price",
+            "type": "publicKey"
+          },
+          {
+            "name": "quantity",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "invoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
@@ -511,12 +647,32 @@ export type MaiusProgramLibrary = {
             "type": "i64"
           },
           {
+            "name": "invoiceItemCount",
+            "type": "u8"
+          },
+          {
+            "name": "periodEnd",
+            "type": "i64"
+          },
+          {
+            "name": "periodStart",
+            "type": "i64"
+          },
+          {
+            "name": "paid",
+            "type": "bool"
+          },
+          {
             "name": "status",
             "type": "string"
           },
           {
-            "name": "subscriptionItemCount",
-            "type": "u8"
+            "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "subscriptionAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -562,6 +718,10 @@ export type MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
           {
             "name": "product",
             "type": "publicKey"
@@ -707,7 +867,19 @@ export type MaiusProgramLibrary = {
             "type": "publicKey"
           },
           {
+            "name": "cancelAt",
+            "type": "i64"
+          },
+          {
             "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "currentPeriodEnd",
+            "type": "i64"
+          },
+          {
+            "name": "currentPeriodStart",
             "type": "i64"
           },
           {
@@ -974,59 +1146,25 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "productAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
         {
           "name": "product",
           "type": "publicKey"
-        },
-        {
-          "name": "billingScheme",
-          "type": "string"
-        },
-        {
-          "name": "currency",
-          "type": "string"
-        },
-        {
-          "name": "unitAmount",
-          "type": "u64"
-        },
-        {
-          "name": "interval",
-          "type": "string"
-        },
-        {
-          "name": "intervalCount",
-          "type": "u8"
-        },
-        {
-          "name": "active",
-          "type": "bool"
-        },
-        {
-          "name": "priceType",
-          "type": "string"
-        },
-        {
-          "name": "acceptedTokens",
-          "type": {
-            "vec": "publicKey"
-          }
         }
       ]
     },
@@ -1077,6 +1215,12 @@ export const IDL: MaiusProgramLibrary = {
         {
           "name": "priceType",
           "type": "string"
+        },
+        {
+          "name": "acceptedTokens",
+          "type": {
+            "vec": "publicKey"
+          }
         }
       ]
     },
@@ -1116,6 +1260,10 @@ export const IDL: MaiusProgramLibrary = {
         {
           "name": "lastInvoice",
           "type": "publicKey"
+        },
+        {
+          "name": "currentPeriodEnd",
+          "type": "i64"
         }
       ]
     },
@@ -1155,6 +1303,142 @@ export const IDL: MaiusProgramLibrary = {
         {
           "name": "quantity",
           "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initializeInvoice",
+      "accounts": [
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccount",
+          "type": "publicKey"
+        },
+        {
+          "name": "subscriptionAccount",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "updateInvoice",
+      "accounts": [
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "total",
+          "type": "u64"
+        },
+        {
+          "name": "periodEnd",
+          "type": "i64"
+        },
+        {
+          "name": "periodStart",
+          "type": "i64"
+        },
+        {
+          "name": "paid",
+          "type": "bool"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initializeInvoiceItem",
+      "accounts": [
+        {
+          "name": "invoiceItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccount",
+          "type": "publicKey"
+        },
+        {
+          "name": "price",
+          "type": "publicKey"
+        },
+        {
+          "name": "quantity",
+          "type": "u64"
         }
       ]
     },
@@ -1222,6 +1506,10 @@ export const IDL: MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "invoiceCount",
+            "type": "i64"
           }
         ]
       }
@@ -1232,11 +1520,31 @@ export const IDL: MaiusProgramLibrary = {
         "kind": "struct",
         "fields": [
           {
-            "name": "cus",
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
-            "name": "lastInvoice",
+            "name": "price",
+            "type": "publicKey"
+          },
+          {
+            "name": "quantity",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "invoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "customerAccount",
             "type": "publicKey"
           },
           {
@@ -1244,12 +1552,32 @@ export const IDL: MaiusProgramLibrary = {
             "type": "i64"
           },
           {
+            "name": "invoiceItemCount",
+            "type": "u8"
+          },
+          {
+            "name": "periodEnd",
+            "type": "i64"
+          },
+          {
+            "name": "periodStart",
+            "type": "i64"
+          },
+          {
+            "name": "paid",
+            "type": "bool"
+          },
+          {
             "name": "status",
             "type": "string"
           },
           {
-            "name": "subscriptionItemCount",
-            "type": "u8"
+            "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "subscriptionAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -1295,6 +1623,10 @@ export const IDL: MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
           {
             "name": "product",
             "type": "publicKey"
@@ -1440,7 +1772,19 @@ export const IDL: MaiusProgramLibrary = {
             "type": "publicKey"
           },
           {
+            "name": "cancelAt",
+            "type": "i64"
+          },
+          {
             "name": "created",
+            "type": "i64"
+          },
+          {
+            "name": "currentPeriodEnd",
+            "type": "i64"
+          },
+          {
+            "name": "currentPeriodStart",
             "type": "i64"
           },
           {
