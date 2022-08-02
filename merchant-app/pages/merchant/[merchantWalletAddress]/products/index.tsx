@@ -73,9 +73,12 @@ const ProductsPage = () => {
     <Card>
       <Group className="justify-content-between align-items-center">
         <Title order={2}>Products</Title>
-        <Link href={routes.merchant.products.create}>
-          <Button leftIcon={<Plus size={14} />}>Add Product</Button>
-        </Link>
+
+        <Group>
+          <Link href={routes.merchant.products.create}>
+            <Button leftIcon={<Plus size={14} />}>Add Product</Button>
+          </Link>
+        </Group>
       </Group>
       <Table highlightOnHover horizontalSpacing="sm" verticalSpacing="sm">
         <thead>

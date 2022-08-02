@@ -35,6 +35,7 @@ pub fn handler(
         product);
     ctx.accounts.price_account.authority = ctx.accounts.merchant.key();
     ctx.accounts.price_account.product = product;
+    ctx.accounts.price_account.active = true;
     ctx.accounts.price_account.created = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.price_account.updated = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.product_account.price_count += 1;

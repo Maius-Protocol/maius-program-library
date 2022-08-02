@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
+    "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.0.0",
     "@mantine/dates": "^5.0.0",
     "@mantine/dropzone": "^5.0.0",
@@ -35,6 +36,7 @@
     "dayjs": "^1.11.3",
     "next": "12.2.2",
     "react": "18.2.0",
+    "react-collapse": "^5.1.1",
     "react-dom": "18.2.0",
     "tabler-icons-react": "^1.53.0"
   },

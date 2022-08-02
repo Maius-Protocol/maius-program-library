@@ -38,6 +38,10 @@ const routing = (merchantWallet: string) => ({
     pricing: {
       list: `/merchant/${merchantWallet}/pricing`,
     },
+    payment_links: {
+      list: `/merchant/${merchantWallet}/payment-links`,
+      create: `/merchant/${merchantWallet}/payment-links/create`,
+    },
   },
 });
 

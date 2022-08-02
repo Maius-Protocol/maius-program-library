@@ -30,6 +30,7 @@ export const airdropAccounts = async () => {
   );
   console.log(
     "merchantWallet",
+    merchantWallet.payer.publicKey.toBase58(),
     await provider.connection.getBalance(merchantWallet.publicKey)
   );
   console.log(

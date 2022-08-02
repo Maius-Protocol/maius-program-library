@@ -159,4 +159,12 @@ pub mod maius_program_library {
             tokens
         )
     }
+
+    pub fn subscribe(
+        ctx: Context<Subscribe>,
+    ) -> Result<()> {
+        subscribe::handler(
+            ctx
+        )
+    }
 }

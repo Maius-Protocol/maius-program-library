@@ -18,3 +18,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}

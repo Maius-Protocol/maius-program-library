@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CurrencyDollar, Settings, User } from "tabler-icons-react";
+import { Box, CurrencyDollar, Globe, Settings, User } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
 import { useProgram } from "../provider/ProgramProvider";
@@ -80,12 +80,15 @@ export const MainLinks = () => {
       color: "blue",
       label: "Products",
     },
-    // {
-    //   icon: <CurrencyDollar size={16} />,
-    //   link: routes.merchant.pricing.list,
-    //   color: "blue",
-    //   label: "Pricing",
-    // },
+  ];
+
+  const directPaymentLinks = [
+    {
+      icon: <Globe size={16} />,
+      link: routes.merchant.payment_links.list,
+      color: "blue",
+      label: "Payment Links",
+    },
   ];
 
   const disabled = !merchantAccount;
@@ -111,6 +114,18 @@ export const MainLinks = () => {
           Merchant
         </Text>
         {productLinks.map((link) => (
+          <MainLink {...link} key={link.label} disabled={disabled} />
+        ))}
+      </div>
+      <div
+        className={classNames({
+          "opacity-50 user-select-none": disabled,
+        })}
+      >
+        <Text p="xs" transform="uppercase" color="gray" size="xs">
+          Direct Payments
+        </Text>
+        {directPaymentLinks.map((link) => (
           <MainLink {...link} key={link.label} disabled={disabled} />
         ))}
       </div>
