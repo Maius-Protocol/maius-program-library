@@ -7,7 +7,9 @@ use crate::Merchant;
 pub struct UpdateMerchant<'info> {
     #[account(mut)]
     pub merchant_account: Account<'info, Merchant>,
-    pub system_program: Program<'info, System>
+    pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
 }
 
 pub fn handler(
