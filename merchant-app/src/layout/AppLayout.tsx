@@ -4,14 +4,11 @@ import {
   Group,
   Header,
   Navbar,
-  Space,
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
 import { MoonStars, Sun } from "tabler-icons-react";
 import { MainLinks } from "./_mainLinks";
-import { Logo } from "./_logo";
-import { User } from "./_user";
 import {
   WalletDisconnectButton,
   WalletMultiButton,

@@ -272,7 +272,7 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
         },
@@ -1211,7 +1211,7 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
         },

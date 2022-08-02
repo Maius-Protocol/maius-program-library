@@ -76,7 +76,7 @@ const EditPage = () => {
         <Divider className="mt-3" />
         <ProductForm {...form} />
       </form>
-      <PriceForm product_id={product_count_index} />
+      <PriceForm product_count_index={product_count_index} />
     </Card>
   );
 };
