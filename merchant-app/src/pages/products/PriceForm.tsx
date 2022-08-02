@@ -54,6 +54,7 @@ const PriceForm = ({ product_count_index }) => {
           // if (!item.active) {
           //   return;
           // }
+
           return (
             <div
               key={`price_${index}`}
