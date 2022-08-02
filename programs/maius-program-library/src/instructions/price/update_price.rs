@@ -43,6 +43,9 @@ pub fn handler(
     if !price_type.is_empty() {
         ctx.accounts.price_account.price_type = price_type;
     }
+    if !accepted_tokens.is_empty() {
+        ctx.accounts.price_account.accepted_tokens = accepted_tokens;
+    }
     ctx.accounts.price_account.active = active;
     ctx.accounts.price_account.updated = Clock::get().unwrap().unix_timestamp;    
     

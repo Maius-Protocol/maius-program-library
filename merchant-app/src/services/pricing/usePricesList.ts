@@ -7,11 +7,12 @@ import { findProductAddress } from "../product/address";
 export function usePricesList(
   merchantWalletAddress: string,
   product_id: number,
-  totalPage: number
+  totalPage: number | undefined
 ) {
   const { program } = useProgram();
+
   return useInfiniteQuery(
-    [useMerchantAccountKey, merchantWalletAddress, usePricingKey, product_id],
+    [useMerchantAccountKey, merchantWalletAddress, "prices", product_id],
     async ({ pageParam = 0 }) => {
       const product_account_address = await findProductAddress(
         merchantWalletAddress,
@@ -23,14 +24,21 @@ export function usePricesList(
         product_account_address?.toBase58(),
         pageParam
       );
-      return await program.account.price.fetch(pricing_account_address);
+      const response = await program.account.price.fetch(
+        pricing_account_address
+      );
+
+      return response;
     },
     {
-      enabled: product_id !== null && merchantWalletAddress !== "",
+      enabled:
+        product_id !== null &&
+        totalPage !== undefined &&
+        merchantWalletAddress !== "",
       keepPreviousData: true,
       getNextPageParam: (lastPage, allPages) => {
-        if (allPages.length < totalPage) {
-          return totalPage - allPages.length;
+        if (allPages.length < totalPage!) {
+          return totalPage! - allPages.length;
         }
         return undefined;
       },

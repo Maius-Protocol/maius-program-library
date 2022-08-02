@@ -1,32 +1,71 @@
-import {
-  ActionIcon,
-  Button,
-  Divider,
-  Group,
-  Select,
-  TextInput,
-} from "@mantine/core";
-import { Trash } from "tabler-icons-react";
-import React from "react";
+import { Button, Divider, Group, Select, TextInput } from "@mantine/core";
+import React, { useEffect } from "react";
 import TokenField from "./_TokenField";
 import { useForm } from "@mantine/form";
 import { UnmountClosed } from "react-collapse";
-import { useInputState } from "@mantine/hooks";
 import DeletePriceButton from "./_DeletePriceButton";
+import { useUpdatePricingAccount } from "../../services/pricing/useUpdatePricingAccount";
+import { useProgram } from "../../provider/ProgramProvider";
+import { useProductAccount } from "../../services/product/useProductAccount";
+import { usePriceAccount } from "../../services/pricing/usePriceAccount";
 
 const PriceRowForm = ({ product_count_index, price_count_index }) => {
-  const [priceTypeValue, setPriceTypeValue] = useInputState("one_time");
+  const { merchantWalletAddress } = useProgram();
+
+  const { refetch } = useProductAccount(
+    merchantWalletAddress,
+    parseInt(product_count_index)
+  );
+
+  const { mutateAsync, isLoading: isCreating } = useUpdatePricingAccount(
+    merchantWalletAddress,
+    parseInt(product_count_index),
+    price_count_index
+  );
+  const { data: priceAccount, isRefetching } = usePriceAccount(
+    merchantWalletAddress,
+    product_count_index,
+    price_count_index
+  );
+
   const form = useForm({
     initialValues: {
       currency: "USD",
+      price_type: "one_time",
     },
   });
 
   const editPrice = async (data) => {
     console.log(data);
+    await mutateAsync({
+      ...data,
+      unit_amount: parseInt(data?.unit_amount),
+      interval_count: parseInt(data?.interval_count),
+    });
+    await refetch();
   };
 
-  const isRecurring = priceTypeValue === "recurring";
+  const isRecurring = form.values.price_type === "recurring";
+
+  const isLoading = isCreating || isRefetching;
+
+  useEffect(() => {
+    if (priceAccount) {
+      form.setValues({
+        ...form.values,
+        billing_scheme: priceAccount?.billingScheme,
+        currency: priceAccount?.currency,
+        unit_amount: priceAccount?.unitAmount?.toNumber(),
+        interval: priceAccount?.interval,
+        interval_count: priceAccount?.intervalCount,
+        active: priceAccount?.active,
+        price_type: priceAccount?.priceType,
+        accepted_tokens: priceAccount?.acceptedTokens?.map((e) =>
+          e?.toBase58()
+        ),
+      });
+    }
+  }, [priceAccount]);
 
   return (
     <form onSubmit={form.onSubmit(editPrice)}>
@@ -36,7 +75,7 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
         labelPosition="center"
       />
       <Select
-        value={priceTypeValue}
+        value={form.values.price_type}
         label="Price Type"
         placeholder="Pick one"
         data={[
@@ -45,8 +84,8 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
         ]}
         className="mb-2"
         onChange={(value) => {
-          setPriceTypeValue(value);
           form.setValues({
+            ...form.values,
             price_type: value,
           });
         }}
@@ -59,6 +98,7 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
           {...form.getInputProps("unit_amount")}
           sx={{ flex: 1 }}
           className="mb-2"
+          type="number"
         />
         <Select
           required
@@ -69,6 +109,7 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
           {...form.getInputProps("currency")}
           onChange={(value) => {
             form.setValues({
+              ...form.values,
               currency: value,
             });
           }}
@@ -87,9 +128,11 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
               { value: "year", label: "Year" },
             ]}
             className="mb-2"
-            onChange={(value) => {
+            value={form?.values?.interval}
+            onSelect={(e) => {
               form.setValues({
-                interval: value,
+                ...form.values,
+                interval: e?.currentTarget?.value?.toLowerCase(),
               });
             }}
           />
@@ -108,7 +151,7 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
         labelPosition="center"
         label={
           <>
-            <Button color="green" type="submit">
+            <Button loading={isLoading} color="green" type="submit">
               Save
             </Button>
             <div style={{ width: "8px" }} />

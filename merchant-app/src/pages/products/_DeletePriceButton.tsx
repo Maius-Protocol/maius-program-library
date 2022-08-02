@@ -26,7 +26,7 @@ const DeletePriceButton = ({ product_count_index, price_count_index }) => {
   );
   const { mutateAsync, isLoading: isCreating } = useUpdatePricingAccount(
     merchantWalletAddress,
-    product_count_index,
+    parseInt(product_count_index),
     price_count_index
   );
 

@@ -1,12 +1,4 @@
-import {
-  ActionIcon,
-  Avatar,
-  Group,
-  MultiSelect,
-  Select,
-  Text,
-} from "@mantine/core";
-import { Trash } from "tabler-icons-react";
+import { Avatar, Group, MultiSelect, Text } from "@mantine/core";
 import React, { forwardRef, useEffect, useState } from "react";
 import { TokenListProvider } from "@solana/spl-token-registry";
 import { UseFormReturnType } from "@mantine/form/lib/types";
@@ -35,7 +27,8 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   )
 );
 
-const TokenField = ({ getInputProps, setValues }: UseFormReturnType<any>) => {
+const TokenField = ({ values, setValues }: UseFormReturnType<any>) => {
+  const [value, setValue] = useState([]);
   const [tokenList, setTokenList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -45,27 +38,34 @@ const TokenField = ({ getInputProps, setValues }: UseFormReturnType<any>) => {
     });
   }, []);
 
+  useEffect(() => {
+    setValues({
+      ...values,
+      accepted_tokens: value,
+    });
+  }, [value]);
+
+  const tokens = tokenList
+    ?.filter((e) => supportedTokens?.includes(e?.symbol))
+    ?.map((e) => ({
+      image: e?.logoURI,
+      label: e?.symbol,
+      value: e?.address,
+      description: e?.name,
+    }));
+
   return (
     <MultiSelect
+      key={JSON.stringify(values.accepted_tokens)}
       label="Accept Tokens (Exchange rate source from pyth.network)"
       placeholder="Pick multiple"
-      data={tokenList
-        ?.filter((e) => supportedTokens?.includes(e?.symbol))
-        ?.map((e) => ({
-          image: e?.logoURI,
-          label: e?.symbol,
-          value: e?.address,
-          description: e?.name,
-        }))}
+      data={tokens}
       itemComponent={SelectItem}
       maxDropdownHeight={250}
       searchable
       sx={{ flex: 1 }}
-      onChange={(value) => {
-        setValues({
-          accepted_tokens: value,
-        });
-      }}
+      value={values.accepted_tokens}
+      onChange={setValue}
       className="mb-2"
     />
   );

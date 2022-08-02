@@ -25,45 +25,45 @@ export function useUpdatePricingAccount(
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  return useMutation<unknown, unknown, UpdatePricingInput>(
-    async ({
-      billing_scheme,
-      currency,
+  return useMutation<unknown, unknown, UpdatePricingInput>(async (props) => {
+    const {
+      billing_scheme = "",
+      currency = "USD",
       unit_amount,
-      interval_count,
-      interval,
-      price_type,
-      accepted_tokens,
-      active,
-    }) => {
-      const product_account_address = await findProductAddress(
-        merchantWalletAddress,
-        product_count_index
-      );
-      const pricing_account_address = await findPricingAddress(
-        merchantWalletAddress,
-        product_account_address?.toBase58(),
-        price_count_index
-      );
-      const transaction = await program.methods
-        .updatePrice(
-          billing_scheme,
-          currency,
-          new BN(unit_amount),
-          interval,
-          interval_count,
-          active,
-          price_type,
-          accepted_tokens
-        )
-        .accounts({
-          priceAccount: pricing_account_address,
-          merchant: merchantWalletAddress,
-          systemProgram: SystemProgram.programId,
-        })
-        .transaction();
-      await sendTransaction(transaction, connection);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
-  );
+      interval_count = 31,
+      interval = "day",
+      price_type = "one_time",
+      accepted_tokens = [],
+      active = true,
+    } = props;
+
+    const product_account_address = await findProductAddress(
+      merchantWalletAddress,
+      product_count_index
+    );
+    const pricing_account_address = await findPricingAddress(
+      merchantWalletAddress,
+      product_account_address?.toBase58(),
+      price_count_index
+    );
+    const transaction = await program.methods
+      .updatePrice(
+        billing_scheme,
+        currency,
+        new BN(unit_amount),
+        interval,
+        interval_count,
+        active,
+        price_type,
+        accepted_tokens.map((e) => new PublicKey(e))
+      )
+      .accounts({
+        priceAccount: pricing_account_address?.toBase58(),
+        merchant: merchantWalletAddress,
+        systemProgram: SystemProgram.programId,
+      })
+      .transaction();
+    await sendTransaction(transaction, connection);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  });
 }
