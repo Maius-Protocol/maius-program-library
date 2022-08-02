@@ -72,15 +72,19 @@ export const ProgramProvider: React.FunctionComponent<ProgramProviderProps> = ({
     return routing("-1");
   }, [wallet?.adapter?.publicKey, merchantWalletAddress]);
 
-  if (router.pathname !== "/" && !wallet?.adapter?.publicKey?.toBase58()) {
-    return (
-      <Container className="p-4">
-        <Center>
-          <Loader />
-        </Center>
-      </Container>
-    );
-  }
+  // if (
+  //   router.pathname !== "/" &&
+  //   !router.pathname?.includes("/payment/") &&
+  //   !wallet?.adapter?.publicKey?.toBase58()
+  // ) {
+  //   return (
+  //     <Container className="p-4">
+  //       <Center>
+  //         <Loader />
+  //       </Center>
+  //     </Container>
+  //   );
+  // }
 
   return (
     <ProgramContext.Provider value={{ program, routes, merchantWalletAddress }}>

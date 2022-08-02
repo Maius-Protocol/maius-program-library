@@ -1,3 +1,0 @@
-const PaymentFromLink = () => {
-  return <div />;
-};

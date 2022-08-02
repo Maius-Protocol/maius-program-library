@@ -84,26 +84,26 @@ function MyApp(props: AppProps) {
           config={{ commitment: "processed" }}
         >
           <WalletProvider wallets={wallets} autoConnect>
-            <ProgramProvider>
-              <WalletModalProvider>
-                <ColorSchemeProvider
-                  colorScheme={colorScheme}
-                  toggleColorScheme={toggleColorScheme}
+            <WalletModalProvider>
+              <ColorSchemeProvider
+                colorScheme={colorScheme}
+                toggleColorScheme={toggleColorScheme}
+              >
+                <MantineProvider
+                  theme={{ colorScheme }}
+                  withGlobalStyles
+                  withNormalizeCSS
                 >
-                  <MantineProvider
-                    theme={{ colorScheme }}
-                    withGlobalStyles
-                    withNormalizeCSS
-                  >
-                    <NotificationsProvider position="top-right">
+                  <NotificationsProvider position="top-right">
+                    <ProgramProvider>
                       <AppLayout>
                         <Component {...pageProps} />
                       </AppLayout>
-                    </NotificationsProvider>
-                  </MantineProvider>
-                </ColorSchemeProvider>
-              </WalletModalProvider>
-            </ProgramProvider>
+                    </ProgramProvider>
+                  </NotificationsProvider>
+                </MantineProvider>
+              </ColorSchemeProvider>
+            </WalletModalProvider>
           </WalletProvider>
         </ConnectionProvider>
       </QueryClientProvider>

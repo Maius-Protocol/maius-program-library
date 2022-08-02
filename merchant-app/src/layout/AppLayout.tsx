@@ -17,12 +17,18 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useProgram } from "../provider/ProgramProvider";
 import { useWallet } from "@solana/wallet-adapter-react";
+import ClientLayout from "./ClientLayout";
 
 const AppLayout = ({ children }) => {
   const router = useRouter();
   const wallet = useWallet();
   const { routes } = useProgram();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
+  if (router.pathname?.includes("/payment/")) {
+    return <ClientLayout>{children}</ClientLayout>;
+  }
+
   return (
     <AppShell
       padding="md"

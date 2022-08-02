@@ -52,9 +52,12 @@ const CreatePaymentLinkPage = () => {
   });
 
   const createPaymentUrl = () => {
-    const params = {};
-
-    console.log(
+    const params = {
+      merchant_wallet: merchantWalletAddress,
+      product_count_index: selectedProductIndex,
+      price_count_index: selectedPricing,
+    };
+    setPaymentUrl(
       `${window.location.origin}/payment/${Base64.encode(
         JSON.stringify(params)
       )}`
@@ -120,7 +123,11 @@ const CreatePaymentLinkPage = () => {
         </Button>
 
         <UnmountClosed isOpened={paymentUrl !== undefined}>
-          <Input icon={<ExternalLink size={16} />} value={paymentUrl} />
+          <Input
+            icon={<ExternalLink size={16} />}
+            className="mt-3"
+            value={paymentUrl}
+          />
         </UnmountClosed>
       </div>
     </Card>
