@@ -33,6 +33,7 @@ export function usePricesList(
     {
       enabled:
         product_id !== null &&
+        product_id !== undefined &&
         totalPage !== undefined &&
         merchantWalletAddress !== "",
       keepPreviousData: true,
