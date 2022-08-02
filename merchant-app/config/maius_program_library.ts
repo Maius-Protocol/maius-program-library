@@ -272,7 +272,7 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
         },
@@ -416,6 +416,11 @@ export type MaiusProgramLibrary = {
         },
         {
           "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerInvoiceAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -582,6 +587,18 @@ export type MaiusProgramLibrary = {
       }
     },
     {
+      "name": "customerInvoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "invoiceCount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
       "name": "customer",
       "type": {
         "kind": "struct",
@@ -600,10 +617,6 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "created",
-            "type": "i64"
-          },
-          {
-            "name": "invoiceCount",
             "type": "i64"
           }
         ]
@@ -1177,7 +1190,7 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAuthority",
+          "name": "merchant",
           "isMut": true,
           "isSigner": true
         },
@@ -1321,6 +1334,11 @@ export const IDL: MaiusProgramLibrary = {
         },
         {
           "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerInvoiceAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -1487,6 +1505,18 @@ export const IDL: MaiusProgramLibrary = {
       }
     },
     {
+      "name": "customerInvoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "invoiceCount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
       "name": "customer",
       "type": {
         "kind": "struct",
@@ -1505,10 +1535,6 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "created",
-            "type": "i64"
-          },
-          {
-            "name": "invoiceCount",
             "type": "i64"
           }
         ]

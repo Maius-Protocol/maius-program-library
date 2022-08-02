@@ -7,7 +7,7 @@ pub struct UpdatePrice<'info> {
     #[account(mut)]
     pub price_account: Account<'info, Price>,
     #[account(mut)]
-    pub merchant_authority: Signer<'info>,
+    pub merchant: Signer<'info>,
     pub system_program: Program<'info, System>
 }
 

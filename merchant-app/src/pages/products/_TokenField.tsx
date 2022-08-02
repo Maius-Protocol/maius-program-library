@@ -40,17 +40,17 @@ const TokenField = ({ getInputProps, setValues }: UseFormReturnType<any>) => {
 
   useEffect(() => {
     new TokenListProvider().resolve().then((tokens) => {
-      const _tokenList = tokens.filterByTag("stablecoin").getList();
+      const _tokenList = tokens.getList();
       setTokenList(_tokenList);
     });
   }, []);
 
   return (
     <MultiSelect
-      label="Accept Tokens"
+      label="Accept Tokens (Exchange rate source from pyth.network)"
       placeholder="Pick multiple"
       data={tokenList
-        // ?.filter((e) => supportedTokens?.includes(e?.symbol))
+        ?.filter((e) => supportedTokens?.includes(e?.symbol))
         ?.map((e) => ({
           image: e?.logoURI,
           label: e?.symbol,
@@ -58,7 +58,7 @@ const TokenField = ({ getInputProps, setValues }: UseFormReturnType<any>) => {
           description: e?.name,
         }))}
       itemComponent={SelectItem}
-      maxDropdownHeight={400}
+      maxDropdownHeight={250}
       searchable
       sx={{ flex: 1 }}
       onChange={(value) => {
