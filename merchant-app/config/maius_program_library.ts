@@ -569,6 +569,27 @@ export type MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "subscribe",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccountInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1487,6 +1508,27 @@ export const IDL: MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "subscribe",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccountInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
