@@ -420,6 +420,11 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "merchant",
           "isMut": true,
           "isSigner": true
@@ -564,6 +569,27 @@ export type MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "subscribe",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccountInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -577,6 +603,18 @@ export type MaiusProgramLibrary = {
             "type": {
               "vec": "publicKey"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "customerInvoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "invoiceCount",
+            "type": "u64"
           }
         ]
       }
@@ -600,10 +638,6 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "created",
-            "type": "i64"
-          },
-          {
-            "name": "invoiceCount",
             "type": "i64"
           }
         ]
@@ -1325,6 +1359,11 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "merchant",
           "isMut": true,
           "isSigner": true
@@ -1469,6 +1508,27 @@ export const IDL: MaiusProgramLibrary = {
           }
         }
       ]
+    },
+    {
+      "name": "subscribe",
+      "accounts": [
+        {
+          "name": "subscriptionAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccountInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1482,6 +1542,18 @@ export const IDL: MaiusProgramLibrary = {
             "type": {
               "vec": "publicKey"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "customerInvoice",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "invoiceCount",
+            "type": "u64"
           }
         ]
       }
@@ -1505,10 +1577,6 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "created",
-            "type": "i64"
-          },
-          {
-            "name": "invoiceCount",
             "type": "i64"
           }
         ]

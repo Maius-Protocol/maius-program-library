@@ -25,6 +25,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         await airdropAccounts();
     });
 
+    console.log("globalState.merchantWallet.payer", globalState.merchantWallet.payer.publicKey.toBase58())
+
     it("[Merchant] Create", async () => {
         [merchantAccount, merchantBump] = await PublicKey.findProgramAddress(
             [
@@ -36,15 +38,24 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         );
         customerAccount = await findCustomerAddress(globalState.merchantWallet);
         await program.methods
-            .initializeMerchant(
+            .initializeMerchant()
+            .accounts({
+                merchant: merchantAccount,
+                genesisCustomer: customerAccount,
+                merchantWallet: globalState.merchantWallet.payer.publicKey,
+                systemProgram: SystemProgram.programId,
+            })
+            .signers([globalState.merchantWallet.payer])
+            .rpc();
+
+        await program.methods
+            .updateMerchant(
                 "MaiusPay",
                 "Awesome store",
                 "https://i.pravatar.cc/300",
             )
             .accounts({
-                merchant: merchantAccount,
-                genesisCustomer: customerAccount,
-                merchantWallet: globalState.merchantWallet.publicKey,
+                merchantAccount: merchantAccount,
                 systemProgram: SystemProgram.programId,
             })
             .signers([globalState.merchantWallet.payer])
