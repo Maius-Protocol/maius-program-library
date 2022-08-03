@@ -25,10 +25,10 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         await airdropAccounts();
     });
 
-    console.log("globalState.merchantWallet.payer", globalState.merchantWallet.payer.publicKey.toBase58())
+    console.log("globalState.merchantWallet.payer", globalState.merchantWallet.publicKey.toBase58())
 
     it("[Merchant] Create", async () => {
-        [merchantAccount, merchantBump] = await PublicKey.findProgramAddress(
+        const [merchantAccount, merchantBump] = await PublicKey.findProgramAddress(
             [
                 Buffer.from("v1"),
                 Buffer.from("merchant"),
@@ -38,16 +38,16 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         );
         customerAccount = await findCustomerAddress(globalState.merchantWallet);
         await program.methods
-            .initializeMerchant()
+            .initializeMerchant(
+            )
             .accounts({
                 merchant: merchantAccount,
                 genesisCustomer: customerAccount,
-                merchantWallet: globalState.merchantWallet.payer.publicKey,
+                merchantWallet: globalState.merchantWallet.publicKey,
                 systemProgram: SystemProgram.programId,
             })
             .signers([globalState.merchantWallet.payer])
             .rpc();
-
         await program.methods
             .updateMerchant(
                 "MaiusPay",
@@ -68,6 +68,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
     it("initialize subscription", async () => {
         const merchantData = await program.account.merchant.fetch(merchantAccount);
         let lastInvoice: anchor.web3.PublicKey;
+        let current_period_end  = 1660553949;
         [subscriptionAccount, subscriptionBump] = await PublicKey.findProgramAddress(
             [
                 Buffer.from("v1"),
@@ -82,7 +83,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .initializeSubscription(
                 merchantAccount,
                 customerAccount,
-                lastInvoice
+                lastInvoice,
+                new anchor.BN(current_period_end)
             )
             .accounts({
                 merchantAccount: merchantAccount,
@@ -113,7 +115,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .initializeSubscription(
                 merchantAccount,
                 customerAccount,
-                lastInvoice
+                lastInvoice,
+                new anchor.BN(current_period_end)
             )
             .accounts({
                 merchantAccount: merchantAccount,

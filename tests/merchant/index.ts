@@ -19,9 +19,6 @@
 //       const genesisCustomer = await findCustomerAddress(globalState.merchantWallet);
 //       await program.methods
 //           .initializeMerchant(
-//               "MaiusPay",
-//               "Awesome store",
-//               "https://i.pravatar.cc/300"
 //           )
 //           .accounts({
 //               merchant: address,
