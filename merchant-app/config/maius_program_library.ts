@@ -40,6 +40,11 @@ export type MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -571,6 +576,37 @@ export type MaiusProgramLibrary = {
       ]
     },
     {
+      "name": "initializeCustomerInvoice",
+      "accounts": [
+        {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "subscribe",
       "accounts": [
         {
@@ -584,9 +620,14 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "priceAccountInfo",
+          "name": "pythPriceAccount",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": []
@@ -979,6 +1020,11 @@ export const IDL: MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -1510,6 +1556,37 @@ export const IDL: MaiusProgramLibrary = {
       ]
     },
     {
+      "name": "initializeCustomerInvoice",
+      "accounts": [
+        {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "subscribe",
       "accounts": [
         {
@@ -1523,9 +1600,14 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "priceAccountInfo",
+          "name": "pythPriceAccount",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": []

@@ -6,13 +6,13 @@ pub struct InitializeCustomerInvoice<'info> {
     #[account(
     init_if_needed,
     seeds = [
-    b"v1",
-    CUSTOMER_INVOICE_PREFIX.as_bytes(),
-    customer_account.key().as_ref(),
-    merchant_account.key().as_ref()
+        b"v1",
+        CUSTOMER_INVOICE_PREFIX.as_bytes(),
+        merchant_account.key().as_ref(),
+        customer_account.key().as_ref()
     ],
     bump,
-    payer = merchant,
+    payer = authority,
     space = CustomerInvoice::space()
     )]
     pub customer_invoice_account: Account<'info, CustomerInvoice>,
@@ -21,7 +21,7 @@ pub struct InitializeCustomerInvoice<'info> {
     #[account(mut)]
     pub customer_account: Account<'info, Customer>,
     #[account(mut)]
-    pub merchant: Signer<'info>,
+    pub authority: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 

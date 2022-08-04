@@ -17,6 +17,7 @@ import { usePriceAccount } from "../../src/services/pricing/usePriceAccount";
 import { useEffect, useState } from "react";
 import { TokenListProvider } from "@solana/spl-token-registry";
 import { supportedTokens } from "../../config/globalVariables";
+import CheckoutButton from "../../src/pages/client/CheckoutButton";
 
 const PaymentFromLink = () => {
   const router = useRouter();
@@ -52,6 +53,7 @@ const PaymentFromLink = () => {
   const tokens = priceAccount?.acceptedTokens?.map((t) =>
     tokenList?.find((e) => e.address === t?.toBase58())
   );
+
   return (
     <div>
       <Grid>
@@ -124,13 +126,12 @@ const PaymentFromLink = () => {
                       <div className="p-2">
                         <Avatar radius="md" src={t?.logoURI} size={40} />
                       </div>
-                      <Button
-                        color="teal"
-                        size="lg"
-                        sx={{ flex: 1, marginLeft: "24px" }}
-                      >
-                        Checkout with {t?.symbol}
-                      </Button>
+                      <CheckoutButton
+                        merchant_wallet={merchant_wallet}
+                        price_count_index={price_count_index}
+                        product_count_index={product_count_index}
+                        symbol={t?.symbol}
+                      />
                     </div>
                   );
                 })}

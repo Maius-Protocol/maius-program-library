@@ -14,17 +14,17 @@ const PaymentLinksPage = () => {
           <Button leftIcon={<Plus size={14} />}>New</Button>
         </Link>
       </Group>
-      <Table horizontalSpacing="sm" verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>WALLET ADDRESS</th>
-            <th>DESCRIPTION</th>
-            <th>CREATED</th>
-            <th></th>
-          </tr>
-        </thead>
-      </Table>
+      {/*<Table horizontalSpacing="sm" verticalSpacing="sm">*/}
+      {/*  <thead>*/}
+      {/*    <tr>*/}
+      {/*      <th></th>*/}
+      {/*      <th>WALLET ADDRESS</th>*/}
+      {/*      <th>DESCRIPTION</th>*/}
+      {/*      <th>CREATED</th>*/}
+      {/*      <th></th>*/}
+      {/*    </tr>*/}
+      {/*  </thead>*/}
+      {/*</Table>*/}
     </Card>
   );
 };

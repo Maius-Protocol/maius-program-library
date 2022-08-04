@@ -160,6 +160,12 @@ pub mod maius_program_library {
         )
     }
 
+    pub fn initialize_customer_invoice(
+        ctx: Context<InitializeCustomerInvoice>,
+    ) -> Result<()> {
+        initialize_customer_invoice::handler(ctx)
+    }
+
     pub fn subscribe(
         ctx: Context<Subscribe>,
     ) -> Result<()> {
