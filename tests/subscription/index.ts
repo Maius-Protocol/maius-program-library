@@ -57,7 +57,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .accounts({
                 merchantAccount: merchantAccount,
                 systemProgram: SystemProgram.programId,
-                payer: globalState.merchantWallet.payer.publicKey,
+                payer: globalState.merchantWallet.publicKey,
             })
             .signers([globalState.merchantWallet.payer])
             .rpc();
