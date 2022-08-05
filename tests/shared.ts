@@ -29,11 +29,6 @@ export const airdropAccounts = async () => {
     "confirmed"
   );
   console.log(
-    "merchantWallet",
-    merchantWallet.payer.publicKey.toBase58(),
-    await provider.connection.getBalance(merchantWallet.publicKey)
-  );
-  console.log(
     "Before merchantWallet SOL amount:",
     await getBalance(merchantWallet.publicKey.toBase58())
   );

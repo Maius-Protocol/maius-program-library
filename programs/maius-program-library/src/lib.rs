@@ -124,10 +124,10 @@ pub mod maius_program_library {
 
     pub fn initialize_invoice(
         ctx: Context<InitializeInvoice>,
-        customer_account: Pubkey,
-        subscription_account: Pubkey,
+        customer_wallet: Pubkey,
+        customer_account_address: Pubkey,
     ) -> Result<()> {
-        initialize_invoice::handler(ctx, customer_account, subscription_account)
+        initialize_invoice::handler(ctx, customer_wallet, customer_account_address)
     }
 
     pub fn update_invoice(
@@ -143,11 +143,12 @@ pub mod maius_program_library {
 
     pub fn initialize_invoice_item(
         ctx: Context<InitializeInvoiceItem>,
+        invoice_account_address: Pubkey,
         customer_account: Pubkey,
         price: Pubkey,
         quantity: u64
     ) -> Result<()> {
-        initialize_invoice_item::handler(ctx, customer_account, price, quantity)
+        initialize_invoice_item::handler(ctx, invoice_account_address, customer_account, price, quantity)
     }
 
     pub fn initialize_accepted_tokens(
@@ -162,8 +163,10 @@ pub mod maius_program_library {
 
     pub fn initialize_customer_invoice(
         ctx: Context<InitializeCustomerInvoice>,
+        merchant_wallet: Pubkey,
+        customer_wallet: Pubkey
     ) -> Result<()> {
-        initialize_customer_invoice::handler(ctx)
+        initialize_customer_invoice::handler(ctx, merchant_wallet, customer_wallet)
     }
 
     pub fn subscribe(

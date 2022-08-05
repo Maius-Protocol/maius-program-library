@@ -14,13 +14,19 @@ import { Base64 } from "js-base64";
 import { useMerchantAccount } from "../../src/services/merchant/useMerchantAccount";
 import { useProductAccount } from "../../src/services/product/useProductAccount";
 import { usePriceAccount } from "../../src/services/pricing/usePriceAccount";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TokenListProvider } from "@solana/spl-token-registry";
 import { supportedTokens } from "../../config/globalVariables";
 import CheckoutButton from "../../src/pages/client/CheckoutButton";
+import {
+  WalletConnectButton,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const PaymentFromLink = () => {
   const router = useRouter();
+  const { connected } = useWallet();
   const [tokenList, setTokenList] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
   const { params } = router.query;
@@ -41,7 +47,6 @@ const PaymentFromLink = () => {
   );
 
   const isLoading = isLoadingMerchant || isLoadingProduct || isLoadingPrice;
-  console.log(merchantAccount, productAccount, priceAccount);
 
   useEffect(() => {
     new TokenListProvider().resolve().then((tokens) => {
@@ -107,6 +112,11 @@ const PaymentFromLink = () => {
           className="p-4 d-flex flex-column align-items-center justify-content-center"
         >
           <div className="w-100">
+            {!connected && (
+              <div className="my-3">
+                <WalletMultiButton />
+              </div>
+            )}
             <div className="text-muted mb-4">Accepting payments with</div>
             {isLoading && (
               <>
@@ -131,6 +141,7 @@ const PaymentFromLink = () => {
                         price_count_index={price_count_index}
                         product_count_index={product_count_index}
                         symbol={t?.symbol}
+                        quantity={quantity}
                       />
                     </div>
                   );
