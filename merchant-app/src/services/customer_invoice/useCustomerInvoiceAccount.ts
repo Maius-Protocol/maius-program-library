@@ -4,7 +4,7 @@ import { findCustomerInvoiceAddress, useCustomerInvoiceKey } from "./address";
 
 export function useCustomerInvoiceAccount(
   merchant_wallet_address: string,
-  customer_wallet_address: string
+  customer_wallet_address: string | undefined
 ) {
   const { program } = useProgram();
   return useQuery(
@@ -19,6 +19,10 @@ export function useCustomerInvoiceAccount(
       );
     },
     {
+      // onError: (error) => {
+      //   console.log(error?.toString()?.includes("Account does not exist"));
+      // },
+      retry: false,
       enabled:
         merchant_wallet_address !== null &&
         merchant_wallet_address !== "" &&

@@ -5,8 +5,10 @@ import { findInvoiceAddress, findMerchantAddress } from "./address";
 import { globalState } from "../../../../tests/maius-program-library";
 import { PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY } from "@solana/web3.js";
 import { findCustomerAddress } from "../customer/address";
+import { findCustomerInvoiceAddress } from "../customer_invoice/address";
 
 export function useCreateInvoiceAccount(
+  merchant_wallet_address: string,
   customer_wallet_address: string,
   invoice_count_index: number
 ) {
@@ -19,12 +21,23 @@ export function useCreateInvoiceAccount(
       invoice_count_index
     );
     const customer_account = await findCustomerAddress(customer_wallet_address);
+    const customer_invoice_account = await findCustomerInvoiceAddress(
+      merchant_wallet_address,
+      customer_wallet_address!
+    );
+    const invoice_account = await findInvoiceAddress(
+      customer_wallet_address,
+      invoice_count_index
+    );
     const transaction = await program.methods
-      .initializeInvoice(customer_account, subscription_account)
+      .initializeInvoice(
+        new PublicKey(customer_wallet_address),
+        customer_account
+      )
       .accounts({
-        merchant: address,
-        genesisCustomer: genesisCustomer,
-        merchantWallet: new PublicKey(merchantWalletAddress),
+        invoiceAccount: invoice_account,
+        customerInvoiceAccount: customer_invoice_account,
+        authority: customer_wallet_address,
         systemProgram: SystemProgram.programId,
       })
       .transaction();
