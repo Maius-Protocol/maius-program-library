@@ -7,6 +7,11 @@ import { useInvoiceAccount } from "../../services/invoice/useInvoiceAccount";
 import { useState } from "react";
 import { useCreateInvoiceItemAccount } from "../../services/invoice_item/useCreateInvoiceItemAccount";
 import { useInvoiceItemAccount } from "../../services/invoice_item/useInvoiceItemAccount";
+import { useCreateSubscriptionAccount } from "../../services/subscription/useCreateSubscriptionAccount";
+import { useCustomerAccount } from "../../services/customer/useCustomerAccount";
+import { useSubscriptionAccount } from "../../services/subscription/useSubscriptionAccount";
+import { useCreateSubscriptionItemAccount } from "../../services/subscription_item/useCreateSubscriptionItemAccount";
+import { useSubscriptionItemAccount } from "../../services/subscription_item/useSubscriptionItemAccount";
 
 const CheckoutButton = ({
   symbol,
@@ -18,6 +23,10 @@ const CheckoutButton = ({
   const [checkoutProcessing, setCheckoutProcessing] = useState(false);
   const { wallet, connected } = useWallet();
   const customer_wallet_address = wallet?.adapter?.publicKey?.toBase58();
+  const { data: customerAccount, refetch: refetchCustomerAccount } =
+    useCustomerAccount(customer_wallet_address as string);
+  const latestIndexSubscription =
+    customerInvoiceAccount?.subscriptionCount?.toNumber() - 1;
   const {
     data: customerInvoiceAccount,
     isLoading: isFetchingCustomerInvoiceAccount,
@@ -74,13 +83,54 @@ const CheckoutButton = ({
     invoiceAccount?.invoiceItemCount
   );
 
+  const {
+    data: latestSubscriptionAccount,
+    refetch: refetchLatestSubscriptionAccount,
+  } = useSubscriptionAccount(
+    customer_wallet_address,
+    customerAccount?.subscriptionCount?.toNumber()
+  );
+
+  const {
+    mutateAsync: createSubscriptionAccount,
+    isLoading: isCreatingSubscriptionAccount,
+  } = useCreateSubscriptionAccount(
+    merchant_wallet,
+    customer_wallet_address,
+    latestIndexInvoice,
+    customerAccount?.subscriptionCount?.toNumber()
+  );
+
+  const {
+    mutateAsync: createSubscriptionItemAccount,
+    isLoading: isCreatingSubscriptionItem,
+  } = useCreateSubscriptionItemAccount(
+    merchant_wallet,
+    customer_wallet_address,
+    product_count_index,
+    price_count_index,
+    latestIndexInvoice
+  );
+
+  const {
+    data,
+    refetch: refetchLatestSubscriptionItem,
+    isLoading: isLoadingLatestSubscriptionItem,
+  } = useSubscriptionItemAccount(customer_wallet_address, 16, 0);
+
+  console.log(data);
+
   const isLoading =
     isFetchingCustomerInvoiceAccount ||
     isCreatingCustomerInvoiceAccount ||
     isCreatingInvoiceAccount ||
     isFetchingInvoiceAccount ||
     checkoutProcessing ||
-    isCreatingInvoiceItemAccount;
+    isCreatingInvoiceItemAccount ||
+    isCreatingSubscriptionAccount ||
+    isCreatingSubscriptionItem ||
+    isLoadingLatestSubscriptionItem;
+
   const disabled = !connected;
   const checkout = async () => {
     setCheckoutProcessing(true);
@@ -119,6 +169,40 @@ const CheckoutButton = ({
       amount: _lastInvoiceItemAccount?.data?.amount?.toNumber(),
       quantity: _lastInvoiceItemAccount?.data?.quantity?.toNumber(),
     });
+    await createSubscriptionAccount({
+      current_period_end: new Date().valueOf(),
+    });
+    console.log("Create subscription");
+    let _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
+    while (!_LatestSubscriptionAccount) {
+      console.log("Retry refetchLatestSubscriptionAccount...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
+    }
+    console.log("Create Subscription Account Success", {
+      ..._LatestSubscriptionAccount?.data,
+    });
+    console.log("Create subscription item");
+    let _customerAccount = await refetchCustomerAccount();
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await createSubscriptionItemAccount({
+      quantity,
+      subscription_count_index:
+        _customerAccount?.data?.subscriptionCount?.toNumber(),
+      subscription_item_count_index:
+        _LatestSubscriptionAccount?.data?.subscriptionItemCount,
+    });
+    let _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
+    while (!_latestSubscriptionItemAccount) {
+      console.log("Retry refetchLatestSubscriptionItem...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
+    }
+    console.log(
+      "Create Subscription item success",
+      _latestSubscriptionItemAccount?.data
+    );
+
     setCheckoutProcessing(false);
   };
 
