@@ -25,7 +25,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         await airdropAccounts();
     });
 
-    console.log("globalState.merchantWallet.payer", globalState.merchantWallet.payer.publicKey.toBase58())
+    console.log("globalState.merchantWallet.payer", globalState.merchantWallet.publicKey.toBase58())
 
     it("[Merchant] Create", async () => {
         [merchantAccount, merchantBump] = await PublicKey.findProgramAddress(
@@ -57,7 +57,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .accounts({
                 merchantAccount: merchantAccount,
                 systemProgram: SystemProgram.programId,
-                payer: globalState.merchantWallet.payer.publicKey,
+                payer: globalState.merchantWallet.publicKey,
             })
             .signers([globalState.merchantWallet.payer])
             .rpc();
@@ -143,7 +143,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         console.log(merchantData2)
 
         let pythPriceAccount = new PublicKey("H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG") // SOL/USD
-        
+
         await program.methods.
             subscribe()
             .accounts({
@@ -154,7 +154,7 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             })
             .signers([globalState.merchantWallet.payer])
             .rpc();
-        
+
     })
 });
 

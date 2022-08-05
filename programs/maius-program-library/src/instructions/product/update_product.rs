@@ -6,7 +6,8 @@ use crate::schemas::*;
 #[instruction()]
 pub struct UpdateProduct<'info> {
     #[account(
-        mut
+        mut,
+        constraint = product_account.authority == *merchant.key,
     )]
     pub product_account: Account<'info, Product>,
     #[account(mut)]

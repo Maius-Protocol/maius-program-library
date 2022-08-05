@@ -16,7 +16,10 @@ pub struct InitializeSubscriptionItem<'info> {
     space = Subscription::space()
     )]
     pub subscription_item_account: Account<'info, SubscriptionItem>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = subscription_account.merchant == *merchant.key,
+    )]
     pub subscription_account: Account<'info, Subscription>,
     #[account(mut)]
     pub merchant: Signer<'info>,
