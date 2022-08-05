@@ -497,22 +497,12 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "invoiceAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "customerAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "merchant",
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -523,6 +513,10 @@ export type MaiusProgramLibrary = {
         }
       ],
       "args": [
+        {
+          "name": "invoiceAccountAddress",
+          "type": "publicKey"
+        },
         {
           "name": "customerAccount",
           "type": "publicKey"
@@ -1466,22 +1460,12 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchantAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "invoiceAccount",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "customerAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "merchant",
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -1492,6 +1476,10 @@ export const IDL: MaiusProgramLibrary = {
         }
       ],
       "args": [
+        {
+          "name": "invoiceAccountAddress",
+          "type": "publicKey"
+        },
         {
           "name": "customerAccount",
           "type": "publicKey"

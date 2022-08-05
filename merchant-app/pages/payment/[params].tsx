@@ -141,6 +141,7 @@ const PaymentFromLink = () => {
                         price_count_index={price_count_index}
                         product_count_index={product_count_index}
                         symbol={t?.symbol}
+                        quantity={quantity}
                       />
                     </div>
                   );
