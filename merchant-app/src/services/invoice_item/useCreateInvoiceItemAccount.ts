@@ -21,13 +21,6 @@ export function useCreateInvoiceItemAccount(
   price_count_index: number,
   invoice_count_index: number
 ) {
-  console.log(
-    customer_wallet_address,
-    merchant_wallet_address,
-    product_count_index,
-    price_count_index,
-    invoice_count_index
-  );
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
@@ -59,11 +52,11 @@ export function useCreateInvoiceItemAccount(
       const transaction = await program.methods
         .initializeInvoiceItem(
           new PublicKey(customer_account),
-          invoice_account,
           new PublicKey(pricing_account_address),
           new BN(quantity)
         )
         .accounts({
+          priceAccount: pricing_account_address,
           invoiceItemAccount: invoice_item_account,
           invoiceAccount: invoice_account,
           authority: customer_wallet_address,

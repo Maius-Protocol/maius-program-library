@@ -1,16 +1,22 @@
 import * as anchor from "@project-serum/anchor";
-import { Keypair, LAMPORTS_PER_SOL, SystemProgram } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  SystemProgram,
+} from "@solana/web3.js";
 import { AnchorProvider, Program, Wallet } from "@project-serum/anchor";
 import { MaiusProgramLibrary } from "../target/types/maius_program_library";
 import { findCustomerAddress, findMerchantAddress } from "./merchant/address";
 import { globalState } from "./maius-program-library";
 
-export const provider = AnchorProvider.env();
+// export const provider = new AnchorProvider(new Connection("https:///"));
 
 export const program = anchor.workspace
   .MaiusProgramLibrary as Program<MaiusProgramLibrary>;
 
 export const getBalance = async (address: string) => {
+  program.provider;
   const response = await program.provider.connection.getBalance(
     new anchor.web3.PublicKey(address)
   );

@@ -6,6 +6,7 @@ import { useCreateInvoiceAccount } from "../../services/invoice/useCreateInvoice
 import { useInvoiceAccount } from "../../services/invoice/useInvoiceAccount";
 import { useState } from "react";
 import { useCreateInvoiceItemAccount } from "../../services/invoice_item/useCreateInvoiceItemAccount";
+import { useInvoiceItemAccount } from "../../services/invoice_item/useInvoiceItemAccount";
 
 const CheckoutButton = ({
   symbol,
@@ -30,6 +31,7 @@ const CheckoutButton = ({
     customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
 
   const {
+    data: invoiceAccount,
     isLoading: isFetchingInvoiceAccount,
     refetch: refetchInvoiceAccount,
   } = useInvoiceAccount(customer_wallet_address, latestIndexInvoice);
@@ -62,13 +64,24 @@ const CheckoutButton = ({
     latestIndexInvoice
   );
 
+  const {
+    // data: lastInvoiceItem,
+    isLoading: isLoadingLastInvoiceItemAccount,
+    refetch: refetchLastInvoiceItem,
+  } = useInvoiceItemAccount(
+    customer_wallet_address,
+    latestIndexInvoice,
+    invoiceAccount?.invoiceItemCount
+  );
+
   const isLoading =
     isFetchingCustomerInvoiceAccount ||
     isCreatingCustomerInvoiceAccount ||
     isCreatingInvoiceAccount ||
     isFetchingInvoiceAccount ||
     checkoutProcessing ||
-    isCreatingInvoiceItemAccount;
+    isCreatingInvoiceItemAccount ||
+    isLoadingLastInvoiceItemAccount;
 
   const disabled = !connected;
   const checkout = async () => {
@@ -97,7 +110,17 @@ const CheckoutButton = ({
       invoice_item_count_index: 0,
       quantity: quantity,
     });
-    console.log("Create Invoice Item Success");
+    let _lastInvoiceItemAccount = await refetchLastInvoiceItem();
+    while (!_lastInvoiceItemAccount) {
+      console.log("Retry refetchLastInvoiceItem...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      _lastInvoiceItemAccount = await refetchLastInvoiceItem();
+    }
+    console.log("Create Invoice Item Success", {
+      ..._lastInvoiceItemAccount?.data,
+      amount: _lastInvoiceItemAccount?.data?.amount?.toNumber(),
+      quantity: _lastInvoiceItemAccount?.data?.quantity?.toNumber(),
+    });
     setCheckoutProcessing(false);
   };
 
