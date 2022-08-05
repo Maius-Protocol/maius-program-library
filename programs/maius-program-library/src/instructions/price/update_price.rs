@@ -4,7 +4,10 @@ use crate::schemas::Price;
 #[derive(Accounts)]
 #[instruction(billing_scheme: String, currency: String, unit_amount: u64, interval: String, interval_count: u8, active: bool, price_type: String)]
 pub struct UpdatePrice<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = price_account.authority == *merchant.key,
+    )]
     pub price_account: Account<'info, Price>,
     #[account(mut)]
     pub merchant: Signer<'info>,

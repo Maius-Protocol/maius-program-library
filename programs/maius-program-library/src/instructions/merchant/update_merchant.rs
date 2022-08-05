@@ -5,7 +5,10 @@ use crate::Merchant;
 #[instruction(description: String)]
 
 pub struct UpdateMerchant<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = merchant_account.merchant_wallet_address == *payer.key,
+    )]
     pub merchant_account: Account<'info, Merchant>,
     pub system_program: Program<'info, System>,
     #[account(mut)]

@@ -16,7 +16,10 @@ pub struct InitializeSubscription<'info> {
     space = Subscription::space()
     )]
     pub subscription_account: Account<'info, Subscription>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = merchant_account.merchant_wallet_address == *merchant.key,
+    )]
     pub merchant_account: Account<'info, Merchant>,
     #[account(mut)]
     pub merchant: Signer<'info>,
@@ -30,6 +33,7 @@ pub fn handler(
     last_invoice: Pubkey,
     current_period_end: i64
 ) ->  Result<()> {
+    ctx.accounts.subscription_account.merchant = *ctx.accounts.merchant.key;
     ctx.accounts.subscription_account.merchant_account = merchant_account;
     ctx.accounts.subscription_account.customer_account = customer_account;
     ctx.accounts.subscription_account.last_invoice = last_invoice;

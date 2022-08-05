@@ -11,6 +11,7 @@ pub struct DeleteProduct<'info> {
     pub product_account_author: Account<'info, ProductAuthor>,
     #[account(
     mut,
+    constraint = product_account.authority == *merchant.key,
     close=merchant
     )]
     pub product_account: Account<'info, Product>,
