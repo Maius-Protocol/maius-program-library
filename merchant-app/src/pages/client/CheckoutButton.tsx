@@ -88,7 +88,7 @@ const CheckoutButton = ({
     refetch: refetchLatestSubscriptionAccount,
   } = useSubscriptionAccount(
     customer_wallet_address,
-    customerAccount?.subscriptionCount?.toNumber()
+    customerAccount?.subscriptionCount?.toNumber() - 1
   );
 
   const {
@@ -116,9 +116,11 @@ const CheckoutButton = ({
     data,
     refetch: refetchLatestSubscriptionItem,
     isLoading: isLoadingLatestSubscriptionItem,
-  } = useSubscriptionItemAccount(customer_wallet_address, 16, 0);
-
-  console.log(data);
+  } = useSubscriptionItemAccount(
+    customer_wallet_address,
+    latestIndexSubscription,
+    0
+  );
 
   const isLoading =
     isFetchingCustomerInvoiceAccount ||
@@ -188,10 +190,15 @@ const CheckoutButton = ({
     await createSubscriptionItemAccount({
       quantity,
       subscription_count_index:
-        _customerAccount?.data?.subscriptionCount?.toNumber(),
+        _customerAccount?.data?.subscriptionCount?.toNumber() - 1,
       subscription_item_count_index:
-        _LatestSubscriptionAccount?.data?.subscriptionItemCount,
+        _LatestSubscriptionAccount?.data?.subscriptionItemCount || 0,
     });
+    // await createSubscriptionItemAccount({
+    //   quantity,
+    //   subscription_count_index: 10,
+    //   subscription_item_count_index: 0,
+    // });
     let _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
     while (!_latestSubscriptionItemAccount) {
       console.log("Retry refetchLatestSubscriptionItem...");
