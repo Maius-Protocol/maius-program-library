@@ -34,6 +34,7 @@ export function useInvoiceItemAccount(
         invoice_item_count_index !== null &&
         invoice_item_count_index !== undefined &&
         invoice_count_index !== null &&
+        !isNaN(invoice_count_index) &&
         invoice_count_index !== undefined &&
         customer_wallet_address !== null &&
         customer_wallet_address !== undefined,

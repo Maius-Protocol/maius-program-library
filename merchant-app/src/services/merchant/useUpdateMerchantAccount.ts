@@ -22,6 +22,7 @@ export function useUpdateMerchantAccount(merchantWalletAddress: string) {
       const transaction = await program.methods
         .updateMerchant(name, description, logo_url)
         .accounts({
+          payer: merchantWalletAddress,
           merchantAccount: address,
           systemProgram: SystemProgram.programId,
         })

@@ -80,9 +80,7 @@ const CheckoutButton = ({
     isCreatingInvoiceAccount ||
     isFetchingInvoiceAccount ||
     checkoutProcessing ||
-    isCreatingInvoiceItemAccount ||
-    isLoadingLastInvoiceItemAccount;
-
+    isCreatingInvoiceItemAccount;
   const disabled = !connected;
   const checkout = async () => {
     setCheckoutProcessing(true);

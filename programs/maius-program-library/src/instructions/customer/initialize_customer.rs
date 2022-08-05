@@ -39,6 +39,7 @@ pub fn handler(
     let merchant_account = &mut ctx.accounts.merchant_account;
     customer_account.authority = customer_wallet;
     customer_account.description = description;
+    customer_account.subscription_count = 0;
 
     customer_account.prev_customer_key = merchant_account.current_customer_key;
     customer_account.created = Clock::get().unwrap().unix_timestamp;

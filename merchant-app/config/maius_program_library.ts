@@ -338,7 +338,12 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -664,6 +669,10 @@ export type MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "subscriptionCount",
+            "type": "u64"
           }
         ]
       }
@@ -759,10 +768,6 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "productCount",
-            "type": "u64"
-          },
-          {
-            "name": "subscriptionCount",
             "type": "u64"
           },
           {
@@ -1306,7 +1311,12 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -1632,6 +1642,10 @@ export const IDL: MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "subscriptionCount",
+            "type": "u64"
           }
         ]
       }
@@ -1727,10 +1741,6 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "productCount",
-            "type": "u64"
-          },
-          {
-            "name": "subscriptionCount",
             "type": "u64"
           },
           {
