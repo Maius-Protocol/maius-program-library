@@ -50,7 +50,7 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     throw new Error("invalid spl-token");
   // const splToken = splTokenField ? new PublicKey(splTokenField) : undefined;
   const splToken = new PublicKey(
-    "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
   );
 
   const referenceField = request.query.reference;

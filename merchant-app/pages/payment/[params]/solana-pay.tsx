@@ -74,7 +74,8 @@ const WrappedSolanaPay = ({ tokens }) => {
         decimals={9}
         minDecimals={1}
         connectWallet={connected}
-        splToken={new PublicKey(selectedToken?.address)}
+        // splToken={new PublicKey(selectedToken?.address)}
+        splToken={new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")}
         requiredConfirmations={MAX_CONFIRMATIONS}
       >
         <TransactionsProvider>
