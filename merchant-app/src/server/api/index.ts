@@ -49,7 +49,9 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   if (splTokenField && typeof splTokenField !== "string")
     throw new Error("invalid spl-token");
   // const splToken = splTokenField ? new PublicKey(splTokenField) : undefined;
-  const splToken = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr");
+  const splToken = new PublicKey(
+    "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
+  );
 
   const referenceField = request.query.reference;
   if (!referenceField) throw new Error("missing reference");
@@ -89,7 +91,6 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     memo,
   });
 
-  Serialize and deserialize the transaction. This ensures consistent ordering of the account keys for signing.
   transaction = Transaction.from(
     transaction.serialize({
       verifySignatures: false,
@@ -97,7 +98,6 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     })
   );
 
-  Serialize and return the unsigned transaction.
   const serialized = transaction.serialize({
     verifySignatures: false,
     requireAllSignatures: false,
