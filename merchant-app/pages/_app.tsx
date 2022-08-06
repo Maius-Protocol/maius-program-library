@@ -81,7 +81,7 @@ function MyApp(props: AppProps) {
         <ReactQueryDevtools initialIsOpen={false} />
         <ConnectionProvider
           endpoint={endpoint}
-          config={{ commitment: "processed" }}
+          config={{ commitment: "confirmed" }}
         >
           <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>

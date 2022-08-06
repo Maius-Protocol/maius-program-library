@@ -33,6 +33,7 @@ import { Base64 } from "js-base64";
 import { useRouter } from "next/router";
 import { useProductAccount } from "../services/product/useProductAccount";
 import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
+import { usePriceAccount } from "../services/pricing/usePriceAccount";
 
 export interface PaymentProviderProps {
   children: ReactNode;
@@ -56,10 +57,18 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   const merchant_wallet = parsedParams?.merchant_wallet;
   const product_count_index = parsedParams?.product_count_index;
   const price_count_index = parsedParams?.price_count_index;
-  const { data: productAccount, isLoading: isLoadingProduct } =
-    useProductAccount(merchant_wallet, parseInt(product_count_index));
   const { data: merchantAccount } = useMerchantAccount(
     merchant_wallet as string
+  );
+  const { data: productAccount } = useProductAccount(
+    merchant_wallet,
+    parseInt(product_count_index)
+  );
+
+  const { data: priceAccount } = usePriceAccount(
+    merchant_wallet,
+    product_count_index,
+    price_count_index
   );
   const { publicKey, sendTransaction } = useWallet();
 
@@ -77,16 +86,11 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
 
   const url = useMemo(() => {
     const url = new URL(String(link));
-
+    const amount = priceAccount?.unitAmount;
     url.searchParams.append("recipient", recipient.toBase58());
 
-    if (amount) {
-      url.searchParams.append("amount", amount.toFixed(amount.decimalPlaces()));
-    }
-
-    if (splToken) {
-      url.searchParams.append("spl-token", splToken.toBase58());
-    }
+    url.searchParams.append("amount", amount?.toNumber()?.toFixed(6));
+    url.searchParams.append("spl-token", splToken?.toBase58());
 
     if (reference) {
       url.searchParams.append("reference", reference.toBase58());
@@ -101,19 +105,9 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     url.searchParams.append("message", `${merchantAccount?.logoUrl}`);
 
     return encodeURL({ link: url });
-  }, [
-    link,
-    recipient,
-    amount,
-    splToken,
-    reference,
-    label,
-    message,
-    memo,
-    productAccount,
-  ]);
+  }, [link, recipient, splToken, reference, memo, productAccount]);
 
-  console.log(url);
+  console.log(url.pathname);
   const reset = useCallback(() => {
     setAmount(undefined);
     setMemo(undefined);
@@ -128,7 +122,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     if (status === PaymentStatus.New && !reference) {
       setReference(Keypair.generate().publicKey);
       setStatus(PaymentStatus.Pending);
-      navigate("/pending");
+      // navigate("/pending");
     }
   }, [status, reference, navigate]);
 
@@ -198,7 +192,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
           console.error(error);
         }
       }
-    }, 250);
+    }, 1000);
 
     return () => {
       changed = true;
@@ -281,6 +275,9 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     };
   }, [status, signature, connection, requiredConfirmations]);
 
+  useEffect(() => {
+    generate();
+  }, [splToken]);
   return (
     <PaymentContext.Provider
       value={{

@@ -9,8 +9,9 @@ import { TransactionsProvider } from "../../../src/provider/TransactionsProvider
 import { Base64 } from "js-base64";
 import { Avatar, Group, Progress, Title } from "@mantine/core";
 import { MAX_CONFIRMATIONS } from "../../../src/utils/constants";
+import { usePayment } from "../../../src/hooks/usePayment";
 
-const SolanaPayPage = () => {
+const SolanaPayPage = ({ token }) => {
   return <QRCode />;
 };
 
@@ -58,7 +59,7 @@ const WrappedSolanaPay = ({ tokens }) => {
       >
         <TransactionsProvider>
           <PaymentProvider>
-            <SolanaPayPage />
+            <SolanaPayPage token={selectedToken} />
           </PaymentProvider>
         </TransactionsProvider>
       </ConfigProvider>
