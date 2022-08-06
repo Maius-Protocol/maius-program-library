@@ -92,13 +92,9 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     url.searchParams.append("amount", amount?.toNumber()?.toFixed(6));
     url.searchParams.append("spl-token", splToken?.toBase58());
 
-    if (reference) {
-      url.searchParams.append("reference", reference.toBase58());
-    }
+    url.searchParams.append("reference", reference?.toBase58());
 
-    if (memo) {
-      url.searchParams.append("memo", memo);
-    }
+    url.searchParams.append("memo", "Memo");
 
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
 
