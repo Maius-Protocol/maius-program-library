@@ -22,7 +22,7 @@ const WrappedSolanaPay = ({ tokens }) => {
   const merchant_wallet = parsedParams?.merchant_wallet;
   const product_count_index = parsedParams?.product_count_index;
   const price_count_index = parsedParams?.price_count_index;
-  const baseURL = `https://172.16.3.36:3001`;
+  const baseURL = `https://maius-program-library.vercel.app`;
 
   const { connected } = useWallet();
   const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);

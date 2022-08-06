@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useProgram } from "../../provider/ProgramProvider";
-import { findInvoiceItemAddress, useInvoiceKey } from "./address";
+import { findInvoiceItemAddress } from "./address";
 import { findInvoiceAddress } from "../invoice/address";
 
 export function useInvoiceItemAccount(
