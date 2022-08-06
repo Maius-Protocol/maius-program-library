@@ -48,7 +48,8 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   const splTokenField = request.query["spl-token"];
   if (splTokenField && typeof splTokenField !== "string")
     throw new Error("invalid spl-token");
-  const splToken = splTokenField ? new PublicKey(splTokenField) : undefined;
+  // const splToken = splTokenField ? new PublicKey(splTokenField) : undefined;
+  const splToken = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr");
 
   const referenceField = request.query.reference;
   if (!referenceField) throw new Error("missing reference");
@@ -80,27 +81,27 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
     memo,
   });
   // Compose a simple transfer transaction to return. In practice, this can be any transaction, and may be signed.
-  // let transaction = await createTransfer(connection, account, {
-  //   recipient,
-  //   amount,
-  //   splToken,
-  //   reference,
-  //   memo,
-  // });
+  let transaction = await createTransfer(connection, account, {
+    recipient,
+    amount,
+    splToken,
+    reference,
+    memo,
+  });
 
-  // Serialize and deserialize the transaction. This ensures consistent ordering of the account keys for signing.
-  // transaction = Transaction.from(
-  //   transaction.serialize({
-  //     verifySignatures: false,
-  //     requireAllSignatures: false,
-  //   })
-  // );
+  Serialize and deserialize the transaction. This ensures consistent ordering of the account keys for signing.
+  transaction = Transaction.from(
+    transaction.serialize({
+      verifySignatures: false,
+      requireAllSignatures: false,
+    })
+  );
 
-  // Serialize and return the unsigned transaction.
-  // const serialized = transaction.serialize({
-  //   verifySignatures: false,
-  //   requireAllSignatures: false,
-  // });
+  Serialize and return the unsigned transaction.
+  const serialized = transaction.serialize({
+    verifySignatures: false,
+    requireAllSignatures: false,
+  });
   const base64 = serialized.toString("base64");
 
   response.status(200).send({ transaction: base64, message });

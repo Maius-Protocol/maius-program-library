@@ -168,34 +168,34 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   // }, [status, connectWallet, publicKey, url, connection, sendTransaction]);
 
   // When the status is pending, poll for the transaction using the reference key
-  // useEffect(() => {
-  //   if (!(status === PaymentStatus.Pending && reference && !signature)) return;
-  //   let changed = false;
-  //
-  //   const interval = setInterval(async () => {
-  //     let signature: ConfirmedSignatureInfo;
-  //     try {
-  //       signature = await findReference(connection, reference);
-  //
-  //       if (!changed) {
-  //         clearInterval(interval);
-  //         setSignature(signature.signature);
-  //         setStatus(PaymentStatus.Confirmed);
-  //         navigate("/confirmed", true);
-  //       }
-  //     } catch (error: any) {
-  //       // If the RPC node doesn't have the transaction signature yet, try again
-  //       if (!(error instanceof FindReferenceError)) {
-  //         console.error(error);
-  //       }
-  //     }
-  //   }, 1000);
-  //
-  //   return () => {
-  //     changed = true;
-  //     clearInterval(interval);
-  //   };
-  // }, [status, reference, signature, connection, navigate]);
+  useEffect(() => {
+    if (!(status === PaymentStatus.Pending && reference && !signature)) return;
+    let changed = false;
+
+    const interval = setInterval(async () => {
+      let signature: ConfirmedSignatureInfo;
+      try {
+        signature = await findReference(connection, reference);
+
+        if (!changed) {
+          clearInterval(interval);
+          setSignature(signature.signature);
+          setStatus(PaymentStatus.Confirmed);
+          // navigate("/confirmed", true);
+        }
+      } catch (error: any) {
+        // If the RPC node doesn't have the transaction signature yet, try again
+        if (!(error instanceof FindReferenceError)) {
+          console.error(error);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      changed = true;
+      clearInterval(interval);
+    };
+  }, [status, reference, signature, connection, navigate]);
 
   // When the status is confirmed, validate the transaction against the provided params
   // useEffect(() => {
