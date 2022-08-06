@@ -71,28 +71,36 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   if (typeof accountField !== "string") throw new Error("invalid account");
   const account = new PublicKey(accountField);
 
-  // Compose a simple transfer transaction to return. In practice, this can be any transaction, and may be signed.
-  let transaction = await createTransfer(connection, account, {
+  console.log({
+    accountField,
     recipient,
     amount,
     splToken,
     reference,
     memo,
   });
+  // Compose a simple transfer transaction to return. In practice, this can be any transaction, and may be signed.
+  // let transaction = await createTransfer(connection, account, {
+  //   recipient,
+  //   amount,
+  //   splToken,
+  //   reference,
+  //   memo,
+  // });
 
   // Serialize and deserialize the transaction. This ensures consistent ordering of the account keys for signing.
-  transaction = Transaction.from(
-    transaction.serialize({
-      verifySignatures: false,
-      requireAllSignatures: false,
-    })
-  );
+  // transaction = Transaction.from(
+  //   transaction.serialize({
+  //     verifySignatures: false,
+  //     requireAllSignatures: false,
+  //   })
+  // );
 
   // Serialize and return the unsigned transaction.
-  const serialized = transaction.serialize({
-    verifySignatures: false,
-    requireAllSignatures: false,
-  });
+  // const serialized = transaction.serialize({
+  //   verifySignatures: false,
+  //   requireAllSignatures: false,
+  // });
   const base64 = serialized.toString("base64");
 
   response.status(200).send({ transaction: base64, message });

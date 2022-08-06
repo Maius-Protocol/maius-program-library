@@ -73,7 +73,7 @@ export const TransactionsProvider: FC<TransactionsProviderProps> = ({
           await connection.getSignaturesForAddress(
             associatedToken || recipient,
             { limit: 10 },
-            "confirmed"
+            "processed"
           );
         if (changed) return;
 

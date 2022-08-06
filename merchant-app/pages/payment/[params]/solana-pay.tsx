@@ -7,12 +7,30 @@ import { ConfigProvider } from "../../../src/provider/ConfigProvider";
 import { useRouter } from "next/router";
 import { TransactionsProvider } from "../../../src/provider/TransactionsProvider";
 import { Base64 } from "js-base64";
-import { Avatar, Group, Progress, Title } from "@mantine/core";
+import { Avatar, Group, Loader, Progress, Title } from "@mantine/core";
 import { MAX_CONFIRMATIONS } from "../../../src/utils/constants";
-import { usePayment } from "../../../src/hooks/usePayment";
+import { PaymentStatus, usePayment } from "../../../src/hooks/usePayment";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const SolanaPayPage = ({ token }) => {
-  return <QRCode />;
+  const { status } = usePayment();
+  return (
+    <div className="d-flex flex-column align-items-center">
+      <QRCode />
+      {status === PaymentStatus.Pending && (
+        <div style={{ marginBottom: "24px" }}>
+          <Loader />{" "}
+          <span style={{ marginLeft: "8px" }}>Waiting scan QR...</span>
+        </div>
+      )}
+      {status === PaymentStatus.Confirmed && (
+        <div style={{ marginBottom: "24px" }}>
+          <Loader />{" "}
+          <span style={{ marginLeft: "8px" }}>Confirming transaction...</span>
+        </div>
+      )}
+    </div>
+  );
 };
 
 const WrappedSolanaPay = ({ tokens }) => {
@@ -23,7 +41,7 @@ const WrappedSolanaPay = ({ tokens }) => {
   const merchant_wallet = parsedParams?.merchant_wallet;
   const product_count_index = parsedParams?.product_count_index;
   const price_count_index = parsedParams?.price_count_index;
-  const baseURL = `https://maius-program-library.vercel.app`;
+  const baseURL = `https://172.16.3.36:3001`;
 
   const { connected } = useWallet();
   const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
@@ -43,6 +61,7 @@ const WrappedSolanaPay = ({ tokens }) => {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
+      <WalletMultiButton />
       <ConfigProvider
         baseURL={baseURL}
         link={link}

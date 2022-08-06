@@ -57,7 +57,7 @@ export const ProgramProvider: React.FunctionComponent<ProgramProviderProps> = ({
   const { wallet } = useWallet();
 
   const provider = new AnchorProvider(connection, wallet, {
-    commitment: "confirmed",
+    commitment: "processed",
   });
 
   const program = new Program(idl, programID, provider);
