@@ -66,95 +66,95 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         console.log("[Merchant] Create result: ", data);
     });
 
-    it("initialize subscription", async () => {
-        const merchantData = await program.account.merchant.fetch(merchantAccount);
-        let lastInvoice: anchor.web3.PublicKey;
-        [subscriptionAccount, subscriptionBump] = await PublicKey.findProgramAddress(
-            [
-                Buffer.from("v1"),
-                Buffer.from("subscription"),
-                merchantAccount.toBuffer(),
-                Buffer.from(merchantData.subscriptionCount.toString())
-
-            ],
-            program.programId
-        );
-        let current_period_end = Date.now() + 24 * 60 * 60 * 1000
-        console.log('current_period_end 1', current_period_end)
-
-        await program.methods
-            .initializeSubscription(
-                merchantAccount,
-                customerAccount,
-                lastInvoice,
-                new anchor.BN(current_period_end),
-            )
-            .accounts({
-                merchantAccount: merchantAccount,
-                subscriptionAccount: subscriptionAccount,
-                merchant: globalState.merchantWallet.publicKey,
-                systemProgram: SystemProgram.programId,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
-
-        const dataSubscriptionAccount = await program.account.subscription.fetch(
-            subscriptionAccount
-        );
-        console.log(dataSubscriptionAccount);
-        const merchantData1 = await program.account.merchant.fetch(merchantAccount);
-
-        [subscriptionAccount1, subscriptionBump1] = await PublicKey.findProgramAddress(
-            [
-                Buffer.from("v1"),
-                Buffer.from("subscription"),
-                merchantAccount.toBuffer(),
-                Buffer.from(merchantData1.subscriptionCount.toString())
-
-            ],
-            program.programId
-        );
-
-        current_period_end = Date.now() + 24 * 60 * 60 * 1000
-        console.log('current_period_end 2', current_period_end)
-
-        await program.methods
-            .initializeSubscription(
-                merchantAccount,
-                customerAccount,
-                lastInvoice,
-                new anchor.BN(current_period_end),
-            )
-            .accounts({
-                merchantAccount: merchantAccount,
-                subscriptionAccount: subscriptionAccount1,
-                merchant: globalState.merchantWallet.publicKey,
-                systemProgram: SystemProgram.programId,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
-
-        const dataSubscriptionAccount1 = await program.account.subscription.fetch(
-            subscriptionAccount1
-        );
-        console.log(subscriptionAccount1)
-        console.log(dataSubscriptionAccount1);
-        const merchantData2 = await program.account.merchant.fetch(merchantAccount);
-        console.log(merchantData2)
-
-        let pythPriceAccount = new PublicKey("H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG") // SOL/USD
-
-        await program.methods.
-            subscribe()
-            .accounts({
-                subscriptionAccount: subscriptionAccount,
-                systemProgram: SystemProgram.programId,
-                pythPriceAccount: pythPriceAccount,
-                payer: globalState.merchantWallet.publicKey,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
-
-    })
+    // it("initialize subscription", async () => {
+    //     const merchantData = await program.account.merchant.fetch(merchantAccount);
+    //     let lastInvoice: anchor.web3.PublicKey;
+    //     [subscriptionAccount, subscriptionBump] = await PublicKey.findProgramAddress(
+    //         [
+    //             Buffer.from("v1"),
+    //             Buffer.from("subscription"),
+    //             merchantAccount.toBuffer(),
+    //             Buffer.from(merchantData.subscriptionCount.toString())
+    //
+    //         ],
+    //         program.programId
+    //     );
+    //     let current_period_end = Date.now() + 24 * 60 * 60 * 1000
+    //     console.log('current_period_end 1', current_period_end)
+    //
+    //     await program.methods
+    //         .initializeSubscription(
+    //             merchantAccount,
+    //             customerAccount,
+    //             lastInvoice,
+    //             new anchor.BN(current_period_end),
+    //         )
+    //         .accounts({
+    //             merchantAccount: merchantAccount,
+    //             subscriptionAccount: subscriptionAccount,
+    //             merchant: globalState.merchantWallet.publicKey,
+    //             systemProgram: SystemProgram.programId,
+    //         })
+    //         .signers([globalState.merchantWallet.payer])
+    //         .rpc();
+    //
+    //     const dataSubscriptionAccount = await program.account.subscription.fetch(
+    //         subscriptionAccount
+    //     );
+    //     console.log(dataSubscriptionAccount);
+    //     const merchantData1 = await program.account.merchant.fetch(merchantAccount);
+    //
+    //     [subscriptionAccount1, subscriptionBump1] = await PublicKey.findProgramAddress(
+    //         [
+    //             Buffer.from("v1"),
+    //             Buffer.from("subscription"),
+    //             merchantAccount.toBuffer(),
+    //             Buffer.from(merchantData1.subscriptionCount.toString())
+    //
+    //         ],
+    //         program.programId
+    //     );
+    //
+    //     current_period_end = Date.now() + 24 * 60 * 60 * 1000
+    //     console.log('current_period_end 2', current_period_end)
+    //
+    //     await program.methods
+    //         .initializeSubscription(
+    //             merchantAccount,
+    //             customerAccount,
+    //             lastInvoice,
+    //             new anchor.BN(current_period_end),
+    //         )
+    //         .accounts({
+    //             merchantAccount: merchantAccount,
+    //             subscriptionAccount: subscriptionAccount1,
+    //             merchant: globalState.merchantWallet.publicKey,
+    //             systemProgram: SystemProgram.programId,
+    //         })
+    //         .signers([globalState.merchantWallet.payer])
+    //         .rpc();
+    //
+    //     const dataSubscriptionAccount1 = await program.account.subscription.fetch(
+    //         subscriptionAccount1
+    //     );
+    //     console.log(subscriptionAccount1)
+    //     console.log(dataSubscriptionAccount1);
+    //     const merchantData2 = await program.account.merchant.fetch(merchantAccount);
+    //     console.log(merchantData2)
+    //
+    //     let pythPriceAccount = new PublicKey("H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG") // SOL/USD
+    //
+    //     await program.methods.
+    //         subscribe()
+    //         .accounts({
+    //             subscriptionAccount: subscriptionAccount,
+    //             systemProgram: SystemProgram.programId,
+    //             pythPriceAccount: pythPriceAccount,
+    //             payer: globalState.merchantWallet.publicKey,
+    //         })
+    //         .signers([globalState.merchantWallet.payer])
+    //         .rpc();
+    //
+    // })
 });
 
