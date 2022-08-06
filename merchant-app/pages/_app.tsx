@@ -107,6 +107,14 @@ function MyApp(props: AppProps) {
           </WalletProvider>
         </ConnectionProvider>
       </QueryClientProvider>
+
+      <style jsx>
+        {`
+          .ReactCollapse--collapse {
+            width: 100%;
+          }
+        `}
+      </style>
     </>
   );
 }

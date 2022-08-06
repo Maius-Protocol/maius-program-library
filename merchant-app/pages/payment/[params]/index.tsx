@@ -11,24 +11,29 @@ import {
   Image,
 } from "@mantine/core";
 import { Base64 } from "js-base64";
-import { useMerchantAccount } from "../../src/services/merchant/useMerchantAccount";
-import { useProductAccount } from "../../src/services/product/useProductAccount";
-import { usePriceAccount } from "../../src/services/pricing/usePriceAccount";
+import { useMerchantAccount } from "../../../src/services/merchant/useMerchantAccount";
+import { useProductAccount } from "../../../src/services/product/useProductAccount";
+import { usePriceAccount } from "../../../src/services/pricing/usePriceAccount";
 import React, { useEffect, useState } from "react";
 import { TokenListProvider } from "@solana/spl-token-registry";
-import { supportedTokens } from "../../config/globalVariables";
-import CheckoutButton from "../../src/pages/client/CheckoutButton";
+import { supportedTokens } from "../../../config/globalVariables";
+import CheckoutButton from "../../../src/pages/client/CheckoutButton";
 import {
   WalletConnectButton,
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+import Link from "next/link";
+import { useProgram } from "../../../src/provider/ProgramProvider";
+import { UnmountClosed } from "react-collapse";
+import WrappedSolanaPay from "./solana-pay";
 
 const PaymentFromLink = () => {
-  const router = useRouter();
+  const [paymentMethod, setPaymentMethod] = useState("solana-pay");
   const { connected } = useWallet();
   const [tokenList, setTokenList] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
   const { params } = router.query;
   const parsedParams = JSON.parse(params ? Base64.decode(params) : "{}");
   const merchant_wallet = parsedParams?.merchant_wallet;
@@ -111,62 +116,73 @@ const PaymentFromLink = () => {
           }}
           className="p-4 d-flex flex-column align-items-center justify-content-center"
         >
-          <div className="w-100">
-            {!connected && (
-              <div className="my-3">
-                <WalletMultiButton />
-              </div>
-            )}
-            <div className="text-muted mb-4">Accepting payments with</div>
-            {isLoading && (
-              <>
-                <Skeleton height={40} mb="sm" />
-                <Skeleton height={40} mb="sm" />
-                <Skeleton height={40} mb="sm" />
-              </>
-            )}
-            {!isLoading && (
-              <>
-                {tokens?.map((t) => {
-                  return (
-                    <div
-                      key={`row_${t?.address}`}
-                      className="d-flex flex-row align-items-center mb-3"
-                    >
-                      <div className="p-2">
-                        <Avatar radius="md" src={t?.logoURI} size={40} />
+          <UnmountClosed isOpened={paymentMethod === "default"}>
+            <div className="w-100">
+              {!connected && (
+                <div className="my-3">
+                  <WalletMultiButton />
+                </div>
+              )}
+              <div className="text-muted mb-4">Accepting payments with</div>
+              {isLoading && (
+                <>
+                  <Skeleton height={40} mb="sm" />
+                  <Skeleton height={40} mb="sm" />
+                  <Skeleton height={40} mb="sm" />
+                </>
+              )}
+              {!isLoading && (
+                <>
+                  {tokens?.map((t) => {
+                    return (
+                      <div
+                        key={`row_${t?.address}`}
+                        className="d-flex flex-row align-items-center mb-3"
+                      >
+                        <div className="p-2">
+                          <Avatar radius="md" src={t?.logoURI} size={40} />
+                        </div>
+                        <CheckoutButton
+                          merchant_wallet={merchant_wallet}
+                          price_count_index={price_count_index}
+                          product_count_index={product_count_index}
+                          symbol={t?.symbol}
+                          quantity={quantity}
+                        />
                       </div>
-                      <CheckoutButton
-                        merchant_wallet={merchant_wallet}
-                        price_count_index={price_count_index}
-                        product_count_index={product_count_index}
-                        symbol={t?.symbol}
-                        quantity={quantity}
-                      />
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </div>
-          <Divider
-            label={
-              <span className="text-muted" style={{ fontSize: "16px" }}>
-                or
-              </span>
-            }
-            labelPosition="center"
-          />
-          <Button
-            className="mt-3"
-            color="dark"
-            size="lg"
-            sx={{ width: "100%" }}
-          >
-            <div className="d-flex flex-row align-items-center">
-              Checkout with <Image ml={12} width={64} src="/solana_pay.png" />
+                    );
+                  })}
+                </>
+              )}
             </div>
-          </Button>
+            <Divider
+              label={
+                <span className="text-muted" style={{ fontSize: "16px" }}>
+                  or
+                </span>
+              }
+              labelPosition="center"
+            />
+            <Button
+              className="mt-3"
+              color="dark"
+              size="lg"
+              sx={{ width: "100%" }}
+              style={{ minWidth: "450px" }}
+            >
+              <div
+                onClick={() => {
+                  setPaymentMethod("solana-pay");
+                }}
+                className="d-flex flex-row align-items-center"
+              >
+                Checkout with <Image ml={12} width={64} src="/solana_pay.png" />
+              </div>
+            </Button>
+          </UnmountClosed>
+          <UnmountClosed isOpened={paymentMethod === "solana-pay"}>
+            <WrappedSolanaPay tokens={tokens} />
+          </UnmountClosed>
         </Grid.Col>
       </Grid>
     </div>

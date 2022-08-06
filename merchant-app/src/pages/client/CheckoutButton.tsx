@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import { useCustomerInvoiceAccount } from "../../services/customer_invoice/useCustomerInvoiceAccount";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useCreateCustomerInvoiceAccount } from "../../services/customer_invoice/useCreateCustomerInvoiceAccount";
@@ -21,6 +21,7 @@ const CheckoutButton = ({
   quantity,
 }) => {
   const [checkoutProcessing, setCheckoutProcessing] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const { wallet, connected } = useWallet();
   const customer_wallet_address = wallet?.adapter?.publicKey?.toBase58();
   const { data: customerAccount, refetch: refetchCustomerAccount } =
@@ -118,7 +119,7 @@ const CheckoutButton = ({
     isLoading: isLoadingLatestSubscriptionItem,
   } = useSubscriptionItemAccount(
     customer_wallet_address,
-    latestIndexSubscription,
+    latestIndexSubscription + 1,
     0
   );
 
@@ -130,8 +131,7 @@ const CheckoutButton = ({
     checkoutProcessing ||
     isCreatingInvoiceItemAccount ||
     isCreatingSubscriptionAccount ||
-    isCreatingSubscriptionItem ||
-    isLoadingLatestSubscriptionItem;
+    isCreatingSubscriptionItem;
 
   const disabled = !connected;
   const checkout = async () => {
@@ -209,9 +209,13 @@ const CheckoutButton = ({
       "Create Subscription item success",
       _latestSubscriptionItemAccount?.data
     );
-
+    setPaymentSuccess(true);
     setCheckoutProcessing(false);
   };
+
+  if (paymentSuccess) {
+    return <Title className="pl-3">🎉 Thank you! 🎉</Title>;
+  }
 
   return (
     <Button
