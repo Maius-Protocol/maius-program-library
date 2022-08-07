@@ -34,6 +34,8 @@ import { useRouter } from "next/router";
 import { useProductAccount } from "../services/product/useProductAccount";
 import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
 import { usePriceAccount } from "../services/pricing/usePriceAccount";
+import { useCreatePayment } from "../services/payment/useCreatePayment";
+import { useCustomerInvoiceAccount } from "../services/customer_invoice/useCustomerInvoiceAccount";
 
 export interface PaymentProviderProps {
   children: ReactNode;
@@ -83,6 +85,28 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     () => confirmations / requiredConfirmations,
     [confirmations, requiredConfirmations]
   );
+  const customer_wallet_address =
+    "5P6KbkdP2GpUkuHi1tnbC2meToMxy52zZTiZnVzce4GJ";
+  const { data: customerInvoiceAccount } = useCustomerInvoiceAccount(
+    merchant_wallet,
+    customer_wallet_address
+  );
+
+  const latestIndexSubscription =
+    customerInvoiceAccount?.subscriptionCount?.toNumber() - 1;
+  const latestIndexInvoice =
+    customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
+
+  const { mutateAsync: payment } = useCreatePayment(
+    merchant_wallet,
+    customer_wallet_address,
+    product_count_index,
+    price_count_index,
+    latestIndexInvoice + 1 || 0,
+    0,
+    latestIndexSubscription || 0,
+    0
+  );
 
   const url = useMemo(() => {
     const url = new URL(String(link));
@@ -109,6 +133,9 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   }, [navigate]);
 
   const generate = useCallback(() => {
+    payment({ quantity: 1 }).then((r) => {
+      console.log("instruction", r);
+    });
     if (status === PaymentStatus.New && !reference) {
       setReference(Keypair.generate().publicKey);
       setStatus(PaymentStatus.Pending);
@@ -163,34 +190,34 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   // }, [status, connectWallet, publicKey, url, connection, sendTransaction]);
 
   // When the status is pending, poll for the transaction using the reference key
-  useEffect(() => {
-    if (!(status === PaymentStatus.Pending && reference && !signature)) return;
-    let changed = false;
-
-    const interval = setInterval(async () => {
-      let signature: ConfirmedSignatureInfo;
-      try {
-        signature = await findReference(connection, reference);
-
-        if (!changed) {
-          clearInterval(interval);
-          setSignature(signature.signature);
-          setStatus(PaymentStatus.Confirmed);
-          // navigate("/confirmed", true);
-        }
-      } catch (error: any) {
-        // If the RPC node doesn't have the transaction signature yet, try again
-        if (!(error instanceof FindReferenceError)) {
-          console.error(error);
-        }
-      }
-    }, 1000);
-
-    return () => {
-      changed = true;
-      clearInterval(interval);
-    };
-  }, [status, reference, signature, connection, navigate]);
+  // useEffect(() => {
+  //   if (!(status === PaymentStatus.Pending && reference && !signature)) return;
+  //   let changed = false;
+  //
+  //   const interval = setInterval(async () => {
+  //     let signature: ConfirmedSignatureInfo;
+  //     try {
+  //       signature = await findReference(connection, reference);
+  //
+  //       if (!changed) {
+  //         clearInterval(interval);
+  //         setSignature(signature.signature);
+  //         setStatus(PaymentStatus.Confirmed);
+  //         // navigate("/confirmed", true);
+  //       }
+  //     } catch (error: any) {
+  //       // If the RPC node doesn't have the transaction signature yet, try again
+  //       if (!(error instanceof FindReferenceError)) {
+  //         console.error(error);
+  //       }
+  //     }
+  //   }, 1000);
+  //
+  //   return () => {
+  //     changed = true;
+  //     clearInterval(interval);
+  //   };
+  // }, [status, reference, signature, connection, navigate]);
 
   // When the status is confirmed, validate the transaction against the provided params
   // useEffect(() => {

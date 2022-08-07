@@ -79,7 +79,7 @@ export function useCreatePayment(
       pricing_count_index
     );
 
-    const transaction = await program.methods
+    let transaction = await program.methods
       .payment(customerAccountAddress, pricing_account_address, quantity)
       .accounts({
         merchantAccount: merchantAccountAddress,
@@ -95,14 +95,16 @@ export function useCreatePayment(
         systemProgram: SystemProgram.programId,
       })
       .transaction();
-
-    await sendTransaction(transaction, connection);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    // return transaction
-    //   .serialize({
-    //     verifySignatures: false,
-    //     requireAllSignatures: false,
-    //   })
-    //   .toString("base64");
+    const blockhash = await connection.getLatestBlockhash("finalized");
+    transaction.recentBlockhash = blockhash.blockhash;
+    transaction.feePayer = new PublicKey(customer_wallet_address);
+    // await sendTransaction(transaction, connection);
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    return transaction
+      .serialize({
+        verifySignatures: false,
+        requireAllSignatures: false,
+      })
+      .toString("base64");
   });
 }
