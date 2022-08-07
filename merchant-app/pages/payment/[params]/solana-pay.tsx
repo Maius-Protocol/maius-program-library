@@ -42,7 +42,8 @@ const WrappedSolanaPay = ({ tokens }) => {
   const product_count_index = parsedParams?.product_count_index;
   const price_count_index = parsedParams?.price_count_index;
   // const baseURL = `https://172.16.3.36:3001`;
-  const baseURL = `https://maius-program-library.vercel.app`;
+  // const baseURL = `https://maius-program-library.vercel.app`;
+  const baseURL = `https://9f0d-113-176-61-185.ap.ngrok.io`;
 
   const { connected } = useWallet();
   const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
@@ -69,13 +70,13 @@ const WrappedSolanaPay = ({ tokens }) => {
         recipient={recipient}
         label={""}
         message={""}
-        symbol={selectedToken?.symbol}
+        symbol={"SOL"}
         icon={<></>}
         decimals={9}
         minDecimals={1}
         connectWallet={connected}
         // splToken={new PublicKey(selectedToken?.address)}
-        splToken={new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")}
+        splToken={new PublicKey("So11111111111111111111111111111111111111112")}
         requiredConfirmations={MAX_CONFIRMATIONS}
       >
         <TransactionsProvider>

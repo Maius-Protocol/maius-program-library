@@ -104,9 +104,9 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   // });
   // const base64 = serialized.toString("base64");
 
+  const instruction = request.query.instruction;
   response.status(200).send({
-    transaction:
-      "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAIJQReKpxTrOqYIAYHr9N2v+h6WYKH9aIkdT3V285zmlftDDfw4WaX1fKXrDJ85CD1KYhOYfp3ZF8mI/7qQmLLu7Ik0R/mgwUe96hH2ILJraEvTEdW7upniQonTwwFReJLEkAO4hSvZKhfqh4xQ8l2kxmTRDdeqQXKEZSNdhCMbigTeuXuxkjdSDq5OpZMTWl+ntlGU5Y6ph3ZKmwnt/9Uhduzuun92AD2mXgfp0OvVRyPx82csfKXvnifxtMcqUqMN8soSK1rI+z3ZizqJCOGQ351PzdC0Fut4NDXHq0e+DWMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEzIuwwI4o8bhZO3DelLibMFWVvf7F0uEOiMjep8b9Jg7sy1DKOa9s8gOMnX0KgfHlBGuj1DA5aPjEfiDtNePdwBCAkDBAAAAQUCBgdJnOJQW2j8MY6QA7iFK9kqF+qHjFDyXaTGZNEN16pBcoRlI12EIxuKBPLKEitayPs92Ys6iQjhkN+dT83QtBbreDQ1x6tHvg1jAQ==",
+    transaction: instruction,
     message: "okay",
   });
 };

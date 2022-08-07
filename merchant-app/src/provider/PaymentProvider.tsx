@@ -97,11 +97,12 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   const latestIndexInvoice =
     customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
 
-  const { mutateAsync: payment } = useCreatePayment(
+  const { data: instruction } = useCreatePayment(
     merchant_wallet,
     customer_wallet_address,
     product_count_index,
     price_count_index,
+    1,
     latestIndexInvoice + 1 || 0,
     0,
     latestIndexSubscription || 0,
@@ -118,9 +119,10 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     url.searchParams.append("memo", "Memo");
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
     url.searchParams.append("message", `${merchantAccount?.logoUrl}`);
+    url.searchParams.append("instruction", instruction);
 
     return encodeURL({ link: url });
-  }, [link, recipient, splToken, reference, memo, productAccount]);
+  }, [link, recipient, splToken, reference, memo, productAccount, instruction]);
 
   const reset = useCallback(() => {
     setAmount(undefined);
@@ -133,9 +135,6 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   }, [navigate]);
 
   const generate = useCallback(() => {
-    payment({ quantity: 1 }).then((r) => {
-      console.log("instruction", r);
-    });
     if (status === PaymentStatus.New && !reference) {
       setReference(Keypair.generate().publicKey);
       setStatus(PaymentStatus.Pending);

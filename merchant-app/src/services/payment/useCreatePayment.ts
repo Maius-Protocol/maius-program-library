@@ -1,6 +1,6 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { findMerchantAddress } from "../merchant/address";
 import { findCustomerAddress } from "../customer/address";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
@@ -17,6 +17,7 @@ export function useCreatePayment(
   customer_wallet_address: string | undefined,
   product_count_index = 0,
   pricing_count_index = 0,
+  quantity = 0,
   invoice_count_index = 0,
   invoice_item_count_index = 0,
   subscription_count_index = 0,
@@ -34,7 +35,7 @@ export function useCreatePayment(
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  return useMutation(async ({ quantity }) => {
+  return useQuery(["paymentTransaction"], async () => {
     const customerAccountAddress = await findCustomerAddress(
       customer_wallet_address
     );
@@ -98,7 +99,7 @@ export function useCreatePayment(
     const blockhash = await connection.getLatestBlockhash("finalized");
     transaction.recentBlockhash = blockhash.blockhash;
     transaction.feePayer = new PublicKey(customer_wallet_address);
-    // await sendTransaction(transaction, connection);
+    // sendTransaction(transaction, connection);
     // await new Promise((resolve) => setTimeout(resolve, 2000));
     return transaction
       .serialize({
