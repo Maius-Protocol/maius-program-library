@@ -24,7 +24,7 @@ export const airdropAccounts = async () => {
   await provider.connection.confirmTransaction(
     await provider.connection.requestAirdrop(
       merchantWallet.publicKey,
-      3 * LAMPORTS_PER_SOL
+      2 * LAMPORTS_PER_SOL
     ),
     "confirmed"
   );
@@ -32,7 +32,7 @@ export const airdropAccounts = async () => {
   await provider.connection.confirmTransaction(
       await provider.connection.requestAirdrop(
           customerWallet.publicKey,
-          3 * LAMPORTS_PER_SOL
+          2 * LAMPORTS_PER_SOL
       ),
       "confirmed"
   );
