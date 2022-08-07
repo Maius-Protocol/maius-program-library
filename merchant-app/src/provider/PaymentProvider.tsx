@@ -88,16 +88,11 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     const url = new URL(String(link));
     const amount = priceAccount?.unitAmount;
     url.searchParams.append("recipient", recipient.toBase58());
-
     url.searchParams.append("amount", amount?.toNumber()?.toFixed(6));
     url.searchParams.append("spl-token", splToken?.toBase58());
-
     url.searchParams.append("reference", reference?.toBase58());
-
     url.searchParams.append("memo", "Memo");
-
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
-
     url.searchParams.append("message", `${merchantAccount?.logoUrl}`);
 
     return encodeURL({ link: url });

@@ -29,7 +29,7 @@ import { UnmountClosed } from "react-collapse";
 import WrappedSolanaPay from "./solana-pay";
 
 const PaymentFromLink = () => {
-  const [paymentMethod, setPaymentMethod] = useState("solana-pay");
+  const [paymentMethod, setPaymentMethod] = useState("default");
   const { connected } = useWallet();
   const [tokenList, setTokenList] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
@@ -169,13 +169,11 @@ const PaymentFromLink = () => {
               size="lg"
               sx={{ width: "100%" }}
               style={{ minWidth: "450px" }}
+              onClick={() => {
+                setPaymentMethod("solana-pay");
+              }}
             >
-              <div
-                onClick={() => {
-                  setPaymentMethod("solana-pay");
-                }}
-                className="d-flex flex-row align-items-center"
-              >
+              <div className="d-flex flex-row align-items-center">
                 Checkout with <Image ml={12} width={64} src="/solana_pay.png" />
               </div>
             </Button>

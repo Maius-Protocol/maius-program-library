@@ -620,6 +620,70 @@ export type MaiusProgramLibrary = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "payment",
+      "accounts": [
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantWallet",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "customerWallet",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccountAddress",
+          "type": "publicKey"
+        },
+        {
+          "name": "priceAccountAddress",
+          "type": "publicKey"
+        },
+        {
+          "name": "quantity",
+          "type": "u8"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1593,6 +1657,70 @@ export const IDL: MaiusProgramLibrary = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "payment",
+      "accounts": [
+        {
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantWallet",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "customerWallet",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "customerInvoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "customerAccountAddress",
+          "type": "publicKey"
+        },
+        {
+          "name": "priceAccountAddress",
+          "type": "publicKey"
+        },
+        {
+          "name": "quantity",
+          "type": "u8"
+        }
+      ]
     }
   ],
   "accounts": [

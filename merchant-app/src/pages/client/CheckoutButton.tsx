@@ -12,6 +12,7 @@ import { useCustomerAccount } from "../../services/customer/useCustomerAccount";
 import { useSubscriptionAccount } from "../../services/subscription/useSubscriptionAccount";
 import { useCreateSubscriptionItemAccount } from "../../services/subscription_item/useCreateSubscriptionItemAccount";
 import { useSubscriptionItemAccount } from "../../services/subscription_item/useSubscriptionItemAccount";
+import { useCreatePayment } from "../../services/payment/useCreatePayment";
 
 const CheckoutButton = ({
   symbol,
@@ -123,6 +124,17 @@ const CheckoutButton = ({
     0
   );
 
+  const { mutateAsync: payment } = useCreatePayment(
+    merchant_wallet,
+    customer_wallet_address,
+    product_count_index,
+    price_count_index,
+    latestIndexInvoice + 1 || 0,
+    0,
+    latestIndexSubscription || 0,
+    0
+  );
+
   const isLoading =
     isFetchingCustomerInvoiceAccount ||
     isCreatingCustomerInvoiceAccount ||
@@ -134,82 +146,90 @@ const CheckoutButton = ({
     isCreatingSubscriptionItem;
 
   const disabled = !connected;
+  // const checkout = async () => {
+  //   setCheckoutProcessing(true);
+  //   if (!customerInvoiceAccount) {
+  //     console.log("Create customer invoice account");
+  //     await createCustomerInvoiceAccount();
+  //     await refetchCustomerInvoiceAccount();
+  //   }
+  //   console.log("Create invoice account");
+  //   await createInvoiceAccount();
+  //   const _refetchCustomerInvoiceAccount =
+  //     await refetchCustomerInvoiceAccount();
+  //   let _latestIndexInvoice =
+  //     _refetchCustomerInvoiceAccount?.data?.invoiceCount?.toNumber() - 1;
+  //   console.log("refetchCustomerInvoiceAccount", _latestIndexInvoice);
+  //   let latestInvoiceAccount = await refetchInvoiceAccount();
+  //   while (!latestInvoiceAccount?.data) {
+  //     console.log("Retry refetchInvoiceAccount...");
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     latestInvoiceAccount = await refetchInvoiceAccount();
+  //   }
+  //   console.log("Proposed Invoice", latestInvoiceAccount?.data);
+  //   console.log("Create Invoice Item");
+  //   await createInvoiceItemAccount({
+  //     invoice_item_count_index: 0,
+  //     quantity: quantity,
+  //   });
+  //   let _lastInvoiceItemAccount = await refetchLastInvoiceItem();
+  //   while (!_lastInvoiceItemAccount) {
+  //     console.log("Retry refetchLastInvoiceItem...");
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     _lastInvoiceItemAccount = await refetchLastInvoiceItem();
+  //   }
+  //   console.log("Create Invoice Item Success", {
+  //     ..._lastInvoiceItemAccount?.data,
+  //     amount: _lastInvoiceItemAccount?.data?.amount?.toNumber(),
+  //     quantity: _lastInvoiceItemAccount?.data?.quantity?.toNumber(),
+  //   });
+  //   await createSubscriptionAccount({
+  //     current_period_end: new Date().valueOf(),
+  //   });
+  //   console.log("Create subscription");
+  //   let _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
+  //   while (!_LatestSubscriptionAccount) {
+  //     console.log("Retry refetchLatestSubscriptionAccount...");
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
+  //   }
+  //   console.log("Create Subscription Account Success", {
+  //     ..._LatestSubscriptionAccount?.data,
+  //   });
+  //   console.log("Create subscription item");
+  //   let _customerAccount = await refetchCustomerAccount();
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+  //   await createSubscriptionItemAccount({
+  //     quantity,
+  //     subscription_count_index:
+  //       _customerAccount?.data?.subscriptionCount?.toNumber() - 1,
+  //     subscription_item_count_index:
+  //       _LatestSubscriptionAccount?.data?.subscriptionItemCount || 0,
+  //   });
+  //   // await createSubscriptionItemAccount({
+  //   //   quantity,
+  //   //   subscription_count_index: 10,
+  //   //   subscription_item_count_index: 0,
+  //   // });
+  //   let _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
+  //   while (!_latestSubscriptionItemAccount) {
+  //     console.log("Retry refetchLatestSubscriptionItem...");
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
+  //   }
+  //   console.log(
+  //     "Create Subscription item success",
+  //     _latestSubscriptionItemAccount?.data
+  //   );
+  //   setPaymentSuccess(true);
+  //   setCheckoutProcessing(false);
+  // };
+
   const checkout = async () => {
     setCheckoutProcessing(true);
-    if (!customerInvoiceAccount) {
-      console.log("Create customer invoice account");
-      await createCustomerInvoiceAccount();
-      await refetchCustomerInvoiceAccount();
-    }
-    console.log("Create invoice account");
-    await createInvoiceAccount();
-    const _refetchCustomerInvoiceAccount =
-      await refetchCustomerInvoiceAccount();
-    let _latestIndexInvoice =
-      _refetchCustomerInvoiceAccount?.data?.invoiceCount?.toNumber() - 1;
-    console.log("refetchCustomerInvoiceAccount", _latestIndexInvoice);
-    let latestInvoiceAccount = await refetchInvoiceAccount();
-    while (!latestInvoiceAccount?.data) {
-      console.log("Retry refetchInvoiceAccount...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      latestInvoiceAccount = await refetchInvoiceAccount();
-    }
-    console.log("Proposed Invoice", latestInvoiceAccount?.data);
-    console.log("Create Invoice Item");
-    await createInvoiceItemAccount({
-      invoice_item_count_index: 0,
-      quantity: quantity,
-    });
-    let _lastInvoiceItemAccount = await refetchLastInvoiceItem();
-    while (!_lastInvoiceItemAccount) {
-      console.log("Retry refetchLastInvoiceItem...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      _lastInvoiceItemAccount = await refetchLastInvoiceItem();
-    }
-    console.log("Create Invoice Item Success", {
-      ..._lastInvoiceItemAccount?.data,
-      amount: _lastInvoiceItemAccount?.data?.amount?.toNumber(),
-      quantity: _lastInvoiceItemAccount?.data?.quantity?.toNumber(),
-    });
-    await createSubscriptionAccount({
-      current_period_end: new Date().valueOf(),
-    });
-    console.log("Create subscription");
-    let _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
-    while (!_LatestSubscriptionAccount) {
-      console.log("Retry refetchLatestSubscriptionAccount...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      _LatestSubscriptionAccount = await refetchLatestSubscriptionAccount();
-    }
-    console.log("Create Subscription Account Success", {
-      ..._LatestSubscriptionAccount?.data,
-    });
-    console.log("Create subscription item");
-    let _customerAccount = await refetchCustomerAccount();
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await createSubscriptionItemAccount({
+    await payment({
       quantity,
-      subscription_count_index:
-        _customerAccount?.data?.subscriptionCount?.toNumber() - 1,
-      subscription_item_count_index:
-        _LatestSubscriptionAccount?.data?.subscriptionItemCount || 0,
     });
-    // await createSubscriptionItemAccount({
-    //   quantity,
-    //   subscription_count_index: 10,
-    //   subscription_item_count_index: 0,
-    // });
-    let _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
-    while (!_latestSubscriptionItemAccount) {
-      console.log("Retry refetchLatestSubscriptionItem...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      _latestSubscriptionItemAccount = await refetchLatestSubscriptionItem();
-    }
-    console.log(
-      "Create Subscription item success",
-      _latestSubscriptionItemAccount?.data
-    );
-    setPaymentSuccess(true);
     setCheckoutProcessing(false);
   };
 
