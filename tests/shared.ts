@@ -31,6 +31,7 @@ export const program = anchor.workspace
   .MaiusProgramLibrary as Program<MaiusProgramLibrary>;
 
 export const getBalance = async (address: string) => {
+  program.provider;
   const response = await program.provider.connection.getBalance(
     new anchor.web3.PublicKey(address)
   );
