@@ -102,47 +102,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             subscriptionAccount
         );
         console.log(dataSubscriptionAccount);
-        const merchantData1 = await program.account.merchant.fetch(merchantAccount);
 
-        [subscriptionAccount1, subscriptionBump1] = await PublicKey.findProgramAddress(
-            [
-                Buffer.from("v1"),
-                Buffer.from("subscription"),
-                merchantAccount.toBuffer(),
-                Buffer.from(merchantData1.subscriptionCount.toString())
-
-            ],
-            program.programId
-        );
-
-        current_period_end = Date.now() + 24 * 60 * 60 * 1000
-        console.log('current_period_end 2', current_period_end)
-
-        await program.methods
-            .initializeSubscription(
-                merchantAccount,
-                customerAccount,
-                lastInvoice,
-                new anchor.BN(current_period_end),
-            )
-            .accounts({
-                merchantAccount: merchantAccount,
-                subscriptionAccount: subscriptionAccount1,
-                merchant: globalState.merchantWallet.publicKey,
-                systemProgram: SystemProgram.programId,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
-
-        const dataSubscriptionAccount1 = await program.account.subscription.fetch(
-            subscriptionAccount1
-        );
-        console.log(subscriptionAccount1)
-        console.log(dataSubscriptionAccount1);
-        const merchantData2 = await program.account.merchant.fetch(merchantAccount);
-        console.log(merchantData2)
-
-        let pythPriceAccount = new PublicKey("H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG") // SOL/USD
+        let pythPriceAccount = new PublicKey("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix") // SOL/USD
 
         await program.methods.
             subscribe()

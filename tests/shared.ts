@@ -10,13 +10,13 @@ import { MaiusProgramLibrary } from "../target/types/maius_program_library";
 import { findCustomerAddress, findMerchantAddress } from "./merchant/address";
 import { globalState } from "./maius-program-library";
 
-// export const provider = new AnchorProvider(new Connection("https:///"));
+export const provider = AnchorProvider.env();
+anchor.setProvider(provider);
 
 export const program = anchor.workspace
   .MaiusProgramLibrary as Program<MaiusProgramLibrary>;
 
 export const getBalance = async (address: string) => {
-  program.provider;
   const response = await program.provider.connection.getBalance(
     new anchor.web3.PublicKey(address)
   );
@@ -30,9 +30,17 @@ export const airdropAccounts = async () => {
   await provider.connection.confirmTransaction(
     await provider.connection.requestAirdrop(
       merchantWallet.publicKey,
-      3 * LAMPORTS_PER_SOL
+      2 * LAMPORTS_PER_SOL
     ),
     "confirmed"
+  );
+
+  await provider.connection.confirmTransaction(
+      await provider.connection.requestAirdrop(
+          customerWallet.publicKey,
+          2 * LAMPORTS_PER_SOL
+      ),
+      "confirmed"
   );
   console.log(
     "Before merchantWallet SOL amount:",

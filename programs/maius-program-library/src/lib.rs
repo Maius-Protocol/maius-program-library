@@ -8,7 +8,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("C4PuSuSn9rw9ET1TsM8WRQRJTKDqFyS1uPWvmxza3TBj");
+declare_id!("6AjWiAUDg1BBwPBXmY1v45wvpBFXkXizXLji9yMiY2ZM");
 
 #[macro_export]
 macro_rules! debug {
