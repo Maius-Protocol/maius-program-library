@@ -10,7 +10,21 @@ import { MaiusProgramLibrary } from "../target/types/maius_program_library";
 import { findCustomerAddress, findMerchantAddress } from "./merchant/address";
 import { globalState } from "./maius-program-library";
 
-export const provider = AnchorProvider.env();
+const connection = new anchor.web3.Connection("https://quaint-morning-tree.solana-devnet.discover.quiknode.pro/86d4cf06b5d98c3413d930b9a65c1685fc61dace/", {commitment: "max"});
+const wallet = anchor.Wallet.local();
+
+const provider = new anchor.AnchorProvider(
+    connection,
+    wallet,
+    {
+      commitment: "max",
+      preflightCommitment: "max",
+      skipPreflight: false
+    }
+)
+
+// export const provider = AnchorProvider.env();
+
 anchor.setProvider(provider);
 
 export const program = anchor.workspace
