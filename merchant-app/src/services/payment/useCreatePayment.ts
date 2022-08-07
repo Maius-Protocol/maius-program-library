@@ -26,7 +26,10 @@ export function useCreatePayment(
   console.log(
     merchant_wallet_address,
     customer_wallet_address,
+    product_count_index,
+    pricing_count_index,
     invoice_count_index,
+    quantity,
     0,
     subscription_count_index,
     0
@@ -35,7 +38,7 @@ export function useCreatePayment(
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  return useQuery(["paymentTransaction"], async () => {
+  return useMutation(async () => {
     const customerAccountAddress = await findCustomerAddress(
       customer_wallet_address
     );
@@ -81,7 +84,7 @@ export function useCreatePayment(
     );
 
     let transaction = await program.methods
-      .payment(customerAccountAddress, pricing_account_address, quantity)
+      .payment(quantity)
       .accounts({
         merchantAccount: merchantAccountAddress,
         customerAccount: customerAccountAddress,
@@ -89,23 +92,23 @@ export function useCreatePayment(
         invoiceAccount: invoice_account,
         invoiceItemAccount: invoice_item_account,
         priceAccount: pricing_account_address,
-        // subscriptionAccount: subscription_account,
+        subscriptionAccount: subscription_account,
         // subscriptionItemAccount: subscription_item_account,
         customerWallet: customer_wallet_address,
         merchantWallet: merchant_wallet_address,
         systemProgram: SystemProgram.programId,
       })
       .transaction();
-    const blockhash = await connection.getLatestBlockhash("finalized");
-    transaction.recentBlockhash = blockhash.blockhash;
-    transaction.feePayer = new PublicKey(customer_wallet_address);
-    // sendTransaction(transaction, connection);
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
-    return transaction
-      .serialize({
-        verifySignatures: false,
-        requireAllSignatures: false,
-      })
-      .toString("base64");
+    // const blockhash = await connection.getLatestBlockhash("finalized");
+    // transaction.recentBlockhash = blockhash.blockhash;
+    // transaction.feePayer = new PublicKey(customer_wallet_address);
+    await sendTransaction(transaction, connection);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // return transaction
+    //   .serialize({
+    //     verifySignatures: false,
+    //     requireAllSignatures: false,
+    //   })
+    //   .toString("base64");
   });
 }

@@ -97,19 +97,19 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   const latestIndexInvoice =
     customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
 
-  const { data: instruction } = useCreatePayment(
-    merchant_wallet,
-    customer_wallet_address,
-    product_count_index,
-    price_count_index,
-    1,
-    latestIndexInvoice + 1 || 0,
-    0,
-    latestIndexSubscription || 0,
-    0
-  );
+  // const { data: instruction } = useCreatePayment(
+  //   merchant_wallet,
+  //   customer_wallet_address,
+  //   product_count_index,
+  //   price_count_index,
+  //   1,
+  //   latestIndexInvoice + 1 || 0,
+  //   0,
+  //   latestIndexSubscription || 0,
+  //   0
+  // );
 
-  const url = useMemo(() => {
+  const url = () => {
     const url = new URL(String(link));
     const amount = priceAccount?.unitAmount;
     url.searchParams.append("recipient", recipient.toBase58());
@@ -119,10 +119,23 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     url.searchParams.append("memo", "Memo");
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
     url.searchParams.append("message", `${merchantAccount?.logoUrl}`);
-    url.searchParams.append("instruction", instruction);
+    // url.searchParams.append("instruction", instruction);
+    url.searchParams.append("merchant_wallet_address", merchant_wallet);
+    url.searchParams.append("customer_wallet_address", customer_wallet_address);
+    url.searchParams.append("product_count_index", product_count_index);
+    url.searchParams.append("pricing_count_index", price_count_index);
+    url.searchParams.append("quantity", 1);
+    url.searchParams.append("invoice_count_index", latestIndexInvoice + 1 || 0);
+    url.searchParams.append("invoice_item_count_index", 0);
+    url.searchParams.append(
+      "subscription_count_index",
+      latestIndexSubscription || 0
+    );
+    url.searchParams.append("subscription_item_count_index", 0);
 
     return encodeURL({ link: url });
-  }, [link, recipient, splToken, reference, memo, productAccount, instruction]);
+  };
+  console.log(url());
 
   const reset = useCallback(() => {
     setAmount(undefined);
@@ -308,7 +321,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
         status,
         confirmations,
         progress,
-        url,
+        url: url(),
         reset,
         generate,
       }}
