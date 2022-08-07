@@ -189,11 +189,10 @@ pub mod maius_program_library {
         let invoice_item_account = &mut ctx.accounts.invoice_item_account;
         let price_account = &mut ctx.accounts.price_account;
         let subscription_account = &mut ctx.accounts.subscription_account;
-        // let subscription_item_account = &mut ctx.accounts.subscription_item_account;
+        let subscription_item_account = &mut ctx.accounts.subscription_item_account;
 
         customer_account.authority = customer_wallet.to_account_info().key();
         customer_account.description = "Test".parse().unwrap();
-        customer_account.subscription_count += 1;
         customer_account.prev_customer_key = merchant_account.current_customer_key;
         customer_account.created = Clock::get().unwrap().unix_timestamp;
         merchant_account.current_customer_key = customer_account.key();
@@ -206,14 +205,23 @@ pub mod maius_program_library {
         invoice_item_account.amount = (quantity as u64) * price_account.unit_amount;
         invoice_account.invoice_item_count += 1;
 
+        // Transfer
+
         subscription_account.merchant = merchant_account.merchant_wallet_address;
         subscription_account.merchant_account = merchant_account.key();
         subscription_account.customer_account = customer_account.key();
         subscription_account.last_invoice = invoice_account.key();
         subscription_account.created = Clock::get().unwrap().unix_timestamp;
         subscription_account.current_period_start = Clock::get().unwrap().unix_timestamp;
-        subscription_account.current_period_end = current_period_end;
+        // subscription_account.current_period_end = current_period_end;
         subscription_account.status = "active".to_string();
+        customer_account.subscription_count += 1;
+
+        subscription_item_account.price = price_account.key();
+        subscription_item_account.quantity = quantity;
+        // subscription_item_account.billing_thresholds = bill_thresholds;
+        subscription_item_account.created = Clock::get().unwrap().unix_timestamp;
+        subscription_account.subscription_item_count += 1;
         Ok(())
     }
 
