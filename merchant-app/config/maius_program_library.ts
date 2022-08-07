@@ -665,20 +665,17 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
-        {
-          "name": "customerAccountAddress",
-          "type": "publicKey"
-        },
-        {
-          "name": "priceAccountAddress",
-          "type": "publicKey"
-        },
         {
           "name": "quantity",
           "type": "u8"
@@ -1702,20 +1699,17 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "subscriptionAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
-        {
-          "name": "customerAccountAddress",
-          "type": "publicKey"
-        },
-        {
-          "name": "priceAccountAddress",
-          "type": "publicKey"
-        },
         {
           "name": "quantity",
           "type": "u8"

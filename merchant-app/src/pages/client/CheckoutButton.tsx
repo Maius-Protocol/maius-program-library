@@ -129,6 +129,7 @@ const CheckoutButton = ({
     customer_wallet_address,
     product_count_index,
     price_count_index,
+    quantity,
     latestIndexInvoice + 1 || 0,
     0,
     latestIndexSubscription || 0,
