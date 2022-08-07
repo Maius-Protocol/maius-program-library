@@ -1,17 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { useProgram } from "../../provider/ProgramProvider";
-import { findInvoiceItemAddress, useInvoiceKey } from "./address";
+import { findInvoiceItemAddress } from "./address";
+import { findInvoiceAddress } from "../invoice/address";
 
 export function useInvoiceItemAccount(
-  invoice_account_address: string,
+  customer_wallet_address: string,
+  invoice_count_index: number,
   invoice_item_count_index: number
 ) {
   const { program } = useProgram();
   return useQuery(
-    [useInvoiceKey, invoice_account_address, invoice_item_count_index],
+    [
+      useInvoiceKey,
+      customer_wallet_address,
+      invoice_count_index,
+      invoice_item_count_index,
+    ],
     async () => {
+      const invoice_account = await findInvoiceAddress(
+        customer_wallet_address,
+        invoice_count_index
+      );
       const invoice_item_account = await findInvoiceItemAddress(
-        invoice_account_address,
+        invoice_account?.toBase58(),
         invoice_item_count_index
       );
 
@@ -22,8 +33,11 @@ export function useInvoiceItemAccount(
       enabled:
         invoice_item_count_index !== null &&
         invoice_item_count_index !== undefined &&
-        invoice_account_address !== null &&
-        invoice_account_address !== "",
+        invoice_count_index !== null &&
+        !isNaN(invoice_count_index) &&
+        invoice_count_index !== undefined &&
+        customer_wallet_address !== null &&
+        customer_wallet_address !== undefined,
     }
   );
 }

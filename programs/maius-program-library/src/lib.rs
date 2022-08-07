@@ -143,12 +143,11 @@ pub mod maius_program_library {
 
     pub fn initialize_invoice_item(
         ctx: Context<InitializeInvoiceItem>,
-        invoice_account_address: Pubkey,
         customer_account: Pubkey,
         price: Pubkey,
         quantity: u64
     ) -> Result<()> {
-        initialize_invoice_item::handler(ctx, invoice_account_address, customer_account, price, quantity)
+        initialize_invoice_item::handler(ctx, customer_account, price, quantity)
     }
 
     pub fn initialize_accepted_tokens(

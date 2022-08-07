@@ -56,7 +56,7 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
         billing_scheme: priceAccount?.billingScheme,
         currency: priceAccount?.currency,
         unit_amount: priceAccount?.unitAmount?.toNumber(),
-        interval: priceAccount?.interval,
+        interval: priceAccount?.interval || "month",
         interval_count: priceAccount?.intervalCount,
         active: priceAccount?.active,
         price_type: priceAccount?.priceType,

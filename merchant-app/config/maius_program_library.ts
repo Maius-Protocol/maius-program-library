@@ -338,7 +338,12 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -381,7 +386,7 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -502,6 +507,11 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": true,
           "isSigner": true
@@ -513,10 +523,6 @@ export type MaiusProgramLibrary = {
         }
       ],
       "args": [
-        {
-          "name": "invoiceAccountAddress",
-          "type": "publicKey"
-        },
         {
           "name": "customerAccount",
           "type": "publicKey"
@@ -594,7 +600,7 @@ export type MaiusProgramLibrary = {
       "accounts": [
         {
           "name": "subscriptionAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -604,7 +610,7 @@ export type MaiusProgramLibrary = {
         },
         {
           "name": "pythPriceAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -663,6 +669,10 @@ export type MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "subscriptionCount",
+            "type": "u64"
           }
         ]
       }
@@ -758,10 +768,6 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "productCount",
-            "type": "u64"
-          },
-          {
-            "name": "subscriptionCount",
             "type": "u64"
           },
           {
@@ -912,6 +918,10 @@ export type MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "merchant",
+            "type": "publicKey"
+          },
           {
             "name": "merchantAccount",
             "type": "publicKey"
@@ -1301,7 +1311,12 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "customerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -1344,7 +1359,7 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
-          "name": "merchant",
+          "name": "authority",
           "isMut": true,
           "isSigner": true
         },
@@ -1465,6 +1480,11 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "priceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": true,
           "isSigner": true
@@ -1476,10 +1496,6 @@ export const IDL: MaiusProgramLibrary = {
         }
       ],
       "args": [
-        {
-          "name": "invoiceAccountAddress",
-          "type": "publicKey"
-        },
         {
           "name": "customerAccount",
           "type": "publicKey"
@@ -1557,7 +1573,7 @@ export const IDL: MaiusProgramLibrary = {
       "accounts": [
         {
           "name": "subscriptionAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1567,7 +1583,7 @@ export const IDL: MaiusProgramLibrary = {
         },
         {
           "name": "pythPriceAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1626,6 +1642,10 @@ export const IDL: MaiusProgramLibrary = {
           {
             "name": "created",
             "type": "i64"
+          },
+          {
+            "name": "subscriptionCount",
+            "type": "u64"
           }
         ]
       }
@@ -1721,10 +1741,6 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "productCount",
-            "type": "u64"
-          },
-          {
-            "name": "subscriptionCount",
             "type": "u64"
           },
           {
@@ -1875,6 +1891,10 @@ export const IDL: MaiusProgramLibrary = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "merchant",
+            "type": "publicKey"
+          },
           {
             "name": "merchantAccount",
             "type": "publicKey"

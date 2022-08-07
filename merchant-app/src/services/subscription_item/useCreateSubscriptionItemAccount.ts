@@ -1,22 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useProgram } from "../../provider/ProgramProvider";
-import { findInvoiceItemAddress } from "./address";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { findCustomerAddress } from "../customer/address";
+import { SystemProgram } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
+import { findSubscriptionItemAddress } from "./address";
 import { findProductAddress } from "../product/address";
 import { findPricingAddress } from "../pricing/address";
-import { findInvoiceAddress } from "../invoice/address";
+import { findSubscriptionAddress } from "../subscription/address";
 
-interface useCreateInvoiceItemAccountProps {
-  quantity: number;
-  invoice_item_count_index: number;
-}
-
-export function useCreateInvoiceItemAccount(
-  customer_wallet_address: string,
+export function useCreateSubscriptionItemAccount(
   merchant_wallet_address: string,
+  customer_wallet_address: string,
   product_count_index: number,
   price_count_index: number,
   invoice_count_index: number
@@ -24,19 +18,29 @@ export function useCreateInvoiceItemAccount(
   const { sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { program } = useProgram();
-  return useMutation<unknown, unknown, useCreateInvoiceItemAccountProps>(
-    async ({ quantity, invoice_item_count_index }) => {
-      const customer_account = await findCustomerAddress(
-        customer_wallet_address
-      );
-
-      const invoice_account = await findInvoiceAddress(
+  return useMutation(
+    async ({
+      quantity,
+      subscription_count_index,
+      subscription_item_count_index,
+    }) => {
+      console.log({
+        merchant_wallet_address,
         customer_wallet_address,
-        invoice_count_index
+        product_count_index,
+        price_count_index,
+        invoice_count_index,
+        subscription_count_index,
+        subscription_item_count_index,
+      });
+      const subscription_account = await findSubscriptionAddress(
+        customer_wallet_address,
+        subscription_count_index
       );
-      const invoice_item_account = await findInvoiceItemAddress(
-        invoice_account?.toBase58(),
-        invoice_item_count_index
+      const subscription_item_account = await findSubscriptionItemAddress(
+        customer_wallet_address,
+        subscription_count_index,
+        subscription_item_count_index
       );
 
       const product_account_address = await findProductAddress(
@@ -50,15 +54,14 @@ export function useCreateInvoiceItemAccount(
       );
 
       const transaction = await program.methods
-        .initializeInvoiceItem(
-          new PublicKey(customer_account),
-          new PublicKey(pricing_account_address),
-          new BN(quantity)
+        .initializeSubscriptionItem(
+          pricing_account_address,
+          new BN(0),
+          quantity
         )
         .accounts({
-          priceAccount: pricing_account_address,
-          invoiceItemAccount: invoice_item_account,
-          invoiceAccount: invoice_account,
+          subscriptionAccount: subscription_account,
+          subscriptionItemAccount: subscription_item_account,
           authority: customer_wallet_address,
           systemProgram: SystemProgram.programId,
         })
