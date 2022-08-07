@@ -211,92 +211,93 @@ pub mod maius_program_library {
         Ok(())
     }
 
-    #[derive(Accounts)]
-    pub struct PaymentContext<'info> {
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        Customer::CUSTOMER_PREFIX.as_bytes(),
-        customer_wallet.key().as_ref(),
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Customer::space()
-        )]
-        pub customer_account: Account<'info, Customer>,
-        #[account(mut)]
-        pub merchant_account: Account<'info, Merchant>,
-        pub merchant_wallet: Signer<'info>,
-        #[account(mut)]
-        pub customer_wallet: Signer<'info>,
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        CUSTOMER_INVOICE_PREFIX.as_bytes(),
-        merchant_wallet.key().as_ref(),
-        customer_wallet.key().as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = CustomerInvoice::space()
-        )]
-        pub customer_invoice_account: Account<'info, CustomerInvoice>,
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        INVOICE_PREFIX.as_bytes(),
-        customer_wallet.key().as_ref(),
-        customer_invoice_account.invoice_count.to_string().as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Invoice::space()
-        )]
-        pub invoice_account: Account<'info, Invoice>,
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        INVOICE_ITEM_PREFIX.as_bytes(),
-        invoice_account.key().as_ref(),
-        invoice_account.invoice_item_count.to_string().as_ref(),
-        ],
-        bump,
-        payer = customer_wallet,
-        space = InvoiceItem::space()
-        )]
-        pub invoice_item_account: Account<'info, InvoiceItem>,
-        #[account(mut)]
-        pub price_account: Account<'info, Price>,
-        // #[account(
-        // init_if_needed,
-        // seeds = [
-        // b"v1",
-        // SUBSCRIPTION_PREFIX.as_bytes(),
-        // customer_wallet.to_account_info().key.as_ref(),
-        // customer_account.subscription_count.to_string().as_ref(),
-        // ],
-        // bump,
-        // payer = customer_wallet,
-        // space = Subscription::space()
-        // )]
-        // pub subscription_account: Account<'info, Subscription>,
-        // #[account(
-        // init_if_needed,
-        // seeds = [
-        // b"v1",
-        // SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
-        // subscription_account.key().as_ref(),
-        // subscription_account.subscription_item_count.to_string().as_ref()
-        // ],
-        // bump,
-        // payer = customer_wallet,
-        // space = Subscription::space()
-        // )]
-        // pub subscription_item_account: Account<'info, SubscriptionItem>,
-        pub system_program: Program<'info, System>,
-    }
+}
+
+#[derive(Accounts)]
+pub struct PaymentContext<'info> {
+    #[account(
+    init_if_needed,
+    seeds = [
+    b"v1",
+    Customer::CUSTOMER_PREFIX.as_bytes(),
+    customer_wallet.key().as_ref(),
+    ],
+    bump,
+    payer = customer_wallet,
+    space = Customer::space()
+    )]
+    pub customer_account: Account<'info, Customer>,
+    #[account(mut)]
+    pub merchant_account: Account<'info, Merchant>,
+    pub merchant_wallet: Signer<'info>,
+    #[account(mut)]
+    pub customer_wallet: Signer<'info>,
+    #[account(
+    init_if_needed,
+    seeds = [
+    b"v1",
+    CUSTOMER_INVOICE_PREFIX.as_bytes(),
+    merchant_wallet.key().as_ref(),
+    customer_wallet.key().as_ref()
+    ],
+    bump,
+    payer = customer_wallet,
+    space = CustomerInvoice::space()
+    )]
+    pub customer_invoice_account: Account<'info, CustomerInvoice>,
+    #[account(
+    init_if_needed,
+    seeds = [
+    b"v1",
+    INVOICE_PREFIX.as_bytes(),
+    customer_wallet.key().as_ref(),
+    customer_invoice_account.invoice_count.to_string().as_ref()
+    ],
+    bump,
+    payer = customer_wallet,
+    space = Invoice::space()
+    )]
+    pub invoice_account: Account<'info, Invoice>,
+    #[account(
+    init_if_needed,
+    seeds = [
+    b"v1",
+    INVOICE_ITEM_PREFIX.as_bytes(),
+    invoice_account.key().as_ref(),
+    invoice_account.invoice_item_count.to_string().as_ref(),
+    ],
+    bump,
+    payer = customer_wallet,
+    space = InvoiceItem::space()
+    )]
+    pub invoice_item_account: Account<'info, InvoiceItem>,
+    #[account(mut)]
+    pub price_account: Account<'info, Price>,
+    // #[account(
+    // init_if_needed,
+    // seeds = [
+    // b"v1",
+    // SUBSCRIPTION_PREFIX.as_bytes(),
+    // customer_wallet.to_account_info().key.as_ref(),
+    // customer_account.subscription_count.to_string().as_ref(),
+    // ],
+    // bump,
+    // payer = customer_wallet,
+    // space = Subscription::space()
+    // )]
+    // pub subscription_account: Account<'info, Subscription>,
+    // #[account(
+    // init_if_needed,
+    // seeds = [
+    // b"v1",
+    // SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
+    // subscription_account.key().as_ref(),
+    // subscription_account.subscription_item_count.to_string().as_ref()
+    // ],
+    // bump,
+    // payer = customer_wallet,
+    // space = Subscription::space()
+    // )]
+    // pub subscription_item_account: Account<'info, SubscriptionItem>,
+    pub system_program: Program<'info, System>,
 }

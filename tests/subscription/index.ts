@@ -67,7 +67,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
     });
 
     it("initialize subscription", async () => {
-        const customerData = await program.account.merchant.fetch(customerAccount);
+        const customerData = await program.account.customer.fetch(customerAccount);
+        console.log(customerData)
         let lastInvoice: anchor.web3.PublicKey;
         [subscriptionAccount, subscriptionBump] = await PublicKey.findProgramAddress(
             [
@@ -104,18 +105,18 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         );
         console.log(dataSubscriptionAccount);
 
-        let pythPriceAccount = new PublicKey("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix") // SOL/USD
-
-        await program.methods.
-            subscribe()
-            .accounts({
-                subscriptionAccount: subscriptionAccount,
-                systemProgram: SystemProgram.programId,
-                pythPriceAccount: pythPriceAccount,
-                payer: globalState.merchantWallet.publicKey,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
+        // let pythPriceAccount = new PublicKey("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix") // SOL/USD
+        //
+        // await program.methods.
+        //     subscribe()
+        //     .accounts({
+        //         subscriptionAccount: subscriptionAccount,
+        //         systemProgram: SystemProgram.programId,
+        //         pythPriceAccount: pythPriceAccount,
+        //         payer: globalState.merchantWallet.publicKey,
+        //     })
+        //     .signers([globalState.merchantWallet.payer])
+        //     .rpc();
 
     })
 });

@@ -10,20 +10,7 @@ import { MaiusProgramLibrary } from "../target/types/maius_program_library";
 import { findCustomerAddress, findMerchantAddress } from "./merchant/address";
 import { globalState } from "./maius-program-library";
 
-const connection = new anchor.web3.Connection("https://quaint-morning-tree.solana-devnet.discover.quiknode.pro/86d4cf06b5d98c3413d930b9a65c1685fc61dace/", {commitment: "max"});
-const wallet = anchor.Wallet.local();
-
-const provider = new anchor.AnchorProvider(
-    connection,
-    wallet,
-    {
-      commitment: "max",
-      preflightCommitment: "max",
-      skipPreflight: false
-    }
-)
-
-// export const provider = AnchorProvider.env();
+export const provider = AnchorProvider.env();
 
 anchor.setProvider(provider);
 
@@ -31,7 +18,7 @@ export const program = anchor.workspace
   .MaiusProgramLibrary as Program<MaiusProgramLibrary>;
 
 export const getBalance = async (address: string) => {
-  program.provider;
+    console.log(program.provider.connection)
   const response = await program.provider.connection.getBalance(
     new anchor.web3.PublicKey(address)
   );
@@ -45,7 +32,7 @@ export const airdropAccounts = async () => {
   await provider.connection.confirmTransaction(
     await provider.connection.requestAirdrop(
       merchantWallet.publicKey,
-      2 * LAMPORTS_PER_SOL
+      3 * LAMPORTS_PER_SOL
     ),
     "confirmed"
   );
@@ -53,7 +40,7 @@ export const airdropAccounts = async () => {
   await provider.connection.confirmTransaction(
       await provider.connection.requestAirdrop(
           customerWallet.publicKey,
-          2 * LAMPORTS_PER_SOL
+          3 * LAMPORTS_PER_SOL
       ),
       "confirmed"
   );
