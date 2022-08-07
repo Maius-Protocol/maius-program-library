@@ -8,7 +8,7 @@ pub struct Customer {
     pub prev_customer_key: Pubkey,
     pub description: String,
     pub created: i64,
-    pub subscription_count: u64,
+    pub subscription_count: u8,
 }
 
 impl Customer {

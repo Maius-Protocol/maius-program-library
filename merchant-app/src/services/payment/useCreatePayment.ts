@@ -93,7 +93,7 @@ export function useCreatePayment(
         invoiceItemAccount: invoice_item_account,
         priceAccount: pricing_account_address,
         subscriptionAccount: subscription_account,
-        // subscriptionItemAccount: subscription_item_account,
+        subscriptionItemAccount: subscription_item_account,
         customerWallet: customer_wallet_address,
         merchantWallet: merchant_wallet_address,
         systemProgram: SystemProgram.programId,
