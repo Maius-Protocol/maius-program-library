@@ -809,6 +809,9 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "status",
+            "docs": [
+              "status\n           0: New\n           1: Shipping\n           2: Delivered"
+            ],
             "type": "u8"
           }
         ]
@@ -1919,6 +1922,9 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "status",
+            "docs": [
+              "status\n           0: New\n           1: Shipping\n           2: Delivered"
+            ],
             "type": "u8"
           }
         ]
