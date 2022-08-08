@@ -12,7 +12,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("8tiNoERcCiG1hKqYMavBgxm2BCWErrCMXZKrpKnbzvuS");
+declare_id!("Cqc31DtkxfXQrEcSzDfS5Cdqb9LsENwfiMv9inEofjQm");
 
 #[macro_export]
 macro_rules! debug {
