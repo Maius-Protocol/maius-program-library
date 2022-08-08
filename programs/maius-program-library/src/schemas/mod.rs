@@ -8,6 +8,7 @@ pub mod invoice;
 pub mod invoice_item;
 pub mod accepted_tokens;
 pub mod customer_inovice;
+pub mod escrow_account;
 
 pub use merchant::*;
 pub use customer::*;
@@ -19,3 +20,4 @@ pub use invoice::*;
 pub use invoice_item::*;
 pub use accepted_tokens::*;
 pub use customer_inovice::*;
+pub use escrow_account::*;

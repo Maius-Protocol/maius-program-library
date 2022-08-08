@@ -67,14 +67,15 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
     });
 
     it("initialize subscription", async () => {
-        const merchantData = await program.account.merchant.fetch(merchantAccount);
+        const customerData = await program.account.customer.fetch(customerAccount);
+        console.log(customerData)
         let lastInvoice: anchor.web3.PublicKey;
         [subscriptionAccount, subscriptionBump] = await PublicKey.findProgramAddress(
             [
                 Buffer.from("v1"),
                 Buffer.from("subscription"),
                 merchantAccount.toBuffer(),
-                Buffer.from(merchantData.subscriptionCount.toString())
+                Buffer.from(customerData.subscriptionCount.toString())
 
             ],
             program.programId
@@ -92,7 +93,8 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
             .accounts({
                 merchantAccount: merchantAccount,
                 subscriptionAccount: subscriptionAccount,
-                merchant: globalState.merchantWallet.publicKey,
+                customerAccount: customerAccount,
+                authority: globalState.merchantWallet.publicKey,
                 systemProgram: SystemProgram.programId,
             })
             .signers([globalState.merchantWallet.payer])
@@ -103,18 +105,18 @@ export const subscriptionTests = describe("[Subscription] Test Cases", () => {
         );
         console.log(dataSubscriptionAccount);
 
-        let pythPriceAccount = new PublicKey("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix") // SOL/USD
-
-        await program.methods.
-            subscribe()
-            .accounts({
-                subscriptionAccount: subscriptionAccount,
-                systemProgram: SystemProgram.programId,
-                pythPriceAccount: pythPriceAccount,
-                payer: globalState.merchantWallet.publicKey,
-            })
-            .signers([globalState.merchantWallet.payer])
-            .rpc();
+        // let pythPriceAccount = new PublicKey("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix") // SOL/USD
+        //
+        // await program.methods.
+        //     subscribe()
+        //     .accounts({
+        //         subscriptionAccount: subscriptionAccount,
+        //         systemProgram: SystemProgram.programId,
+        //         pythPriceAccount: pythPriceAccount,
+        //         payer: globalState.merchantWallet.publicKey,
+        //     })
+        //     .signers([globalState.merchantWallet.payer])
+        //     .rpc();
 
     })
 });
