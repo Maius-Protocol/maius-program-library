@@ -20,8 +20,7 @@ pub struct EscrowAccount {
            1: Shipping
            2: Delivered
      */
-    pub status: u8,
-    pub trial_day: u16,
+    pub status: u8
 }
 
 impl EscrowAccount {
@@ -35,7 +34,7 @@ impl EscrowAccount {
             // PUBKEY_SIZE + // merchant_account
             PUBKEY_SIZE + // invoice_account
             8  + // amount
-            1 + // status
-            2 // trial_day
+            1 // status
+
     }
 }
