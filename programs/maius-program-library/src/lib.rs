@@ -1,5 +1,9 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint};
+use anchor_spl::{
+    associated_token::AssociatedToken,
+    mint,
+    token::{self, Mint, Token, TokenAccount, Transfer, SetAuthority},
+};
 pub mod schemas;
 pub mod instructions;
 mod constants;
@@ -20,6 +24,8 @@ macro_rules! debug {
 
 #[program]
 pub mod maius_program_library {
+    use std::borrow::Borrow;
+    use anchor_spl::token::TokenAccount;
     use super::*;
 
     pub fn initialize_merchant(ctx: Context<InitializeMerchant>) -> Result<()> {
@@ -190,6 +196,9 @@ pub mod maius_program_library {
         let price_account = &mut ctx.accounts.price_account;
         let subscription_account = &mut ctx.accounts.subscription_account;
         let subscription_item_account = &mut ctx.accounts.subscription_item_account;
+        let escrow_account = &mut ctx.accounts.escrow_account;
+        let customer_deposit_token_account = &mut ctx.accounts.customer_deposit_token_account;
+        let merchant_receive_token_account = &mut ctx.accounts.merchant_receive_token_account;
 
         customer_account.authority = customer_wallet.to_account_info().key();
         customer_account.description = "Test".parse().unwrap();
@@ -206,6 +215,20 @@ pub mod maius_program_library {
         invoice_account.invoice_item_count += 1;
 
         // Transfer
+
+        escrow_account.customer = customer_wallet.to_account_info().key();
+        escrow_account.merchant = merchant_wallet.to_account_info().key();
+        escrow_account.customer_deposit_token_account = customer_deposit_token_account.key();
+        escrow_account.merchant_receive_token_account = merchant_receive_token_account.key();
+        escrow_account.amount = 10;
+        escrow_account.invoice_account = invoice_account.key();
+        escrow_account.status = 0;
+
+
+        token::transfer(
+            ctx.accounts.into_transfer_to_pda_context(),
+            ctx.accounts.escrow_account.amount,
+        )?;
 
         subscription_account.merchant = merchant_account.merchant_wallet_address;
         subscription_account.merchant_account = merchant_account.key();
@@ -238,9 +261,9 @@ pub mod maius_program_library {
         payer = customer_wallet,
         space = Customer::space()
         )]
-        pub customer_account: Account<'info, Customer>,
+        pub customer_account: Box<Account<'info, Customer>>,
         #[account(mut)]
-        pub merchant_account: Account<'info, Merchant>,
+        pub merchant_account: Box<Account<'info, Merchant>>,
         pub merchant_wallet: Signer<'info>,
         #[account(mut)]
         pub customer_wallet: Signer<'info>,
@@ -256,7 +279,7 @@ pub mod maius_program_library {
         payer = customer_wallet,
         space = CustomerInvoice::space()
         )]
-        pub customer_invoice_account: Account<'info, CustomerInvoice>,
+        pub customer_invoice_account: Box<Account<'info, CustomerInvoice>>,
         #[account(
         init_if_needed,
         seeds = [
@@ -269,7 +292,7 @@ pub mod maius_program_library {
         payer = customer_wallet,
         space = Invoice::space()
         )]
-        pub invoice_account: Account<'info, Invoice>,
+        pub invoice_account: Box<Account<'info, Invoice>>,
         #[account(
         init_if_needed,
         seeds = [
@@ -282,7 +305,7 @@ pub mod maius_program_library {
         payer = customer_wallet,
         space = InvoiceItem::space()
         )]
-        pub invoice_item_account: Account<'info, InvoiceItem>,
+        pub invoice_item_account: Box<Account<'info, InvoiceItem>>,
         #[account(mut)]
         pub price_account: Box<Account<'info, Price>>,
         #[account(
@@ -312,6 +335,60 @@ pub mod maius_program_library {
         )]
         pub subscription_item_account: Box<Account<'info, SubscriptionItem>>,
         pub system_program: Program<'info, System>,
+
+        pub mint: Account<'info, Mint>,
+        #[account(
+        init_if_needed,
+        seeds = [
+        b"v1",
+        b"token-seed".as_ref(),
+        invoice_account.key().as_ref()
+        ],
+        bump,
+        payer = customer_wallet,
+        token::mint = mint,
+        token::authority = customer_wallet,
+        )]
+        pub vault_account: Box<Account<'info, TokenAccount>>,
+        #[account(mut)]
+        pub customer_deposit_token_account: Account<'info, TokenAccount>,
+        #[account(mut)]
+        pub merchant_receive_token_account: Account<'info, TokenAccount>,
+        #[account(
+        init_if_needed,
+        seeds = [
+        b"v1",
+        b"escrow-account".as_ref(),
+        invoice_account.key().as_ref()
+        ],
+        bump,
+        space = EscrowAccount::space(),
+        payer = customer_wallet,
+        )]
+        pub escrow_account: Account<'info, EscrowAccount>,
+        pub rent: Sysvar<'info, Rent>,
+        pub token_program: Program<'info, Token>,
+
+    }
+
+
+    impl<'info> PaymentContext<'info> {
+        fn into_transfer_to_pda_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+            let cpi_accounts = Transfer {
+                from: self.customer_deposit_token_account.to_account_info().clone(),
+                to: self.vault_account.to_account_info().clone(),
+                authority: self.customer_wallet.to_account_info(),
+            };
+            CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
+        }
+
+        fn into_set_authority_context(&self) -> CpiContext<'_, '_, '_, 'info, SetAuthority<'info>> {
+            let cpi_accounts = SetAuthority {
+                account_or_mint: self.vault_account.to_account_info().clone(),
+                current_authority: self.customer_wallet.to_account_info(),
+            };
+            CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
+        }
     }
 }
 

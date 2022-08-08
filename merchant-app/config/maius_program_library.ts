@@ -678,6 +678,41 @@ export type MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerDepositTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantReceiveTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "escrowAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -738,6 +773,42 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "subscriptionCount",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "escrowAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "customer",
+            "type": "publicKey"
+          },
+          {
+            "name": "merchant",
+            "type": "publicKey"
+          },
+          {
+            "name": "customerDepositTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "merchantReceiveTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "invoiceAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "status",
             "type": "u8"
           }
         ]
@@ -1717,6 +1788,41 @@ export const IDL: MaiusProgramLibrary = {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "customerDepositTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "merchantReceiveTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "escrowAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -1777,6 +1883,42 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "subscriptionCount",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "escrowAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "customer",
+            "type": "publicKey"
+          },
+          {
+            "name": "merchant",
+            "type": "publicKey"
+          },
+          {
+            "name": "customerDepositTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "merchantReceiveTokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "invoiceAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "status",
             "type": "u8"
           }
         ]

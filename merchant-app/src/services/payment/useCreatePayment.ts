@@ -3,7 +3,7 @@ import { useProgram } from "../../provider/ProgramProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { findMerchantAddress } from "../merchant/address";
 import { findCustomerAddress } from "../customer/address";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
 import { findInvoiceAddress } from "../invoice/address";
 import { findInvoiceItemAddress } from "../invoice_item/address";
 import { findSubscriptionAddress } from "../subscription/address";
@@ -11,6 +11,13 @@ import { findSubscriptionItemAddress } from "../subscription_item/address";
 import { findCustomerInvoiceAddress } from "../customer_invoice/address";
 import { findProductAddress } from "../product/address";
 import { findPricingAddress } from "../pricing/address";
+import {
+  findAssociatedAccountAddress,
+  findEscrowAccount,
+  findVaultAccountAddress,
+} from "../vault_account/address";
+
+import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token";
 
 export function useCreatePayment(
   merchant_wallet_address: string,
@@ -83,6 +90,24 @@ export function useCreatePayment(
       pricing_count_index
     );
 
+    const vault_account_address = await findVaultAccountAddress(
+      invoice_account?.toBase58()
+    );
+
+    const mintAddress = "A4JXXu5vcbqS8TQnj33iLeT23eD2Bd7fdiCXRDKuXZmu";
+
+    const customer_deposit_token_address = await findAssociatedAccountAddress(
+      mintAddress,
+      customer_wallet_address
+    );
+
+    const merchant_receive_token_address = await findAssociatedAccountAddress(
+      mintAddress,
+      merchant_wallet_address
+    );
+
+    const escrow_account = await findEscrowAccount(invoice_account?.toBase58());
+
     let transaction = await program.methods
       .payment(quantity)
       .accounts({
@@ -94,8 +119,14 @@ export function useCreatePayment(
         priceAccount: pricing_account_address,
         subscriptionAccount: subscription_account,
         subscriptionItemAccount: subscription_item_account,
+        mint: new PublicKey(mintAddress),
+        vaultAccount: vault_account_address,
+        customerDepositTokenAccount: customer_deposit_token_address,
+        merchantReceiveTokenAccount: merchant_receive_token_address,
+        escrowAccount: escrow_account,
         customerWallet: customer_wallet_address,
         merchantWallet: merchant_wallet_address,
+        rent: SYSVAR_RENT_PUBKEY,
         systemProgram: SystemProgram.programId,
       })
       .transaction();
