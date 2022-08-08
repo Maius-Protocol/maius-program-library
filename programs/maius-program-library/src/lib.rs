@@ -188,12 +188,11 @@ pub mod maius_program_library {
         let invoice_account = &mut ctx.accounts.invoice_account;
         let invoice_item_account = &mut ctx.accounts.invoice_item_account;
         let price_account = &mut ctx.accounts.price_account;
-        // let subscription_account = &mut ctx.accounts.subscription_account;
-        // let subscription_item_account = &mut ctx.accounts.subscription_item_account;
+        let subscription_account = &mut ctx.accounts.subscription_account;
+        let subscription_item_account = &mut ctx.accounts.subscription_item_account;
 
         customer_account.authority = customer_wallet.to_account_info().key();
         customer_account.description = "Test".parse().unwrap();
-        customer_account.subscription_count = 0;
         customer_account.prev_customer_key = merchant_account.current_customer_key;
         customer_account.created = Clock::get().unwrap().unix_timestamp;
         merchant_account.current_customer_key = customer_account.key();
@@ -206,15 +205,23 @@ pub mod maius_program_library {
         invoice_item_account.amount = (quantity as u64) * price_account.unit_amount;
         invoice_account.invoice_item_count += 1;
 
-        // subscription_account.merchant = merchant_account.merchant_wallet_address;
-        // subscription_account.merchant_account = merchant_account.key();
-        // subscription_account.customer_account = customer_account.key();
-        // subscription_account.last_invoice = invoice_account.key();
-        // subscription_account.created = Clock::get().unwrap().unix_timestamp;
-        // subscription_account.current_period_start = Clock::get().unwrap().unix_timestamp;
+        // Transfer
+
+        subscription_account.merchant = merchant_account.merchant_wallet_address;
+        subscription_account.merchant_account = merchant_account.key();
+        subscription_account.customer_account = customer_account.key();
+        subscription_account.last_invoice = invoice_account.key();
+        subscription_account.created = Clock::get().unwrap().unix_timestamp;
+        subscription_account.current_period_start = Clock::get().unwrap().unix_timestamp;
         // subscription_account.current_period_end = current_period_end;
-        // subscription_account.status = "active".to_string();
-        // customer_account.subscription_count += 1;
+        subscription_account.status = "active".to_string();
+        customer_account.subscription_count += 1;
+
+        subscription_item_account.price = price_account.key();
+        subscription_item_account.quantity = quantity;
+        // subscription_item_account.billing_thresholds = bill_thresholds;
+        subscription_item_account.created = Clock::get().unwrap().unix_timestamp;
+        subscription_account.subscription_item_count += 1;
         Ok(())
     }
 
@@ -277,33 +284,33 @@ pub mod maius_program_library {
         )]
         pub invoice_item_account: Account<'info, InvoiceItem>,
         #[account(mut)]
-        pub price_account: Account<'info, Price>,
+        pub price_account: Box<Account<'info, Price>>,
         #[account(
         init_if_needed,
         seeds = [
         b"v1",
         SUBSCRIPTION_PREFIX.as_bytes(),
         customer_wallet.to_account_info().key.as_ref(),
-        customer_account.subscription_count.to_string().as_ref(),
+        &[customer_account.subscription_count].as_ref()
         ],
         bump,
         payer = customer_wallet,
         space = Subscription::space()
         )]
-        pub subscription_account: Account<'info, Subscription>,
-        // #[account(
-        // init_if_needed,
-        // seeds = [
-        // b"v1",
-        // SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
-        // subscription_account.key().as_ref(),
-        // subscription_account.subscription_item_count.to_string().as_ref()
-        // ],
-        // bump,
-        // payer = customer_wallet,
-        // space = Subscription::space()
-        // )]
-        // pub subscription_item_account: Account<'info, SubscriptionItem>,
+        pub subscription_account: Box<Account<'info, Subscription>>,
+        #[account(
+        init_if_needed,
+        seeds = [
+        b"v1",
+        SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
+        subscription_account.key().as_ref(),
+        &[subscription_account.subscription_item_count].as_ref()
+        ],
+        bump,
+        payer = customer_wallet,
+        space = Subscription::space()
+        )]
+        pub subscription_item_account: Box<Account<'info, SubscriptionItem>>,
         pub system_program: Program<'info, System>,
     }
 }

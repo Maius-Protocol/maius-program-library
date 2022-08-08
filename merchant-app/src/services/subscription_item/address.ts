@@ -18,7 +18,7 @@ export const findSubscriptionItemAddress = async (
       Buffer.from("v1"),
       Buffer.from(useSubscriptionItemKey),
       new PublicKey(subscriptionAddress?.toBase58())?.toBuffer(),
-      Buffer.from(subscription_item_count_index?.toString()),
+      Buffer.from([subscription_item_count_index]),
     ],
     programID
   );

@@ -90,7 +90,7 @@ const CheckoutButton = ({
     refetch: refetchLatestSubscriptionAccount,
   } = useSubscriptionAccount(
     customer_wallet_address,
-    customerAccount?.subscriptionCount?.toNumber() - 1
+    customerAccount?.subscriptionCount - 1
   );
 
   const {
@@ -100,7 +100,7 @@ const CheckoutButton = ({
     merchant_wallet,
     customer_wallet_address,
     latestIndexInvoice,
-    customerAccount?.subscriptionCount?.toNumber()
+    customerAccount?.subscriptionCount
   );
 
   const {
@@ -146,6 +146,7 @@ const CheckoutButton = ({
     isCreatingSubscriptionAccount ||
     isCreatingSubscriptionItem;
 
+  console.log(customerAccount?.subscriptionCount);
   const disabled = !connected;
   // const checkout = async () => {
   //   setCheckoutProcessing(true);

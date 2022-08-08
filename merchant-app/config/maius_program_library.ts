@@ -670,6 +670,11 @@ export type MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "subscriptionItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -733,7 +738,7 @@ export type MaiusProgramLibrary = {
           },
           {
             "name": "subscriptionCount",
-            "type": "u64"
+            "type": "u8"
           }
         ]
       }
@@ -1704,6 +1709,11 @@ export const IDL: MaiusProgramLibrary = {
           "isSigner": false
         },
         {
+          "name": "subscriptionItemAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -1767,7 +1777,7 @@ export const IDL: MaiusProgramLibrary = {
           },
           {
             "name": "subscriptionCount",
-            "type": "u64"
+            "type": "u8"
           }
         ]
       }
