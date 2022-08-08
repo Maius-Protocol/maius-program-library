@@ -24,7 +24,7 @@ macro_rules! debug {
 
 #[program]
 pub mod maius_program_library {
-    use std::borrow::Borrow;
+    use std::borrow::{Borrow, BorrowMut};
     use anchor_spl::token::TokenAccount;
     use super::*;
 
@@ -199,6 +199,8 @@ pub mod maius_program_library {
         let escrow_account = &mut ctx.accounts.escrow_account;
         let customer_deposit_token_account = &mut ctx.accounts.customer_deposit_token_account;
         let merchant_receive_token_account = &mut ctx.accounts.merchant_receive_token_account;
+        let vault_account = &mut ctx.accounts.vault_account;
+        let cpi_program = ctx.accounts.token_program.to_account_info();
 
         customer_account.authority = customer_wallet.to_account_info().key();
         customer_account.description = "Test".parse().unwrap();
@@ -225,10 +227,22 @@ pub mod maius_program_library {
         escrow_account.status = 0;
 
 
+        let amount = 10;
+        let cpi_accounts = Transfer {
+            from: ctx.accounts.customer_deposit_token_account.to_account_info(),
+            to: vault_account.to_account_info(),
+            authority: customer_wallet.to_account_info(),
+        };
+
+        escrow_account.amount += amount;
+
         token::transfer(
-            ctx.accounts.into_transfer_to_pda_context(),
-            ctx.accounts.escrow_account.amount,
-        )?;
+            CpiContext::new_with_signer(
+                cpi_program,
+                cpi_accounts,
+                &[&[b"vault", ctx.accounts.vault_account.mint.as_ref()]]),
+            amount)?;
+
 
         subscription_account.merchant = merchant_account.merchant_wallet_address;
         subscription_account.merchant_account = merchant_account.key();
