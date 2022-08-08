@@ -197,8 +197,8 @@ pub mod maius_program_library {
         let subscription_account = &mut ctx.accounts.subscription_account;
         let subscription_item_account = &mut ctx.accounts.subscription_item_account;
         let escrow_account = &mut ctx.accounts.escrow_account;
-        let customer_deposit_token_account = &mut ctx.accounts.customer_deposit_token_account;
-        let merchant_receive_token_account = &mut ctx.accounts.merchant_receive_token_account;
+        let customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.clone();
+        let merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.clone();
         let vault_account = &mut ctx.accounts.vault_account;
         let cpi_program = ctx.accounts.token_program.to_account_info();
 
@@ -234,14 +234,16 @@ pub mod maius_program_library {
             authority: customer_wallet.to_account_info(),
         };
 
-        escrow_account.amount += amount;
 
-        token::transfer(
-            CpiContext::new_with_signer(
-                cpi_program,
-                cpi_accounts,
-                &[&[b"vault", ctx.accounts.vault_account.mint.as_ref()]]),
-            amount)?;
+        let cpi_accounts = Transfer {
+            from: customer_deposit_token_account.to_account_info(),
+            to: vault_account.clone().to_account_info(),
+            authority: customer_wallet.clone().to_account_info(),
+        };
+
+        token::transfer( CpiContext::new(cpi_program, cpi_accounts), amount)?;
+
+        escrow_account.amount += amount;
 
 
         subscription_account.merchant = merchant_account.merchant_wallet_address;
@@ -364,9 +366,7 @@ pub mod maius_program_library {
         token::authority = customer_wallet,
         )]
         pub vault_account: Box<Account<'info, TokenAccount>>,
-        #[account(mut)]
         pub customer_deposit_token_account: Account<'info, TokenAccount>,
-        #[account(mut)]
         pub merchant_receive_token_account: Account<'info, TokenAccount>,
         #[account(
         init_if_needed,
