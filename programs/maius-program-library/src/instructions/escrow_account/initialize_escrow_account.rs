@@ -6,6 +6,7 @@ use anchor_spl::{
 };
 use crate::schemas::*;
 
+
 #[derive(Accounts)]
 #[instruction(amount: u64)]
 pub struct InitializeEscrowAccount<'info> {
@@ -18,7 +19,7 @@ pub struct InitializeEscrowAccount<'info> {
         init,
         seeds = [
             b"v1",
-            b"token-seed",
+            b"token-seed".as_ref(),
             invoice_account.key().as_ref()
         ],
         bump,
@@ -38,10 +39,11 @@ pub struct InitializeEscrowAccount<'info> {
         init,
         seeds = [
         b"v1",
-        ESCROW_ACCOUNT_PREFIX.as_ref(),
+        b"escrow-account".as_ref(),
         invoice_account.key().as_ref()
         ],
         bump,
+        space = EscrowAccount::space(),
         payer = customer,
     )]
     pub escrow_account: Account<'info, EscrowAccount>,
@@ -58,10 +60,10 @@ pub fn handler(
 ) ->  Result<()> {
     ctx.accounts.escrow_account.customer = *ctx.accounts.customer.key;
     ctx.accounts.escrow_account.merchant = *ctx.accounts.merchant.key;
-    ctx.accounts.escrow_account.customer_deposit_token_account = *ctx.accounts.customer_deposit_token_account.key();
-    ctx.accounts.escrow_account.merchant_receive_token_account = *ctx.accounts.merchant_receive_token_account.key();
+    ctx.accounts.escrow_account.customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.key();
+    ctx.accounts.escrow_account.merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.key();
     ctx.accounts.escrow_account.amount = amount;
-    ctx.accounts.escrow_account.invoice_account = *ctx.accounts.invoice_account.key();
+    ctx.accounts.escrow_account.invoice_account = ctx.accounts.invoice_account.key();
     ctx.accounts.escrow_account.status = 0;
 
     // Transfer token to PDA
@@ -73,21 +75,21 @@ pub fn handler(
     Ok(())
 }
 
-impl<'info> Initialize<'info> {
+impl<'info> InitializeEscrowAccount<'info> {
     fn into_transfer_to_pda_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
         let cpi_accounts = Transfer {
             from: self.customer_deposit_token_account.to_account_info().clone(),
             to: self.vault_account.to_account_info().clone(),
-            authority: self.customer.clone(),
+            authority: self.customer.to_account_info(),
         };
-        CpiContext::new(self.token_program.clone(), cpi_accounts)
+        CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
     }
 
     fn into_set_authority_context(&self) -> CpiContext<'_, '_, '_, 'info, SetAuthority<'info>> {
         let cpi_accounts = SetAuthority {
             account_or_mint: self.vault_account.to_account_info().clone(),
-            current_authority: self.customer.clone(),
+            current_authority: self.customer.to_account_info(),
         };
-        CpiContext::new(self.token_program.clone(), cpi_accounts)
+        CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
     }
 }
