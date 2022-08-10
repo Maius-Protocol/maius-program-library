@@ -691,12 +691,12 @@ export type MaiusProgramLibrary = {
         },
         {
           "name": "customerDepositTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "merchantReceiveTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1799,12 +1799,12 @@ export const IDL: MaiusProgramLibrary = {
         },
         {
           "name": "customerDepositTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "merchantReceiveTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {

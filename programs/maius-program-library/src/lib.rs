@@ -197,8 +197,8 @@ pub mod maius_program_library {
         let subscription_account = &mut ctx.accounts.subscription_account;
         let subscription_item_account = &mut ctx.accounts.subscription_item_account;
         // let escrow_account = &mut ctx.accounts.escrow_account;
-        let customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.clone();
-        let merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.clone();
+        let customer_deposit_token_account = &mut ctx.accounts.customer_deposit_token_account.clone();
+        let merchant_receive_token_account = &mut ctx.accounts.merchant_receive_token_account.clone();
         let vault_account = &mut ctx.accounts.vault_account;
         let cpi_program = ctx.accounts.token_program.to_account_info();
 
@@ -226,19 +226,12 @@ pub mod maius_program_library {
         // escrow_account.invoice_account = invoice_account.key();
         // escrow_account.status = 0;
 
-
-        let amount = 10;
-        let cpi_accounts = Transfer {
-            from: ctx.accounts.customer_deposit_token_account.to_account_info(),
-            to: vault_account.to_account_info(),
-            authority: customer_wallet.to_account_info(),
-        };
-
+        let amount = 10000000;
 
         let cpi_accounts = Transfer {
             from: customer_deposit_token_account.to_account_info(),
-            to: vault_account.clone().to_account_info(),
-            authority: customer_wallet.clone().to_account_info(),
+            to: vault_account.to_account_info(),
+            authority: customer_wallet.to_account_info(),
         };
 
         token::transfer( CpiContext::new(cpi_program, cpi_accounts), amount)?;
@@ -267,15 +260,15 @@ pub mod maius_program_library {
     #[derive(Accounts)]
     pub struct PaymentContext<'info> {
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        Customer::CUSTOMER_PREFIX.as_bytes(),
-        customer_wallet.key().as_ref(),
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Customer::space()
+            init_if_needed,
+            seeds = [
+            b"v1",
+            Customer::CUSTOMER_PREFIX.as_bytes(),
+            customer_wallet.key().as_ref(),
+            ],
+            bump,
+            payer = customer_wallet,
+            space = Customer::space()
         )]
         pub customer_account: Box<Account<'info, Customer>>,
         #[account(mut)]
@@ -284,125 +277,106 @@ pub mod maius_program_library {
         #[account(mut)]
         pub customer_wallet: Signer<'info>,
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        CUSTOMER_INVOICE_PREFIX.as_bytes(),
-        merchant_wallet.key().as_ref(),
-        customer_wallet.key().as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = CustomerInvoice::space()
-        )]
-        pub customer_invoice_account: Box<Account<'info, CustomerInvoice>>,
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        INVOICE_PREFIX.as_bytes(),
-        customer_wallet.key().as_ref(),
-        customer_invoice_account.invoice_count.to_string().as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Invoice::space()
+            init_if_needed,
+            seeds = [
+            b"v1",
+            CUSTOMER_INVOICE_PREFIX.as_bytes(),
+            merchant_wallet.key().as_ref(),
+            customer_wallet.key().as_ref()
+            ],
+            bump,
+            payer = customer_wallet,
+            space = CustomerInvoice::space()
+            )]
+            pub customer_invoice_account: Box<Account<'info, CustomerInvoice>>,
+            #[account(
+            init_if_needed,
+            seeds = [
+            b"v1",
+            INVOICE_PREFIX.as_bytes(),
+            customer_wallet.key().as_ref(),
+            customer_invoice_account.invoice_count.to_string().as_ref()
+            ],
+            bump,
+            payer = customer_wallet,
+            space = Invoice::space()
         )]
         pub invoice_account: Box<Account<'info, Invoice>>,
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        INVOICE_ITEM_PREFIX.as_bytes(),
-        invoice_account.key().as_ref(),
-        invoice_account.invoice_item_count.to_string().as_ref(),
-        ],
-        bump,
-        payer = customer_wallet,
-        space = InvoiceItem::space()
+            init_if_needed,
+            seeds = [
+            b"v1",
+            INVOICE_ITEM_PREFIX.as_bytes(),
+            invoice_account.key().as_ref(),
+            invoice_account.invoice_item_count.to_string().as_ref(),
+            ],
+            bump,
+            payer = customer_wallet,
+            space = InvoiceItem::space()
         )]
         pub invoice_item_account: Box<Account<'info, InvoiceItem>>,
         #[account(mut)]
         pub price_account: Box<Account<'info, Price>>,
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        SUBSCRIPTION_PREFIX.as_bytes(),
-        customer_wallet.to_account_info().key.as_ref(),
-        &[customer_account.subscription_count].as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Subscription::space()
+            init_if_needed,
+            seeds = [
+            b"v1",
+            SUBSCRIPTION_PREFIX.as_bytes(),
+            customer_wallet.to_account_info().key.as_ref(),
+            &[customer_account.subscription_count].as_ref()
+            ],
+            bump,
+            payer = customer_wallet,
+            space = Subscription::space()
         )]
         pub subscription_account: Box<Account<'info, Subscription>>,
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
-        subscription_account.key().as_ref(),
-        &[subscription_account.subscription_item_count].as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        space = Subscription::space()
+            init_if_needed,
+            seeds = [
+            b"v1",
+            SUBSCRIPTION_ITEM_PREFIX.as_bytes(),
+            subscription_account.key().as_ref(),
+            &[subscription_account.subscription_item_count].as_ref()
+            ],
+            bump,
+            payer = customer_wallet,
+            space = Subscription::space()
         )]
         pub subscription_item_account: Box<Account<'info, SubscriptionItem>>,
         pub system_program: Program<'info, System>,
-
         pub mint: Account<'info, Mint>,
         #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        b"token-seed".as_ref(),
-        invoice_account.key().as_ref()
-        ],
-        bump,
-        payer = customer_wallet,
-        token::mint = mint,
-        token::authority = customer_wallet,
+            init_if_needed,
+            seeds = [
+            b"v1",
+            b"token-seed".as_ref(),
+            invoice_account.key().as_ref()
+            ],
+            bump,
+            payer = customer_wallet,
+            token::mint = mint,
+            token::authority = vault_account,
         )]
         pub vault_account: Box<Account<'info, TokenAccount>>,
+        #[account(mut)]
         pub customer_deposit_token_account: Account<'info, TokenAccount>,
+        #[account(mut)]
         pub merchant_receive_token_account: Account<'info, TokenAccount>,
         // #[account(
-        // init_if_needed,
-        // seeds = [
-        // b"v1",
-        // b"escrow-account".as_ref(),
-        // invoice_account.key().as_ref()
-        // ],
-        // bump,
-        // space = EscrowAccount::space(),
-        // payer = customer_wallet,
+            // init_if_needed,
+            // seeds = [
+            // b"v1",
+            // b"escrow-account".as_ref(),
+            // invoice_account.key().as_ref()
+            // ],
+            // bump,
+            // space = EscrowAccount::space(),
+            // payer = customer_wallet,
         // )]
         // pub escrow_account: Account<'info, EscrowAccount>,
         pub rent: Sysvar<'info, Rent>,
         pub token_program: Program<'info, Token>,
 
-    }
-
-
-    impl<'info> PaymentContext<'info> {
-        fn into_transfer_to_pda_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
-            let cpi_accounts = Transfer {
-                from: self.customer_deposit_token_account.to_account_info().clone(),
-                to: self.vault_account.to_account_info().clone(),
-                authority: self.customer_wallet.to_account_info(),
-            };
-            CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
-        }
-
-        fn into_set_authority_context(&self) -> CpiContext<'_, '_, '_, 'info, SetAuthority<'info>> {
-            let cpi_accounts = SetAuthority {
-                account_or_mint: self.vault_account.to_account_info().clone(),
-                current_authority: self.customer_wallet.to_account_info(),
-            };
-            CpiContext::new(self.token_program.to_account_info(), cpi_accounts)
-        }
     }
 }
 
