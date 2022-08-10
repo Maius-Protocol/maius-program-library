@@ -12,7 +12,7 @@ use crate::constants::*;
 use instructions::*;
 use schemas::*;
 
-declare_id!("DfErhW4XENnqdN4vpAWj33gxuBS3R25fmigd7medovb4");
+declare_id!("Cqc31DtkxfXQrEcSzDfS5Cdqb9LsENwfiMv9inEofjQm");
 
 #[macro_export]
 macro_rules! debug {
@@ -196,7 +196,7 @@ pub mod maius_program_library {
         let price_account = &mut ctx.accounts.price_account;
         let subscription_account = &mut ctx.accounts.subscription_account;
         let subscription_item_account = &mut ctx.accounts.subscription_item_account;
-        // let escrow_account = &mut ctx.accounts.escrow_account;
+        let escrow_account = &mut ctx.accounts.escrow_account;
         let customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.clone();
         let merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.clone();
         let vault_account = &mut ctx.accounts.vault_account;
@@ -218,16 +218,22 @@ pub mod maius_program_library {
 
         // Transfer
 
-        // escrow_account.customer = customer_wallet.to_account_info().key();
-        // escrow_account.merchant = merchant_wallet.to_account_info().key();
-        // escrow_account.customer_deposit_token_account = customer_deposit_token_account.key();
-        // escrow_account.merchant_receive_token_account = merchant_receive_token_account.key();
-        // escrow_account.amount = 10;
-        // escrow_account.invoice_account = invoice_account.key();
-        // escrow_account.status = 0;
+        escrow_account.customer = customer_wallet.to_account_info().key();
+        escrow_account.merchant = merchant_wallet.to_account_info().key();
+        escrow_account.customer_deposit_token_account = customer_deposit_token_account.key();
+        escrow_account.merchant_receive_token_account = merchant_receive_token_account.key();
+        escrow_account.amount = 10;
+        escrow_account.invoice_account = invoice_account.key();
+        escrow_account.status = 0;
 
 
         let amount = 10;
+        let cpi_accounts = Transfer {
+            from: ctx.accounts.customer_deposit_token_account.to_account_info(),
+            to: vault_account.to_account_info(),
+            authority: customer_wallet.to_account_info(),
+        };
+
 
         let cpi_accounts = Transfer {
             from: customer_deposit_token_account.to_account_info(),
@@ -237,7 +243,7 @@ pub mod maius_program_library {
 
         token::transfer( CpiContext::new(cpi_program, cpi_accounts), amount)?;
 
-        // escrow_account.amount += amount;
+        escrow_account.amount += amount;
 
 
         subscription_account.merchant = merchant_account.merchant_wallet_address;
@@ -362,18 +368,18 @@ pub mod maius_program_library {
         pub vault_account: Box<Account<'info, TokenAccount>>,
         pub customer_deposit_token_account: Account<'info, TokenAccount>,
         pub merchant_receive_token_account: Account<'info, TokenAccount>,
-        // #[account(
-        // init_if_needed,
-        // seeds = [
-        // b"v1",
-        // b"escrow-account".as_ref(),
-        // invoice_account.key().as_ref()
-        // ],
-        // bump,
-        // space = EscrowAccount::space(),
-        // payer = customer_wallet,
-        // )]
-        // pub escrow_account: Account<'info, EscrowAccount>,
+        #[account(
+        init_if_needed,
+        seeds = [
+        b"v1",
+        b"escrow-account".as_ref(),
+        invoice_account.key().as_ref()
+        ],
+        bump,
+        space = EscrowAccount::space(),
+        payer = customer_wallet,
+        )]
+        pub escrow_account: Account<'info, EscrowAccount>,
         pub rent: Sysvar<'info, Rent>,
         pub token_program: Program<'info, Token>,
 
