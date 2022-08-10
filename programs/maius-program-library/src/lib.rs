@@ -218,13 +218,13 @@ pub mod maius_program_library {
 
         // Transfer
 
-        escrow_account.customer = customer_wallet.to_account_info().key();
-        escrow_account.merchant = merchant_wallet.to_account_info().key();
-        escrow_account.customer_deposit_token_account = customer_deposit_token_account.key();
-        escrow_account.merchant_receive_token_account = merchant_receive_token_account.key();
-        escrow_account.amount = 10;
-        escrow_account.invoice_account = invoice_account.key();
-        escrow_account.status = 0;
+        // escrow_account.customer = customer_wallet.to_account_info().key();
+        // escrow_account.merchant = merchant_wallet.to_account_info().key();
+        // escrow_account.customer_deposit_token_account = customer_deposit_token_account.key();
+        // escrow_account.merchant_receive_token_account = merchant_receive_token_account.key();
+        // escrow_account.amount = 10;
+        // escrow_account.invoice_account = invoice_account.key();
+        // escrow_account.status = 0;
 
 
         let amount = 10;
@@ -243,7 +243,7 @@ pub mod maius_program_library {
 
         token::transfer( CpiContext::new(cpi_program, cpi_accounts), amount)?;
 
-        escrow_account.amount += amount;
+        // escrow_account.amount += amount;
 
 
         subscription_account.merchant = merchant_account.merchant_wallet_address;
@@ -368,18 +368,18 @@ pub mod maius_program_library {
         pub vault_account: Box<Account<'info, TokenAccount>>,
         pub customer_deposit_token_account: Account<'info, TokenAccount>,
         pub merchant_receive_token_account: Account<'info, TokenAccount>,
-        #[account(
-        init_if_needed,
-        seeds = [
-        b"v1",
-        b"escrow-account".as_ref(),
-        invoice_account.key().as_ref()
-        ],
-        bump,
-        space = EscrowAccount::space(),
-        payer = customer_wallet,
-        )]
-        pub escrow_account: Account<'info, EscrowAccount>,
+        // #[account(
+        // init_if_needed,
+        // seeds = [
+        // b"v1",
+        // b"escrow-account".as_ref(),
+        // invoice_account.key().as_ref()
+        // ],
+        // bump,
+        // space = EscrowAccount::space(),
+        // payer = customer_wallet,
+        // )]
+        // pub escrow_account: Account<'info, EscrowAccount>,
         pub rent: Sysvar<'info, Rent>,
         pub token_program: Program<'info, Token>,
 
