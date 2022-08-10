@@ -196,7 +196,7 @@ pub mod maius_program_library {
         let price_account = &mut ctx.accounts.price_account;
         let subscription_account = &mut ctx.accounts.subscription_account;
         let subscription_item_account = &mut ctx.accounts.subscription_item_account;
-        let escrow_account = &mut ctx.accounts.escrow_account;
+        // let escrow_account = &mut ctx.accounts.escrow_account;
         let customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.clone();
         let merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.clone();
         let vault_account = &mut ctx.accounts.vault_account;
