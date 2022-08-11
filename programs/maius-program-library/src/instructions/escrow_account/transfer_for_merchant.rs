@@ -9,14 +9,20 @@ use crate::schemas::*;
 #[derive(Accounts)]
 pub struct TransferForMerchant<'info> {
     #[account(mut)]
-    pub judge: Signer<'info>,
-    /// CHECK
-    pub merchant: AccountInfo<'info>,
+    pub merchant: Signer<'info>,
     #[account(mut)]
     pub merchant_receive_token_account: Account<'info, TokenAccount>,
-    #[account(mut)]
-    pub escrow_account: Box<Account<'info, EscrowAccount>>,
-    #[account(mut)]
+    // #[account(mut)]
+    // pub escrow_account: Box<Account<'info, EscrowAccount>>,
+    #[account(
+        mut,
+        seeds = [
+        b"v1",
+        b"token-seed".as_ref(),
+        invoice_account.key().as_ref()
+        ],
+        bump,
+    )]
     pub vault_account: Account<'info, TokenAccount>,
     #[account(mut)]
     pub invoice_account: Account<'info, Invoice>,
@@ -34,11 +40,6 @@ pub fn handler(
         authority: ctx.accounts.vault_account.to_account_info(),
     };
 
-    if amount > ctx.accounts.escrow_account.amount {
-        msg!("error")
-    }
-
-    ctx.accounts.escrow_account.amount -= amount;
 
     token::transfer(
         CpiContext::new_with_signer(
