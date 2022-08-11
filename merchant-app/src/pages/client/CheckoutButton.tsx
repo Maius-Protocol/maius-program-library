@@ -27,8 +27,8 @@ const CheckoutButton = ({
   const customer_wallet_address = wallet?.adapter?.publicKey?.toBase58();
   const { data: customerAccount, refetch: refetchCustomerAccount } =
     useCustomerAccount(customer_wallet_address as string);
-  const latestIndexSubscription =
-    customerInvoiceAccount?.subscriptionCount?.toNumber() - 1;
+
+  const latestIndexSubscription = customerAccount?.subscriptionCount;
   const {
     data: customerInvoiceAccount,
     isLoading: isFetchingCustomerInvoiceAccount,
