@@ -124,18 +124,20 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     url.searchParams.append("memo", "Memo");
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
     url.searchParams.append("message", `test`);
-    url.searchParams.append("instruction", instruction);
-    // url.searchParams.append("merchant_wallet_address", merchant_wallet);
-    // url.searchParams.append("customer_wallet_address", customer_wallet_address);
-    // url.searchParams.append("product_count_index", product_count_index);
-    // url.searchParams.append("pricing_count_index", price_count_index);
-    // url.searchParams.append("quantity", 1);
-    // url.searchParams.append("invoice_count_index", latestIndexInvoice + 1 || 0);
-    // url.searchParams.append("invoice_item_count_index", 0);
-    // url.searchParams.append(
-    //   "subscription_count_index",
-    //   latestIndexSubscription || 0
-    // );
+    // url.searchParams.append("instruction", instruction);
+    url.searchParams.append("merchant_wallet_address", merchant_wallet);
+    url.searchParams.append("customer_wallet_address", customer_wallet_address);
+    url.searchParams.append("product_count_index", product_count_index);
+    url.searchParams.append("pricing_count_index", price_count_index);
+    url.searchParams.append("quantity", 1);
+    url.searchParams.append("invoice_count_index", latestIndexInvoice + 1 || 0);
+    url.searchParams.append("invoice_item_count_index", 0);
+    url.searchParams.append("mintAddress", splToken?.toBase58());
+    url.searchParams.append(
+      "subscription_count_index",
+      latestIndexSubscription || 0
+    );
+    url.searchParams.append("subscription_item_count_index", 0);
     // url.searchParams.append("subscription_item_count_index", 0);
     return encodeURL({ link: url });
     // if (!reference) {
