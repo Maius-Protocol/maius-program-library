@@ -6,6 +6,7 @@ import { usePayment } from "../../hooks/usePayment";
 
 export const QRCode: FC = () => {
   const { url } = usePayment();
+  console.log(url);
   const [size, setSize] = useState(() =>
     typeof window === "undefined"
       ? 400
