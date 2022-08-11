@@ -179,7 +179,7 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   // console.log("api", instruction);
   response.status(200).send({
     transaction: instruction,
-    message: `Maius Pay, ${customer_wallet_address}`,
+    message: `Subscribe 🔔`,
   });
 };
 
