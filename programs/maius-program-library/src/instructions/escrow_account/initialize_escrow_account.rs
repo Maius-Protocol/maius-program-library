@@ -14,8 +14,6 @@ pub struct InitializeEscrowAccount<'info> {
     pub customer: Signer<'info>,
     /// CHECK
     pub merchant: AccountInfo<'info>,
-    /// CHECK
-    pub judge: AccountInfo<'info>,
     pub mint: Account<'info, Mint>,
     #[account(
         init,
@@ -62,7 +60,6 @@ pub fn handler(
 ) ->  Result<()> {
     ctx.accounts.escrow_account.customer = *ctx.accounts.customer.key;
     ctx.accounts.escrow_account.merchant = *ctx.accounts.merchant.key;
-    ctx.accounts.escrow_account.judge = *ctx.accounts.judge.key;
     ctx.accounts.escrow_account.customer_deposit_token_account = ctx.accounts.customer_deposit_token_account.key();
     ctx.accounts.escrow_account.merchant_receive_token_account = ctx.accounts.merchant_receive_token_account.key();
     ctx.accounts.escrow_account.amount = amount;
