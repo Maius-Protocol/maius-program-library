@@ -28,7 +28,8 @@ export function useCreatePayment(
   invoice_count_index = 0,
   invoice_item_count_index = 0,
   subscription_count_index = 0,
-  subscription_item_count_index = 0
+  subscription_item_count_index = 0,
+  returnTransaction = false
 ) {
   console.log(
     merchant_wallet_address,
@@ -94,15 +95,18 @@ export function useCreatePayment(
       invoice_account?.toBase58()
     );
 
-    const mintAddress = "2w5vRywEzSXUX56KhGvC8DcMyhRPYnFd1jb2n1ku1hVK";
+    const mintAddress = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr";
 
     const customer_deposit_token_address = await findAssociatedAccountAddress(
       mintAddress,
       customer_wallet_address
     );
 
-    console.log("customer_wallet_address", customer_wallet_address)
-    console.log("customer_deposit_token_address", customer_deposit_token_address.toBase58())
+    console.log("customer_wallet_address", customer_wallet_address);
+    console.log(
+      "customer_deposit_token_address",
+      customer_deposit_token_address.toBase58()
+    );
 
     const merchant_receive_token_address = await findAssociatedAccountAddress(
       mintAddress,
@@ -134,17 +138,54 @@ export function useCreatePayment(
       })
       .transaction();
 
-    // const blockhash = await connection.getLatestBlockhash("finalized");
-    // transaction.recentBlockhash = blockhash.blockhash;
-    // transaction.feePayer = new PublicKey(customer_wallet_address);
-    await sendTransaction(transaction, connection);
-  
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    // return transaction
-    //   .serialize({
-    //     verifySignatures: false,
-    //     requireAllSignatures: false,
-    //   })
-    //   .toString("base64");
+    if (returnTransaction) {
+      const blockhash = await connection.getLatestBlockhash("finalized");
+      transaction.recentBlockhash = blockhash.blockhash;
+      transaction.feePayer = new PublicKey(customer_wallet_address);
+
+      return transaction
+        .serialize({
+          verifySignatures: false,
+          requireAllSignatures: false,
+        })
+        .toString("base64");
+    } else {
+      await sendTransaction(transaction, connection);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
   });
+}
+
+export function usePaymentInstruction(
+  merchant_wallet_address: string,
+  customer_wallet_address: string | undefined,
+  product_count_index = 0,
+  pricing_count_index = 0,
+  quantity = 0,
+  invoice_count_index = 0,
+  invoice_item_count_index = 0,
+  subscription_count_index = 0,
+  subscription_item_count_index = 0
+) {
+  const { mutateAsync } = useCreatePayment(
+    merchant_wallet_address,
+    customer_wallet_address,
+    product_count_index,
+    pricing_count_index,
+    quantity,
+    invoice_count_index,
+    invoice_item_count_index,
+    subscription_count_index,
+    subscription_item_count_index,
+    true
+  );
+  return useQuery(
+    ["instruction"],
+    async () => {
+      return await mutateAsync();
+    },
+    {
+      refetchInterval: 8000,
+    }
+  );
 }

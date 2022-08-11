@@ -133,7 +133,8 @@ const CheckoutButton = ({
     latestIndexInvoice + 1 || 0,
     0,
     latestIndexSubscription || 0,
-    0
+    0,
+    false
   );
 
   const isLoading =

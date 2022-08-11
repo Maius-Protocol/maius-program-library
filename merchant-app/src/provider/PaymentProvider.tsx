@@ -34,8 +34,12 @@ import { useRouter } from "next/router";
 import { useProductAccount } from "../services/product/useProductAccount";
 import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
 import { usePriceAccount } from "../services/pricing/usePriceAccount";
-import { useCreatePayment } from "../services/payment/useCreatePayment";
+import {
+  useCreatePayment,
+  usePaymentInstruction,
+} from "../services/payment/useCreatePayment";
 import { useCustomerInvoiceAccount } from "../services/customer_invoice/useCustomerInvoiceAccount";
+import { useCustomerAccount } from "../services/customer/useCustomerAccount";
 
 export interface PaymentProviderProps {
   children: ReactNode;
@@ -73,7 +77,6 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     price_count_index
   );
   const { publicKey, sendTransaction } = useWallet();
-
   const [amount, setAmount] = useState<BigNumber>();
   const [memo, setMemo] = useState<string>();
   const [reference, setReference] = useState<PublicKey>();
@@ -91,51 +94,63 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     merchant_wallet,
     customer_wallet_address
   );
+  const { data: customerAccount } = useCustomerAccount(
+    customer_wallet_address as string
+  );
+  const latestIndexSubscription = customerAccount?.subscriptionCount;
 
-  const latestIndexSubscription =
-    customerInvoiceAccount?.subscriptionCount?.toNumber() - 1;
   const latestIndexInvoice =
     customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
 
-  // const { data: instruction } = useCreatePayment(
-  //   merchant_wallet,
-  //   customer_wallet_address,
-  //   product_count_index,
-  //   price_count_index,
-  //   1,
-  //   latestIndexInvoice + 1 || 0,
-  //   0,
-  //   latestIndexSubscription || 0,
-  //   0
-  // );
+  const { data: instruction } = usePaymentInstruction(
+    merchant_wallet,
+    customer_wallet_address,
+    product_count_index,
+    price_count_index,
+    1,
+    latestIndexInvoice + 1 || 0,
+    0,
+    latestIndexSubscription || 0,
+    0
+  );
 
-  const url = () => {
+  const fetchUrl = () => {
     const url = new URL(String(link));
     const amount = priceAccount?.unitAmount;
-    url.searchParams.append("recipient", recipient.toBase58());
+    url.searchParams.append("recipient", recipient?.toBase58());
     url.searchParams.append("amount", amount?.toNumber()?.toFixed(6));
     url.searchParams.append("spl-token", splToken?.toBase58());
     url.searchParams.append("reference", reference?.toBase58());
     url.searchParams.append("memo", "Memo");
     url.searchParams.append("label", `${productAccount?.name} via MaiusPay`);
-    url.searchParams.append("message", `${merchantAccount?.logoUrl}`);
-    // url.searchParams.append("instruction", instruction);
-    url.searchParams.append("merchant_wallet_address", merchant_wallet);
-    url.searchParams.append("customer_wallet_address", customer_wallet_address);
-    url.searchParams.append("product_count_index", product_count_index);
-    url.searchParams.append("pricing_count_index", price_count_index);
-    url.searchParams.append("quantity", 1);
-    url.searchParams.append("invoice_count_index", latestIndexInvoice + 1 || 0);
-    url.searchParams.append("invoice_item_count_index", 0);
-    url.searchParams.append(
-      "subscription_count_index",
-      latestIndexSubscription || 0
-    );
-    url.searchParams.append("subscription_item_count_index", 0);
-
+    url.searchParams.append("message", `test`);
+    url.searchParams.append("instruction", instruction);
+    // url.searchParams.append("merchant_wallet_address", merchant_wallet);
+    // url.searchParams.append("customer_wallet_address", customer_wallet_address);
+    // url.searchParams.append("product_count_index", product_count_index);
+    // url.searchParams.append("pricing_count_index", price_count_index);
+    // url.searchParams.append("quantity", 1);
+    // url.searchParams.append("invoice_count_index", latestIndexInvoice + 1 || 0);
+    // url.searchParams.append("invoice_item_count_index", 0);
+    // url.searchParams.append(
+    //   "subscription_count_index",
+    //   latestIndexSubscription || 0
+    // );
+    // url.searchParams.append("subscription_item_count_index", 0);
     return encodeURL({ link: url });
+    // if (!reference) {
+    //   return;
+    // }
+    // return encodeURL({
+    //   recipient: new PublicKey("5P6KbkdP2GpUkuHi1tnbC2meToMxy52zZTiZnVzce4GJ"),
+    //   amount: amount?.toNumber()?.toFixed(4),
+    //   splToken: new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"),
+    //   reference: reference,
+    //   label: `${productAccount?.name} via MaiusPay`,
+    //   message: `${merchantAccount?.logoUrl}`,
+    //   memo: "ABC",
+    // });
   };
-  console.log(url());
 
   const reset = useCallback(() => {
     setAmount(undefined);
@@ -148,6 +163,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   }, [navigate]);
 
   const generate = useCallback(() => {
+    fetchUrl();
     if (status === PaymentStatus.New && !reference) {
       setReference(Keypair.generate().publicKey);
       setStatus(PaymentStatus.Pending);
@@ -321,7 +337,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
         status,
         confirmations,
         progress,
-        url: url(),
+        url: fetchUrl(),
         reset,
         generate,
       }}
