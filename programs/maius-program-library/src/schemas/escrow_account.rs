@@ -9,6 +9,7 @@ pub const MAXIMUM_LENGTH_OF_STATUS :usize = 36;
 pub struct EscrowAccount {
     pub customer: Pubkey,
     pub merchant: Pubkey,
+    pub judge: Pubkey,
     pub customer_deposit_token_account: Pubkey,
     pub merchant_receive_token_account: Pubkey,
     // pub customer_account: Pubkey,
@@ -28,6 +29,7 @@ impl EscrowAccount {
         8  + // discriminator
             PUBKEY_SIZE + // customer
             PUBKEY_SIZE + // merchant
+            PUBKEY_SIZE + // judge
             PUBKEY_SIZE + // customer_deposit_token_account
             PUBKEY_SIZE + // merchant_receive_token_account
             // PUBKEY_SIZE + // customer_account
