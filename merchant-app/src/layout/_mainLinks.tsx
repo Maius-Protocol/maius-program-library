@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, CurrencyDollar, Globe, Settings, User } from "tabler-icons-react";
+import {
+  Box,
+  CurrencyDollar,
+  Globe,
+  Note,
+  Settings,
+  User,
+} from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
 import { useProgram } from "../provider/ProgramProvider";
@@ -79,6 +86,12 @@ export const MainLinks = () => {
       link: routes.merchant.products.list,
       color: "blue",
       label: "Products",
+    },
+    {
+      icon: <Note size={16} />,
+      link: routes.merchant.invoices.list,
+      color: "blue",
+      label: "Invoices",
     },
   ];
 

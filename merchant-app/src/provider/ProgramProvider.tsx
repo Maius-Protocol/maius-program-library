@@ -35,6 +35,9 @@ const routing = (merchantWallet: string) => ({
       edit: (product_count_index) =>
         `/merchant/${merchantWallet}/products/${product_count_index}`,
     },
+    invoices: {
+      list: `/merchant/${merchantWallet}/invoices`,
+    },
     pricing: {
       list: `/merchant/${merchantWallet}/pricing`,
     },

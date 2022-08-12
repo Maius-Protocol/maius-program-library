@@ -622,6 +622,42 @@ export type MaiusProgramLibrary = {
       "args": []
     },
     {
+      "name": "merchantWithdrawl",
+      "accounts": [
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "merchantReceiveTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "payment",
       "accounts": [
         {
@@ -1728,6 +1764,42 @@ export const IDL: MaiusProgramLibrary = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "merchantWithdrawl",
+      "accounts": [
+        {
+          "name": "merchant",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "merchantReceiveTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "invoiceAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     },
     {
       "name": "payment",

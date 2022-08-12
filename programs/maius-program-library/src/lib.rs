@@ -90,8 +90,8 @@ pub mod maius_program_library {
         billing_scheme: String,
         currency: String,
         unit_amount: u64,
-        interval: String, 
-        interval_count: u8, 
+        interval: String,
+        interval_count: u8,
         active: bool,
         price_type: String,
         accepted_tokens: Vec<Pubkey>,
@@ -101,7 +101,7 @@ pub mod maius_program_library {
             billing_scheme,
             currency,
             unit_amount,
-            interval, 
+            interval,
             interval_count,
             active,
             price_type,
@@ -161,7 +161,7 @@ pub mod maius_program_library {
         tokens: Vec<Pubkey>
     ) -> Result<()> {
         initialize_accepted_tokens::handler(
-            ctx, 
+            ctx,
             tokens
         )
     }
@@ -180,6 +180,14 @@ pub mod maius_program_library {
         subscribe::handler(
             ctx
         )
+    }
+
+
+    pub fn merchant_withdrawl(
+        ctx: Context<TransferForMerchant>,
+        amount: u64,
+    ) ->  Result<()> {
+        transfer_for_merchant::handler(ctx, amount)
     }
 
     pub fn payment(

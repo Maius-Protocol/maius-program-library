@@ -15,13 +15,13 @@ pub struct TransferForMerchant<'info> {
     // #[account(mut)]
     // pub escrow_account: Box<Account<'info, EscrowAccount>>,
     #[account(
-        mut,
-        seeds = [
-        b"v1",
-        b"token-seed".as_ref(),
-        invoice_account.key().as_ref()
-        ],
-        bump,
+    mut,
+    seeds = [
+    b"v1",
+    b"token-seed".as_ref(),
+    invoice_account.key().as_ref()
+    ],
+    bump,
     )]
     pub vault_account: Account<'info, TokenAccount>,
     #[account(mut)]

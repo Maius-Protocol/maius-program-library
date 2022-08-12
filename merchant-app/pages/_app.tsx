@@ -47,9 +47,9 @@ function MyApp(props: AppProps) {
   const network = WalletAdapterNetwork.Devnet;
 
   const endpoint = useMemo(() => {
-    // if (process.env.NODE_ENV === "development") {
-    //   return localhostEndpoint;
-    // }
+    if (process.env.NODE_ENV === "development") {
+      return localhostEndpoint;
+    }
     return clusterApiUrl(network);
   }, [network]);
   const wallets = useMemo(
