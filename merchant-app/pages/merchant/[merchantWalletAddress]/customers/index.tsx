@@ -62,7 +62,7 @@ const CustomersPage = () => {
     if (lastKey) {
       fetchNextPage();
     }
-  }, [lastKey]);
+  }, [lastKey?.toBase58()]);
 
   return (
     <Card>

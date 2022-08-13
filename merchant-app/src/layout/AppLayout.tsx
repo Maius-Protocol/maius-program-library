@@ -25,7 +25,10 @@ const AppLayout = ({ children }) => {
   const { routes } = useProgram();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  if (router.pathname?.includes("/payment/")) {
+  if (
+    router.pathname?.includes("/payment/") ||
+    router.pathname?.includes("/thanks")
+  ) {
     return <ClientLayout>{children}</ClientLayout>;
   }
 

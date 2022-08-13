@@ -45,6 +45,7 @@ const routing = (merchantWallet: string) => ({
       list: `/merchant/${merchantWallet}/payment-links`,
       create: `/merchant/${merchantWallet}/payment-links/create`,
     },
+    thanks: "/thanks",
   },
 });
 

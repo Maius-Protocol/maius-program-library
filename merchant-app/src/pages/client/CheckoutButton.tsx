@@ -13,6 +13,8 @@ import { useSubscriptionAccount } from "../../services/subscription/useSubscript
 import { useCreateSubscriptionItemAccount } from "../../services/subscription_item/useCreateSubscriptionItemAccount";
 import { useSubscriptionItemAccount } from "../../services/subscription_item/useSubscriptionItemAccount";
 import { useCreatePayment } from "../../services/payment/useCreatePayment";
+import { useRouter } from "next/router";
+import { useProgram } from "../../provider/ProgramProvider";
 
 const CheckoutButton = ({
   symbol,
@@ -21,13 +23,14 @@ const CheckoutButton = ({
   price_count_index,
   quantity,
 }) => {
+  const { routes } = useProgram();
   const [checkoutProcessing, setCheckoutProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const { wallet, connected } = useWallet();
   const customer_wallet_address = wallet?.adapter?.publicKey?.toBase58();
   const { data: customerAccount, refetch: refetchCustomerAccount } =
     useCustomerAccount(customer_wallet_address as string);
-
+  const router = useRouter();
   const latestIndexSubscription = customerAccount?.subscriptionCount;
   const {
     data: customerInvoiceAccount,
@@ -234,6 +237,7 @@ const CheckoutButton = ({
       quantity,
     });
     setCheckoutProcessing(false);
+    router.push(routes.merchant.thanks);
   };
 
   if (paymentSuccess) {
