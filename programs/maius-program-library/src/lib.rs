@@ -281,7 +281,8 @@ pub mod maius_program_library {
         pub customer_account: Box<Account<'info, Customer>>,
         #[account(mut)]
         pub merchant_account: Box<Account<'info, Merchant>>,
-        pub merchant_wallet: Signer<'info>,
+        /// CHECK:
+        pub merchant_wallet: AccountInfo<'info>,
         #[account(mut)]
         pub customer_wallet: Signer<'info>,
         #[account(

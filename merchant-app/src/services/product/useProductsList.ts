@@ -22,7 +22,7 @@ export function useProductsList(
       keepPreviousData: true,
       getNextPageParam: (lastPage, allPages) => {
         if (allPages.length < totalPage) {
-          return totalPage - allPages.length;
+          return allPages.length;
         }
         return undefined;
       },
