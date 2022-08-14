@@ -34,10 +34,7 @@ import { useRouter } from "next/router";
 import { useProductAccount } from "../services/product/useProductAccount";
 import { useMerchantAccount } from "../services/merchant/useMerchantAccount";
 import { usePriceAccount } from "../services/pricing/usePriceAccount";
-import {
-  useCreatePayment,
-  usePaymentInstruction,
-} from "../services/payment/useCreatePayment";
+import { usePaymentInstruction } from "../services/payment/useCreatePayment";
 import { useCustomerInvoiceAccount } from "../services/customer_invoice/useCustomerInvoiceAccount";
 import { useCustomerAccount } from "../services/customer/useCustomerAccount";
 
@@ -89,7 +86,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     [confirmations, requiredConfirmations]
   );
   const customer_wallet_address =
-    "5P6KbkdP2GpUkuHi1tnbC2meToMxy52zZTiZnVzce4GJ";
+    "DZBD6BzAmMMiKCvpt1k6H74NK4eAw2JkXyHNp3tyEgjy";
   const { data: customerInvoiceAccount } = useCustomerInvoiceAccount(
     merchant_wallet,
     customer_wallet_address
@@ -101,18 +98,18 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
 
   const latestIndexInvoice =
     customerInvoiceAccount?.invoiceCount?.toNumber() - 1;
-
-  const { data: instruction } = usePaymentInstruction(
-    merchant_wallet,
-    customer_wallet_address,
-    product_count_index,
-    price_count_index,
-    1,
-    latestIndexInvoice + 1 || 0,
-    0,
-    latestIndexSubscription || 0,
-    0
-  );
+  //
+  // const { data: instruction } = usePaymentInstruction(
+  //   merchant_wallet,
+  //   customer_wallet_address,
+  //   product_count_index,
+  //   price_count_index,
+  //   1,
+  //   latestIndexInvoice + 1 || 0,
+  //   0,
+  //   latestIndexSubscription || 0,
+  //   0
+  // );
 
   const fetchUrl = () => {
     const url = new URL(String(link));
@@ -327,6 +324,28 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
   useEffect(() => {
     generate();
   }, [splToken]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      let signature: ConfirmedSignatureInfo;
+      try {
+        signature = await findReference(connection, reference);
+        console.log(signature);
+        router.push("/thanks");
+      } catch (error: any) {
+        console.log(error);
+        // If the RPC node doesn't have the transaction signature yet, try again
+        if (!(error instanceof FindReferenceError)) {
+          console.error(error);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [status, reference, signature, connection, navigate]);
+
   return (
     <PaymentContext.Provider
       value={{

@@ -1,4 +1,11 @@
-import { Button, Divider, Group, Select, TextInput } from "@mantine/core";
+import {
+  Button,
+  Divider,
+  Group,
+  Input,
+  Select,
+  TextInput,
+} from "@mantine/core";
 import React, { useEffect } from "react";
 import TokenField from "./_TokenField";
 import { useForm } from "@mantine/form";
@@ -8,6 +15,8 @@ import { useUpdatePricingAccount } from "../../services/pricing/useUpdatePricing
 import { useProgram } from "../../provider/ProgramProvider";
 import { useProductAccount } from "../../services/product/useProductAccount";
 import { usePriceAccount } from "../../services/pricing/usePriceAccount";
+import { ExternalLink } from "tabler-icons-react";
+import { Base64 } from "js-base64";
 
 const PriceRowForm = ({ product_count_index, price_count_index }) => {
   const { merchantWalletAddress } = useProgram();
@@ -66,6 +75,15 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
       });
     }
   }, [priceAccount]);
+
+  const params = {
+    merchant_wallet: merchantWalletAddress,
+    product_count_index: product_count_index,
+    price_count_index: price_count_index,
+  };
+  const paymentUrl = `${window.location.origin}/payment/${Base64.encode(
+    JSON.stringify(params)
+  )}`;
 
   return (
     <form onSubmit={form.onSubmit(editPrice)}>
@@ -147,6 +165,12 @@ const PriceRowForm = ({ product_count_index, price_count_index }) => {
       </UnmountClosed>
 
       <TokenField {...form} />
+      <TextInput
+        label="Payment URL"
+        icon={<ExternalLink size={16} />}
+        className="mt-3"
+        value={paymentUrl}
+      />
       <Divider
         labelPosition="center"
         label={

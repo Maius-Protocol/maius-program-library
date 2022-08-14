@@ -5,6 +5,7 @@ import {
   SystemProgram,
   SYSVAR_RENT_PUBKEY,
   Transaction,
+  TransactionInstruction,
 } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import { NextApiHandler } from "next";
@@ -73,6 +74,7 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   const invoice_count_index = request.query?.invoice_count_index;
   const invoice_item_count_index = request.query?.invoice_item_count_index;
   const subscription_count_index = request.query?.subscription_count_index;
+  const reference = request.query?.reference;
   const subscription_item_count_index =
     request.query?.subscription_item_count_index;
   const product_count_index = request.query?.product_count_index;
@@ -141,8 +143,8 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
   );
 
   const escrow_account = await findEscrowAccount(invoice_account?.toBase58());
-
-  let transaction = await program.methods
+  const transaction = new Transaction();
+  const _instructions = await program.methods
     .payment(quantity)
     .accounts({
       merchantAccount: merchantAccountAddress,
@@ -163,7 +165,13 @@ const post: NextApiHandler<PostResponse> = async (request, response) => {
       rent: SYSVAR_RENT_PUBKEY,
       systemProgram: SystemProgram.programId,
     })
-    .transaction();
+    .instruction();
+  _instructions.keys.push({
+    pubkey: new PublicKey(reference!),
+    isWritable: false,
+    isSigner: false,
+  });
+  transaction.add(_instructions);
   const blockhash = await connection.getLatestBlockhash("finalized");
   transaction.recentBlockhash = blockhash.blockhash;
   transaction.feePayer = new PublicKey(customer_wallet_address);

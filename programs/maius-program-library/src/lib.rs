@@ -234,7 +234,7 @@ pub mod maius_program_library {
         // escrow_account.invoice_account = invoice_account.key();
         // escrow_account.status = 0;
 
-        let amount = 10000000;
+        let amount = 10000000000;
 
         let cpi_accounts = Transfer {
             from: customer_deposit_token_account.to_account_info(),

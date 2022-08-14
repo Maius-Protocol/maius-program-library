@@ -18,7 +18,7 @@ import {
 } from "../vault_account/address";
 
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token";
-export const mintAddress = "cQ5BykUc5yP7knX4LPhbSnuCsx83uecXmdtU6iZnY6M";
+export const mintAddress = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr";
 
 export function useCreatePayment(
   merchant_wallet_address: string,

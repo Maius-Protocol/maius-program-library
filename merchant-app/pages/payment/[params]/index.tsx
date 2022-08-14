@@ -70,7 +70,7 @@ const PaymentFromLink = () => {
         <Grid.Col span={6}>
           <div
             className="p-lg-5 d-flex flex-column align-content-center justify-content-center"
-            style={{ height: "100vh" }}
+            style={{ height: "100vh", marginLeft: "25%" }}
           >
             <div>
               {isLoading && (
@@ -83,21 +83,21 @@ const PaymentFromLink = () => {
               )}
               {!isLoading && (
                 <>
-                  <Avatar
-                    radius="md"
-                    src={merchantAccount?.logoUrl}
-                    size={100}
-                    className="mb-4"
-                  />
                   <h5>{productAccount.name}</h5>
-                  <h2>{`${priceAccount?.unitAmount?.toNumber() * quantity} ${
-                    priceAccount?.currency
+                  <h2>{`$${
+                    priceAccount?.unitAmount?.toNumber() * quantity
                   }`}</h2>
                   <NumberInput
                     onChange={setQuantity}
                     value={quantity}
                     style={{ maxWidth: "120px" }}
                     label="Quantity"
+                  />
+                  <Avatar
+                    radius="md"
+                    src={merchantAccount?.logoUrl}
+                    size={300}
+                    className="mt-4"
                   />
                 </>
               )}
@@ -123,7 +123,7 @@ const PaymentFromLink = () => {
                   <WalletMultiButton />
                 </div>
               )}
-              <div className="text-muted mb-4">Accepting payments with</div>
+              {/*<div className="text-muted mb-4">Accepting payments with</div>*/}
               {isLoading && (
                 <>
                   <Skeleton height={40} mb="sm" />
@@ -131,6 +131,33 @@ const PaymentFromLink = () => {
                   <Skeleton height={40} mb="sm" />
                 </>
               )}
+              <Button
+                className="mt-3"
+                color="dark"
+                size="lg"
+                sx={{ width: "100%" }}
+                style={{ minWidth: "450px" }}
+                onClick={() => {
+                  setPaymentMethod("solana-pay");
+                  // setTimeout(() => {
+                  //   router.push("/thanks");
+                  // }, 1000 * 10);
+                }}
+              >
+                <div className="d-flex flex-row align-items-center">
+                  Checkout with{" "}
+                  <Image ml={12} width={64} src="/solana_pay.png" />
+                </div>
+              </Button>
+              <Divider
+                my={10}
+                label={
+                  <span className="text-muted" style={{ fontSize: "16px" }}>
+                    or
+                  </span>
+                }
+                labelPosition="center"
+              />
               {!isLoading && (
                 <>
                   {tokens?.map((t) => {
@@ -155,28 +182,6 @@ const PaymentFromLink = () => {
                 </>
               )}
             </div>
-            <Divider
-              label={
-                <span className="text-muted" style={{ fontSize: "16px" }}>
-                  or
-                </span>
-              }
-              labelPosition="center"
-            />
-            <Button
-              className="mt-3"
-              color="dark"
-              size="lg"
-              sx={{ width: "100%" }}
-              style={{ minWidth: "450px" }}
-              onClick={() => {
-                setPaymentMethod("solana-pay");
-              }}
-            >
-              <div className="d-flex flex-row align-items-center">
-                Checkout with <Image ml={12} width={64} src="/solana_pay.png" />
-              </div>
-            </Button>
           </UnmountClosed>
           <UnmountClosed isOpened={paymentMethod === "solana-pay"}>
             <WrappedSolanaPay tokens={tokens} />

@@ -1,19 +1,8 @@
-import {
-  Button,
-  Card,
-  Group,
-  Table,
-  ThemeIcon,
-  Title,
-  UnstyledButton,
-} from "@mantine/core";
-import Link from "next/link";
-import { Edit, Plus, User } from "tabler-icons-react";
+import { Card, Group, Table, Title } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useProgram } from "../../../../src/provider/ProgramProvider";
 import { useMerchantAccount } from "../../../../src/services/merchant/useMerchantAccount";
 import { useCustomersList } from "../../../../src/services/customer/useCustomersList";
-import { displayTime } from "../../../../src/utils/displayUtils";
 import InvoicePerCustomer from "../../../../src/pages/invoices/_InvoicesPerCustomer";
 import { uniqBy } from "lodash";
 
