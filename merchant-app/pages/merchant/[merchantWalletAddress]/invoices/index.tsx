@@ -15,6 +15,7 @@ import { useMerchantAccount } from "../../../../src/services/merchant/useMerchan
 import { useCustomersList } from "../../../../src/services/customer/useCustomersList";
 import { displayTime } from "../../../../src/utils/displayUtils";
 import InvoicePerCustomer from "../../../../src/pages/invoices/_InvoicesPerCustomer";
+import { uniqBy } from "lodash";
 
 const InvoicesPage = () => {
   const { routes, merchantWalletAddress } = useProgram();
@@ -25,10 +26,12 @@ const InvoicesPage = () => {
     fetchNextPage,
   } = useCustomersList(merchantAccount?.currentCustomerKey?.toBase58() || "");
 
-  const customers = customersUnflat?.pages?.flat() || [];
+  const customers = uniqBy(customersUnflat?.pages?.flat() || [], (obj) => {
+    return obj?.authority?.toBase58();
+  });
 
-  const rows = customers.map((element) => {
-    return <InvoicePerCustomer element={element} />;
+  const rows = customers.map((element, index) => {
+    return <InvoicePerCustomer key={`invoice_${index}`} element={element} />;
   });
 
   const lastKey = customers[customers?.length - 1]?.prevCustomerKey;
@@ -38,7 +41,7 @@ const InvoicesPage = () => {
       fetchNextPage();
     }
   }, [lastKey?.toBase58()]);
-  console.log(lastKey);
+
   return (
     <Card>
       <Group className="justify-content-between align-items-center">
@@ -49,7 +52,7 @@ const InvoicesPage = () => {
           <tr>
             <th></th>
             <th>CUSTOMER WALLET</th>
-            <th>PAID</th>
+            {/*<th>PAID</th>*/}
             <th>PERIOD</th>
             <th>STATUS</th>
             <th>MINT TOKEN</th>

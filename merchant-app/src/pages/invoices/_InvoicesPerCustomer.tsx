@@ -58,7 +58,7 @@ const InvoiceRow = ({
           Reclaim
         </Button>
       </td>
-      <td>{invoiceAccount?.paid}</td>
+      {/*<td>{invoiceAccount?.paid}</td>*/}
       <td>
         <div>Start: {invoiceAccount?.periodStart?.toNumber()}</div>
         <div>End: {invoiceAccount?.periodEnd?.toNumber()}</div>
@@ -80,8 +80,7 @@ const InvoicePerCustomer = ({ element }) => {
     element?.authority?.toBase58()
   );
 
-  const numberOfInvoices = customerAccount?.invoiceCount?.toNumber();
-
+  const numberOfInvoices = customerAccount?.invoiceCount?.toNumber() || 0;
   return (
     <>
       {[...Array(numberOfInvoices).keys()].map((index) => {

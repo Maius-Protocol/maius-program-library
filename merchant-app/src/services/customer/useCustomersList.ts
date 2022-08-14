@@ -19,6 +19,7 @@ export function useCustomersList(current_customer_key: string) {
           lastPage?.prevCustomerKey?.toBase58() ===
           SystemProgram.programId?.toBase58()
         ) {
+          // return undefined;
           // If this is the end, must be genesis customer
           // const customerAddress = await findCustomerAddress(
           //   merchantWalletAddress

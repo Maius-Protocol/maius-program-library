@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import { useCustomersList } from "../../../../src/services/customer/useCustomersList";
 import { useMerchantAccount } from "../../../../src/services/merchant/useMerchantAccount";
 import { displayTime } from "../../../../src/utils/displayUtils";
+import { uniqBy } from "lodash";
 
 const CustomersPage = () => {
   const { routes, merchantWalletAddress } = useProgram();
@@ -21,7 +22,9 @@ const CustomersPage = () => {
   const { data, hasNextPage, fetchNextPage } = useCustomersList(
     merchantAccount?.currentCustomerKey?.toBase58() || ""
   );
-  const elements = data?.pages?.flat() || [];
+  const elements = uniqBy(data?.pages?.flat() || [], (obj) => {
+    return obj?.authority?.toBase58();
+  });
 
   const rows = elements.map((element) => {
     return (
